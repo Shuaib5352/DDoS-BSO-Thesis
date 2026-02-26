@@ -1,0 +1,110 @@
+{
+    "name": "DDoS Saldırısı Tespiti - BSO-Hibrit Framework",
+    "short_name": "DDoS-BSO Tespiti",
+    "description": "Yüksek Lisans Tezi: Bat Swarm Optimization (BSO) ile Geliştirilmiş DDoS Saldırısı Tespiti",
+    "version": "2.0.0",
+    "author": "SHUAIB AYAD JASIM",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#ffffff",
+    "theme_color": "#1f2937",
+    "scope": "/",
+    "lang": "tr-TR",
+    "dir": "ltr",
+    "prefer_related_applications": false,
+    "categories": [
+        "productivity",
+        "utilities",
+        "security",
+        "education"
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshot-1.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/screenshot-2.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+    ],
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-192-maskable.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-512-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Ana Sayfa",
+            "short_name": "Ana Sayfa",
+            "description": "Ana sayfayı aç",
+            "url": "/",
+            "icons": [
+                {
+                    "src": "/icon-96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "BSO Analizi",
+            "short_name": "Analiz",
+            "description": "BSO algoritma analizini görüntüle",
+            "url": "/?tab=bso",
+            "icons": [
+                {
+                    "src": "/icon-96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Model Karşılaştırması",
+            "short_name": "Karşılaştır",
+            "description": "Modelleri karşılaştır",
+            "url": "/?tab=algorithms",
+            "icons": [
+                {
+                    "src": "/icon-96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "share_target": {
+        "action": "/share",
+        "method": "POST",
+        "enctype": "application/json",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
+}
