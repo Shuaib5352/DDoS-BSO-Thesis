@@ -209,6 +209,9 @@ export default function DDoSDetectionDashboard() {
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
                   Yüksek Lisans Tezi — SHUAIB AYAD JASIM — CICIoT2023
                 </p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 font-medium">
+                  👨‍🎓 Danışman: <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Dr. Saim Ervural</span> — KTO Karatay Üniversitesi
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2.5 flex-shrink-0">
