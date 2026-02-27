@@ -10,7 +10,7 @@ import {
   Grid3X3, Trophy, Gauge, Database, Zap, CheckCircle2,
   BookOpen, ChevronRight, ArrowRight, GraduationCap,
   Activity, Layers, Brain, Award, Clock, Calendar,
-  Sparkles, BarChart2, Network, MessageCircleQuestion, Library,
+  Sparkles, BarChart2, Network, MessageCircleQuestion, Library, ScanSearch,
 } from "lucide-react"
 import BSOVisualization from "@/components/bso-visualization"
 import MLClassificationPanel from "@/components/ml-classification-panel"
@@ -33,6 +33,7 @@ import ThesisDefenseQA from "@/components/thesis-defense-qa"
 import ThesisTables from "@/components/thesis-tables"
 import FeatureSelectionAnalysis from "@/components/feature-selection-analysis"
 import AcademicReferences from "@/components/academic-references"
+import DDoSDetectionForm from "@/components/ddos-detection-form"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -63,6 +64,7 @@ const TAB_CATEGORIES = [
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
       { value: "tables", label: "Tez Tabloları", icon: FileText },
       { value: "references", label: "Kaynakça", icon: Library },
+      { value: "detection", label: "DDoS Tespit", icon: ScanSearch },
     ],
   },
   {
@@ -125,6 +127,7 @@ const TAB_COLORS: Record<string, string> = {
   tables: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-teal-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
   references: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "feature-selection": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-emerald-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  detection: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -179,6 +182,7 @@ const QUICK_NAV = [
   { tab: "defense", title: "Savunma S&C", desc: "Tez savunma soru-cevap hazırlığı", icon: MessageCircleQuestion, accent: "rose" },
   { tab: "export", title: "Dışa Aktar", desc: "PDF, HTML, JSON, CSV formatları", icon: Printer, accent: "stone" },
   { tab: "references", title: "Kaynakça", desc: "60+ akademik referans — APA 7", icon: Library, accent: "teal" },
+  { tab: "detection", title: "DDoS Tespit", desc: "Etkileşimli trafik analiz formu", icon: ScanSearch, accent: "red" },
 ]
 
 const accentMap: Record<string, { border: string; bg: string; iconBg: string }> = {
@@ -693,6 +697,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="tables" className="space-y-6 animate-fade-in"><ThesisTables /></TabsContent>
           <TabsContent value="feature-selection" className="space-y-6 animate-fade-in"><FeatureSelectionAnalysis /></TabsContent>
           <TabsContent value="references" className="space-y-6 animate-fade-in"><AcademicReferences /></TabsContent>
+          <TabsContent value="detection" className="space-y-6 animate-fade-in"><DDoSDetectionForm /></TabsContent>
           <TabsContent value="export" className="space-y-6 animate-fade-in"><PrintExportPanel /></TabsContent>
         </Tabs>
 
