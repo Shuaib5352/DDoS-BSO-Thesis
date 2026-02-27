@@ -56,6 +56,7 @@ const TAB_CATEGORIES = [
     label: "Genel Bakış",
     tabs: [
       { value: "home", label: "Ana Sayfa", icon: BookOpen },
+      { value: "info", label: "Proje Bilgileri", icon: GraduationCap },
       { value: "thesis", label: "Tez Sonuçları", icon: FileText },
       { value: "architecture", label: "Sistem Mimarisi", icon: GitBranch },
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
@@ -104,6 +105,7 @@ const TAB_CATEGORIES = [
    ═══════════════════════════════════════════════════════════════ */
 const TAB_COLORS: Record<string, string> = {
   home: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-700 data-[state=active]:to-slate-800 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  info: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
   thesis: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-emerald-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
   architecture: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-indigo-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
   bso: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600 data-[state=active]:to-sky-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
@@ -162,6 +164,7 @@ const TIMELINE = [
    Quick navigation
    ═══════════════════════════════════════════════════════════════ */
 const QUICK_NAV = [
+  { tab: "info", title: "Proje Bilgileri", desc: "Tez danışmanı, öğrenci ve proje detayları", icon: GraduationCap, accent: "purple" },
   { tab: "thesis", title: "Bölüm 4: Sonuçlar", desc: "Tüm tablo ve şekillerle tez sonuçları", icon: FileText, accent: "indigo" },
   { tab: "architecture", title: "Sistem Mimarisi", desc: "Dışa aktarılabilir SVG diyagramı", icon: GitBranch, accent: "violet" },
   { tab: "bso", title: "BSO Analizi", desc: "Yakınsama eğrileri ve optimizasyon", icon: GitGraph, accent: "sky" },
@@ -174,6 +177,7 @@ const QUICK_NAV = [
 ]
 
 const accentMap: Record<string, { border: string; bg: string; iconBg: string }> = {
+  purple: { border: "border-purple-200 dark:border-purple-800/40 hover:border-purple-400 dark:hover:border-purple-600", bg: "hover:bg-purple-50/50 dark:hover:bg-purple-950/20", iconBg: "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400" },
   indigo: { border: "border-indigo-200 dark:border-indigo-800/40 hover:border-indigo-400 dark:hover:border-indigo-600", bg: "hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20", iconBg: "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400" },
   violet: { border: "border-violet-200 dark:border-violet-800/40 hover:border-violet-400 dark:hover:border-violet-600", bg: "hover:bg-violet-50/50 dark:hover:bg-violet-950/20", iconBg: "bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400" },
   sky: { border: "border-sky-200 dark:border-sky-800/40 hover:border-sky-400 dark:hover:border-sky-600", bg: "hover:bg-sky-50/50 dark:hover:bg-sky-950/20", iconBg: "bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400" },
@@ -660,6 +664,9 @@ export default function DDoSDetectionDashboard() {
           </TabsContent>
 
           {/* ════════════════════ CONTENT TABS ════════════════════ */}
+          <TabsContent value="info" className="space-y-6 animate-fade-in">
+            <iframe src="/proje-bilgileri" className="w-full h-[800px] border-0 rounded-lg" />
+          </TabsContent>
           <TabsContent value="thesis" className="space-y-6 animate-fade-in"><ThesisResultsChapter /></TabsContent>
           <TabsContent value="architecture" className="space-y-6 animate-fade-in"><SystemArchitectureDiagram /></TabsContent>
           <TabsContent value="bso" className="space-y-6 animate-fade-in"><BSOVisualization /></TabsContent>
