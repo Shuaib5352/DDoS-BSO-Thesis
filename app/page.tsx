@@ -31,6 +31,7 @@ import ModelRankingDashboard from "@/components/model-ranking-dashboard"
 import LearningCurvesEfficiency from "@/components/learning-curves-efficiency"
 import ThesisDefenseQA from "@/components/thesis-defense-qa"
 import ThesisTables from "@/components/thesis-tables"
+import FeatureSelectionAnalysis from "@/components/feature-selection-analysis"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -68,6 +69,7 @@ const TAB_CATEGORIES = [
     tabs: [
       { value: "bso", label: "BSO Optimizasyonu", icon: GitGraph },
       { value: "features", label: "Öznitelik Analizi", icon: Target },
+      { value: "feature-selection", label: "Öznitelik Seçimi", icon: CheckCircle2 },
       { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
     ],
   },
@@ -168,6 +170,7 @@ const QUICK_NAV = [
   { tab: "ranking", title: "Model Sıralaması", desc: "Bileşik puanlama karşılaştırması", icon: Trophy, accent: "amber" },
   { tab: "heatmap", title: "Karışıklık Matrisleri", desc: "12 model için ısı haritaları", icon: Grid3X3, accent: "purple" },
   { tab: "features", title: "Öznitelik Önemi", desc: "Öznitelik sıralaması ve analizi", icon: Target, accent: "blue" },
+  { tab: "feature-selection", title: "Öznitelik Seçimi", desc: "BSO ile seçim analizi ve karşılaştırması", icon: CheckCircle2, accent: "emerald" },
   { tab: "errors", title: "Hata Analizi", desc: "Yanlış sınıflandırma kalıpları", icon: AlertTriangle, accent: "red" },
   { tab: "defense", title: "Savunma S&C", desc: "Tez savunma soru-cevap hazırlığı", icon: MessageCircleQuestion, accent: "rose" },
   { tab: "export", title: "Dışa Aktar", desc: "PDF, HTML, JSON, CSV formatları", icon: Printer, accent: "stone" },
@@ -183,6 +186,7 @@ const accentMap: Record<string, { border: string; bg: string; iconBg: string }> 
   red: { border: "border-red-200 dark:border-red-800/40 hover:border-red-400 dark:hover:border-red-600", bg: "hover:bg-red-50/50 dark:hover:bg-red-950/20", iconBg: "bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400" },
   stone: { border: "border-stone-200 dark:border-stone-800/40 hover:border-stone-400 dark:hover:border-stone-600", bg: "hover:bg-stone-50/50 dark:hover:bg-stone-950/20", iconBg: "bg-stone-100 dark:bg-stone-900/50 text-stone-600 dark:text-stone-400" },
   rose: { border: "border-rose-200 dark:border-rose-800/40 hover:border-rose-400 dark:hover:border-rose-600", bg: "hover:bg-rose-50/50 dark:hover:bg-rose-950/20", iconBg: "bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400" },
+  emerald: { border: "border-emerald-200 dark:border-emerald-800/40 hover:border-emerald-400 dark:hover:border-emerald-600", bg: "hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20", iconBg: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400" },
 }
 
 export default function DDoSDetectionDashboard() {
@@ -681,6 +685,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="learning" className="space-y-6 animate-fade-in"><LearningCurvesEfficiency /></TabsContent>
           <TabsContent value="defense" className="space-y-6 animate-fade-in"><ThesisDefenseQA /></TabsContent>
           <TabsContent value="tables" className="space-y-6 animate-fade-in"><ThesisTables /></TabsContent>
+          <TabsContent value="feature-selection" className="space-y-6 animate-fade-in"><FeatureSelectionAnalysis /></TabsContent>
           <TabsContent value="export" className="space-y-6 animate-fade-in"><PrintExportPanel /></TabsContent>
         </Tabs>
 
