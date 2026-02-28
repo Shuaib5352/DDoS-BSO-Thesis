@@ -72,9 +72,9 @@ const TAB_CATEGORIES = [
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
       { value: "tables", label: "Tez Tabloları", icon: FileText },
       { value: "references", label: "Kaynakça", icon: Library },
-      { value: "detection", label: "DDoS Tespit", icon: ScanSearch },
-      { value: "pipeline", label: "Veri Süreci", icon: Workflow },
-      { value: "equations", label: "Formüller", icon: Sigma },
+      { value: "literature", label: "İlgili Çalışmalar", icon: BookOpen },
+      { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
+      { value: "glossary", label: "Semboller", icon: List },
     ],
   },
   {
@@ -85,6 +85,7 @@ const TAB_CATEGORIES = [
       { value: "features", label: "Öznitelik Analizi", icon: Target },
       { value: "feature-selection", label: "Öznitelik Seçimi", icon: CheckCircle2 },
       { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
+      { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
     ],
   },
   {
@@ -94,6 +95,8 @@ const TAB_CATEGORIES = [
       { value: "ml", label: "ML Sınıflandırma", icon: Cpu },
       { value: "algorithms", label: "Algoritmalar", icon: BarChart3 },
       { value: "ranking", label: "Model Sıralaması", icon: Trophy },
+      { value: "detection", label: "DDoS Tespit", icon: ScanSearch },
+      { value: "pipeline", label: "Veri Süreci", icon: Workflow },
     ],
   },
   {
@@ -104,6 +107,7 @@ const TAB_CATEGORIES = [
       { value: "heatmap", label: "Karışıklık Matrisi", icon: Grid3X3 },
       { value: "errors", label: "Hata Analizi", icon: AlertTriangle },
       { value: "learning", label: "Öğrenme Eğrileri", icon: Gauge },
+      { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
     ],
   },
   {
@@ -111,17 +115,7 @@ const TAB_CATEGORIES = [
     label: "Dışa Aktar",
     tabs: [
       { value: "export", label: "Yazdır / Dışa Aktar", icon: Printer },
-    ],
-  },
-  {
-    id: "thesis-tools",
-    label: "Tez Araçları",
-    tabs: [
-      { value: "literature", label: "İlgili Çalışmalar", icon: BookOpen },
-      { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
-      { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
-      { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
-      { value: "glossary", label: "Semboller", icon: List },
+      { value: "equations", label: "Formüller", icon: Sigma },
     ],
   },
 ]
