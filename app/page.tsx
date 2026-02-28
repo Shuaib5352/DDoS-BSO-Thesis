@@ -252,12 +252,20 @@ export default function DDoSDetectionDashboard() {
                 <h1 className="text-sm md:text-base font-bold text-slate-900 dark:text-white truncate tracking-tight">
                   BSO-Hibrit RF ile Geliştirilmiş DDoS Tespiti
                 </h1>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                  Yüksek Lisans Tezi — SHUAIB AYAD JASIM — CICIoT2023
-                </p>
-                <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 font-medium">
-                  👨‍🎓 Danışman: <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Dr. Saim Ervural</span> — KTO Karatay Üniversitesi
-                </p>
+                <div className="flex items-center gap-3 mt-1">
+                  <img src="/shuaib.jpg" alt="SHUAIB AYAD JASIM" className="w-9 h-9 rounded-full border-2 border-indigo-400 shadow" />
+                  <div>
+                    <p className="text-[11px] text-slate-800 dark:text-slate-200 font-bold leading-tight">SHUAIB AYAD JASIM</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">Yüksek Lisans Öğrencisi</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 mt-1">
+                  <img src="/advisor.jpg" alt="Dr. Saim Ervural" className="w-9 h-9 rounded-full border-2 border-emerald-400 shadow" />
+                  <div>
+                    <p className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold leading-tight">Dr. Saim Ervural</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">Danışman — KTO Karatay Üniversitesi</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2.5 flex-shrink-0">
