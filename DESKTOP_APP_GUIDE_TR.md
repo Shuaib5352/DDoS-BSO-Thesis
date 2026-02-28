@@ -201,11 +201,11 @@ Bu proje akademik tez projesidir. Kullanım izni için lütfen yöneticiye başv
 
 ## 👤 Yazar
 
-**غسق محمد** - DDoS-BSO Tespiti Tez Projesi
+**shuaib ayad jasimد** - DDoS-BSO Tespiti Tez Projesi
 
 ## 📞 İletişim
 
-Sorular ve öneriler için lütfen proje yöneticisine başvurun.
+_x9sl instagram.
 
 ---
 
