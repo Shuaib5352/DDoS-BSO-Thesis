@@ -11,6 +11,7 @@ import {
   BookOpen, ChevronRight, ArrowRight, GraduationCap,
   Activity, Layers, Brain, Award, Clock, Calendar,
   Sparkles, BarChart2, Network, MessageCircleQuestion, Library, ScanSearch, Workflow, Sigma,
+  PieChart, List,
 } from "lucide-react"
 import BSOVisualization from "@/components/bso-visualization"
 import MLClassificationPanel from "@/components/ml-classification-panel"
@@ -36,6 +37,11 @@ import AcademicReferences from "@/components/academic-references"
 import DDoSDetectionForm from "@/components/ddos-detection-form"
 import PipelineDemo from "@/components/pipeline-demo"
 import MathEquations from "@/components/math-equations"
+import LiteratureComparison from "@/components/literature-comparison"
+import DatasetEDA from "@/components/dataset-eda"
+import StatisticalSignificance from "@/components/statistical-significance"
+import ThesisWritingGuide from "@/components/thesis-writing-guide"
+import GlossaryNotation from "@/components/glossary-notation"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -107,6 +113,17 @@ const TAB_CATEGORIES = [
       { value: "export", label: "Yazdır / Dışa Aktar", icon: Printer },
     ],
   },
+  {
+    id: "thesis-tools",
+    label: "Tez Araçları",
+    tabs: [
+      { value: "literature", label: "İlgili Çalışmalar", icon: BookOpen },
+      { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
+      { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
+      { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
+      { value: "glossary", label: "Semboller", icon: List },
+    ],
+  },
 ]
 
 /* ═══════════════════════════════════════════════════════════════
@@ -134,6 +151,11 @@ const TAB_COLORS: Record<string, string> = {
   detection: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   pipeline: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   equations: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-indigo-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  literature: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "dataset-eda": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  statistics: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "writing-guide": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-yellow-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  glossary: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-600 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -191,6 +213,11 @@ const QUICK_NAV = [
   { tab: "detection", title: "DDoS Tespit", desc: "Etkileşimli trafik analiz formu", icon: ScanSearch, accent: "red" },
   { tab: "pipeline", title: "Veri Süreci", desc: "Adım adım pipeline demo", icon: Workflow, accent: "violet" },
   { tab: "equations", title: "Formüller", desc: "24 temel matematiksel denklem", icon: Sigma, accent: "indigo" },
+  { tab: "literature", title: "İlgili Çalışmalar", desc: "12 çalışma karşılaştırması", icon: BookOpen, accent: "emerald" },
+  { tab: "dataset-eda", title: "Veri Keşfi", desc: "Keşifsel veri analizi (EDA)", icon: PieChart, accent: "sky" },
+  { tab: "statistics", title: "İstatistiksel Testler", desc: "McNemar, Wilcoxon, Cohen's d", icon: BarChart2, accent: "purple" },
+  { tab: "writing-guide", title: "Yazım Rehberi", desc: "5 bölüm tez yazım kılavuzu", icon: GraduationCap, accent: "amber" },
+  { tab: "glossary", title: "Semboller", desc: "53 sembol ve kısaltma tablosu", icon: List, accent: "teal" },
 ]
 
 const accentMap: Record<string, { border: string; bg: string; iconBg: string }> = {
@@ -708,6 +735,11 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="detection" className="space-y-6 animate-fade-in"><DDoSDetectionForm /></TabsContent>
           <TabsContent value="pipeline" className="space-y-6 animate-fade-in"><PipelineDemo /></TabsContent>
           <TabsContent value="equations" className="space-y-6 animate-fade-in"><MathEquations /></TabsContent>
+          <TabsContent value="literature" className="space-y-6 animate-fade-in"><LiteratureComparison /></TabsContent>
+          <TabsContent value="dataset-eda" className="space-y-6 animate-fade-in"><DatasetEDA /></TabsContent>
+          <TabsContent value="statistics" className="space-y-6 animate-fade-in"><StatisticalSignificance /></TabsContent>
+          <TabsContent value="writing-guide" className="space-y-6 animate-fade-in"><ThesisWritingGuide /></TabsContent>
+          <TabsContent value="glossary" className="space-y-6 animate-fade-in"><GlossaryNotation /></TabsContent>
           <TabsContent value="export" className="space-y-6 animate-fade-in"><PrintExportPanel /></TabsContent>
         </Tabs>
 
