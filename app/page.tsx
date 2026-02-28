@@ -63,59 +63,65 @@ function useForceTurkish() {
    ═══════════════════════════════════════════════════════════════ */
 const TAB_CATEGORIES = [
   {
-    id: "overview",
-    label: "Genel Bakış",
+    id: "ch1-intro",
+    label: "Bölüm 1 · Giriş",
     tabs: [
       { value: "home", label: "Ana Sayfa", icon: BookOpen },
-      { value: "thesis", label: "Tez Sonuçları", icon: FileText },
       { value: "architecture", label: "Sistem Mimarisi", icon: GitBranch },
-      { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
-      { value: "tables", label: "Tez Tabloları", icon: FileText },
-      { value: "references", label: "Kaynakça", icon: Library },
+    ],
+  },
+  {
+    id: "ch2-literature",
+    label: "Bölüm 2 · Literatür",
+    tabs: [
       { value: "literature", label: "İlgili Çalışmalar", icon: BookOpen },
-      { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
-      { value: "glossary", label: "Semboller", icon: List },
+      { value: "references", label: "Kaynakça", icon: Library },
     ],
   },
   {
-    id: "analysis",
-    label: "Analiz",
+    id: "ch3-method",
+    label: "Bölüm 3 · Yöntem",
     tabs: [
-      { value: "bso", label: "BSO Optimizasyonu", icon: GitGraph },
-      { value: "features", label: "Öznitelik Analizi", icon: Target },
-      { value: "feature-selection", label: "Öznitelik Seçimi", icon: CheckCircle2 },
-      { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
       { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
+      { value: "bso", label: "BSO Optimizasyonu", icon: GitGraph },
+      { value: "feature-selection", label: "Öznitelik Seçimi", icon: CheckCircle2 },
+      { value: "equations", label: "Formüller", icon: Sigma },
+      { value: "pipeline", label: "Veri Süreci", icon: Workflow },
+      { value: "detection", label: "DDoS Tespit", icon: ScanSearch },
     ],
   },
   {
-    id: "models",
-    label: "Modeller",
+    id: "ch4-results",
+    label: "Bölüm 4 · Bulgular",
     tabs: [
+      { value: "thesis", label: "Tez Sonuçları", icon: FileText },
+      { value: "tables", label: "Tez Tabloları", icon: FileText },
+      { value: "features", label: "Öznitelik Önemi", icon: Target },
       { value: "ml", label: "ML Sınıflandırma", icon: Cpu },
       { value: "algorithms", label: "Algoritmalar", icon: BarChart3 },
       { value: "ranking", label: "Model Sıralaması", icon: Trophy },
-      { value: "detection", label: "DDoS Tespit", icon: ScanSearch },
-      { value: "pipeline", label: "Veri Süreci", icon: Workflow },
     ],
   },
   {
-    id: "evaluation",
-    label: "Değerlendirme",
+    id: "ch4-eval",
+    label: "Bölüm 4 · Değerlendirme",
     tabs: [
       { value: "performance", label: "Performans", icon: TrendingUp },
       { value: "heatmap", label: "Karışıklık Matrisi", icon: Grid3X3 },
       { value: "errors", label: "Hata Analizi", icon: AlertTriangle },
       { value: "learning", label: "Öğrenme Eğrileri", icon: Gauge },
+      { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
       { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
     ],
   },
   {
-    id: "export",
-    label: "Dışa Aktar",
+    id: "tools",
+    label: "Araçlar",
     tabs: [
-      { value: "export", label: "Yazdır / Dışa Aktar", icon: Printer },
-      { value: "equations", label: "Formüller", icon: Sigma },
+      { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
+      { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
+      { value: "glossary", label: "Semboller", icon: List },
+      { value: "export", label: "Dışa Aktar", icon: Printer },
     ],
   },
 ]
@@ -193,25 +199,22 @@ const TIMELINE = [
    Quick navigation
    ═══════════════════════════════════════════════════════════════ */
 const QUICK_NAV = [
-  { tab: "thesis", title: "Bölüm 4: Sonuçlar", desc: "Tüm tablo ve şekillerle tez sonuçları", icon: FileText, accent: "indigo" },
-  { tab: "architecture", title: "Sistem Mimarisi", desc: "Dışa aktarılabilir SVG diyagramı", icon: GitBranch, accent: "violet" },
-  { tab: "bso", title: "BSO Analizi", desc: "Yakınsama eğrileri ve optimizasyon", icon: GitGraph, accent: "sky" },
-  { tab: "ranking", title: "Model Sıralaması", desc: "Bileşik puanlama karşılaştırması", icon: Trophy, accent: "amber" },
-  { tab: "heatmap", title: "Karışıklık Matrisleri", desc: "12 model için ısı haritaları", icon: Grid3X3, accent: "purple" },
-  { tab: "features", title: "Öznitelik Önemi", desc: "Öznitelik sıralaması ve analizi", icon: Target, accent: "blue" },
-  { tab: "feature-selection", title: "Öznitelik Seçimi", desc: "BSO ile seçim analizi ve karşılaştırması", icon: CheckCircle2, accent: "emerald" },
-  { tab: "errors", title: "Hata Analizi", desc: "Yanlış sınıflandırma kalıpları", icon: AlertTriangle, accent: "red" },
-  { tab: "defense", title: "Savunma S&C", desc: "Tez savunma soru-cevap hazırlığı", icon: MessageCircleQuestion, accent: "rose" },
-  { tab: "export", title: "Dışa Aktar", desc: "PDF, HTML, JSON, CSV formatları", icon: Printer, accent: "stone" },
-  { tab: "references", title: "Kaynakça", desc: "60+ akademik referans — APA 7", icon: Library, accent: "teal" },
-  { tab: "detection", title: "DDoS Tespit", desc: "Etkileşimli trafik analiz formu", icon: ScanSearch, accent: "red" },
-  { tab: "pipeline", title: "Veri Süreci", desc: "Adım adım pipeline demo", icon: Workflow, accent: "violet" },
-  { tab: "equations", title: "Formüller", desc: "24 temel matematiksel denklem", icon: Sigma, accent: "indigo" },
+  /* Bölüm 1 — Giriş */
+  { tab: "architecture", title: "Sistem Mimarisi", desc: "BSO-RF çerçeve diyagramı", icon: GitBranch, accent: "violet" },
+  /* Bölüm 2 — Literatür */
   { tab: "literature", title: "İlgili Çalışmalar", desc: "12 çalışma karşılaştırması", icon: BookOpen, accent: "emerald" },
+  { tab: "references", title: "Kaynakça", desc: "60+ akademik referans — APA 7", icon: Library, accent: "teal" },
+  /* Bölüm 3 — Yöntem */
   { tab: "dataset-eda", title: "Veri Keşfi", desc: "Keşifsel veri analizi (EDA)", icon: PieChart, accent: "sky" },
+  { tab: "bso", title: "BSO Analizi", desc: "Yakınsama eğrileri ve optimizasyon", icon: GitGraph, accent: "sky" },
+  { tab: "feature-selection", title: "Öznitelik Seçimi", desc: "BSO ile seçim analizi", icon: CheckCircle2, accent: "emerald" },
+  { tab: "equations", title: "Formüller", desc: "24 temel matematiksel denklem", icon: Sigma, accent: "indigo" },
+  /* Bölüm 4 — Bulgular */
+  { tab: "thesis", title: "Tez Sonuçları", desc: "Tüm tablo ve şekillerle sonuçlar", icon: FileText, accent: "indigo" },
+  { tab: "ranking", title: "Model Sıralaması", desc: "12 model bileşik puanlama", icon: Trophy, accent: "amber" },
+  { tab: "heatmap", title: "Karışıklık Matrisleri", desc: "12 model için ısı haritaları", icon: Grid3X3, accent: "purple" },
   { tab: "statistics", title: "İstatistiksel Testler", desc: "McNemar, Wilcoxon, Cohen's d", icon: BarChart2, accent: "purple" },
-  { tab: "writing-guide", title: "Yazım Rehberi", desc: "5 bölüm tez yazım kılavuzu", icon: GraduationCap, accent: "amber" },
-  { tab: "glossary", title: "Semboller", desc: "53 sembol ve kısaltma tablosu", icon: List, accent: "teal" },
+  { tab: "errors", title: "Hata Analizi", desc: "Yanlış sınıflandırma kalıpları", icon: AlertTriangle, accent: "red" },
 ]
 
 const accentMap: Record<string, { border: string; bg: string; iconBg: string }> = {
