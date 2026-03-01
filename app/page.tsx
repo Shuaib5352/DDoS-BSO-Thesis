@@ -43,6 +43,9 @@ import StatisticalSignificance from "@/components/statistical-significance"
 import ThesisWritingGuide from "@/components/thesis-writing-guide"
 import GlossaryNotation from "@/components/glossary-notation"
 import MethodologyFramework from "@/components/methodology-framework"
+import ThesisFigures from "@/components/thesis-figures"
+import ThesisChapterOrganizer from "@/components/thesis-chapter-organizer"
+import ConclusionRecommendations from "@/components/conclusion-recommendations"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -117,9 +120,18 @@ const TAB_CATEGORIES = [
     ],
   },
   {
+    id: "ch5-conclusion",
+    label: "Bölüm 5 · Sonuç",
+    tabs: [
+      { value: "conclusion", label: "Sonuç ve Öneriler", icon: Award },
+    ],
+  },
+  {
     id: "tools",
     label: "Araçlar",
     tabs: [
+      { value: "figures", label: "Tez Şekilleri", icon: FileText },
+      { value: "chapter-org", label: "Bölüm Düzenleyici", icon: GraduationCap },
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
       { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
       { value: "glossary", label: "Semboller", icon: List },
@@ -159,6 +171,9 @@ const TAB_COLORS: Record<string, string> = {
   "writing-guide": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-yellow-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   glossary: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-600 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   methodology: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  conclusion: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  figures: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "chapter-org": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -219,6 +234,11 @@ const QUICK_NAV = [
   { tab: "heatmap", title: "Karışıklık Matrisleri", desc: "12 model için ısı haritaları", icon: Grid3X3, accent: "purple" },
   { tab: "statistics", title: "İstatistiksel Testler", desc: "McNemar, Wilcoxon, Cohen's d", icon: BarChart2, accent: "purple" },
   { tab: "errors", title: "Hata Analizi", desc: "Yanlış sınıflandırma kalıpları", icon: AlertTriangle, accent: "red" },
+  /* Bölüm 5 — Sonuç */
+  { tab: "conclusion", title: "Sonuç ve Öneriler", desc: "Bölüm 5 — kısıtlamalar ve gelecek çalışmalar", icon: Award, accent: "rose" },
+  /* Araçlar */
+  { tab: "figures", title: "Tez Şekilleri", desc: "18+ akademik diyagram ve şekil", icon: FileText, accent: "sky" },
+  { tab: "chapter-org", title: "Bölüm Düzenleyici", desc: "Word'e kopyalanabilir paragraflar", icon: GraduationCap, accent: "amber" },
 ]
 
 const accentMap: Record<string, { border: string; bg: string; iconBg: string }> = {
@@ -741,6 +761,9 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="writing-guide" className="space-y-6 animate-fade-in"><ThesisWritingGuide /></TabsContent>
           <TabsContent value="glossary" className="space-y-6 animate-fade-in"><GlossaryNotation /></TabsContent>
           <TabsContent value="export" className="space-y-6 animate-fade-in"><PrintExportPanel /></TabsContent>
+          <TabsContent value="conclusion" className="space-y-6 animate-fade-in"><ConclusionRecommendations /></TabsContent>
+          <TabsContent value="figures" className="space-y-6 animate-fade-in"><ThesisFigures /></TabsContent>
+          <TabsContent value="chapter-org" className="space-y-6 animate-fade-in"><ThesisChapterOrganizer /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}
