@@ -127,7 +127,7 @@ const THESIS_CHAPTERS = [
                 number: "3.2",
                 title: "Veri Ön İşleme",
                 paragraphs: [
-                    `Veri ön işleme aşamasında sırasıyla şu adımlar uygulanmıştır:\n\n1. Eksik Değer Kontrolü: Veri setinde eksik değer bulunmamıştır.\n2. Tekrarlanan Veri Temizliği: Tekrarlanan satırlar kaldırılmıştır.\n3. Min-Max Normalizasyon: Tüm sayısal özellikler [0, 1] aralığına normalize edilmiştir:\n   x_norm = (x - x_min) / (x_max - x_min)\n4. Veri Bölme: Tabakalı bölme ile %70 eğitim (${(DATASET_STATISTICS.totalFlows.training - DATASET_STATISTICS.smoteSyntheticSamples).toLocaleString()}), %10 doğrulama (${DATASET_STATISTICS.totalFlows.validation.toLocaleString()}) ve %20 test (${DATASET_STATISTICS.totalFlows.testing.toLocaleString()}) olarak ayrılmıştır.`,,
+                    `Veri ön işleme aşamasında sırasıyla şu adımlar uygulanmıştır:\n\n1. Eksik Değer Kontrolü: Veri setinde eksik değer bulunmamıştır.\n2. Tekrarlanan Veri Temizliği: Tekrarlanan satırlar kaldırılmıştır.\n3. Min-Max Normalizasyon: Tüm sayısal özellikler [0, 1] aralığına normalize edilmiştir:\n   x_norm = (x - x_min) / (x_max - x_min)\n4. Veri Bölme: Tabakalı bölme ile %70 eğitim (${(DATASET_STATISTICS.totalFlows.training - DATASET_STATISTICS.smoteSyntheticSamples).toLocaleString()}), %10 doğrulama (${DATASET_STATISTICS.totalFlows.validation.toLocaleString()}) ve %20 test (${DATASET_STATISTICS.totalFlows.testing.toLocaleString()}) olarak ayrılmıştır.`, ,
                     `SMOTE (Synthetic Minority Over-sampling Technique) yalnızca eğitim setine uygulanmıştır (Chawla et al., 2002). Eğitim seti boyutu ${(DATASET_STATISTICS.totalFlows.training - DATASET_STATISTICS.smoteSyntheticSamples).toLocaleString()}'den ${DATASET_STATISTICS.totalFlows.training.toLocaleString()}'e yükselmiştir. Özellikle Backdoor_Malware sınıfının örnek sayısı 2.252'den 17.500'e artırılmıştır (×7,8). SMOTE'un yalnızca eğitim setine uygulanması, test setinin gerçekçiliğini korumuştur (veri sızıntısı önlenir).`,
                 ],
                 tables: ["Tablo 3.2: SMOTE Öncesi ve Sonrası Sınıf Dağılımı"],
@@ -439,7 +439,7 @@ export default function ThesisChapterOrganizer() {
                                                         variant="ghost"
                                                         size="sm"
                                                         className="absolute top-0 right-0 h-6 px-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                        onClick={() => copy(`${sec.id}-p${pi}`, p)}
+                                                        onClick={() => copy(`${sec.id}-p${pi}`, p ?? "")}
                                                     >
                                                         {copied === `${sec.id}-p${pi}` ? (
                                                             <CheckCircle2 className="w-3 h-3 text-emerald-500" />

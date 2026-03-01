@@ -1075,7 +1075,7 @@ export default function ThesisFigures() {
             {filtered.map((fig) => {
                 const typeConf = figureTypeConfig[fig.type] || figureTypeConfig.system
                 const TypeIcon = typeConf.icon
-                const Renderer = SVG_RENDERERS[fig.id]
+                const Renderer = SVG_RENDERERS[fig.id] as (() => React.ReactNode) | undefined
                 const captionText = `${fig.number}: ${fig.title}`
                 const isOpen = expanded.has(fig.id)
 
