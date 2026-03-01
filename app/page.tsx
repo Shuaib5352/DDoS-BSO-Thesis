@@ -42,6 +42,7 @@ import DatasetEDA from "@/components/dataset-eda"
 import StatisticalSignificance from "@/components/statistical-significance"
 import ThesisWritingGuide from "@/components/thesis-writing-guide"
 import GlossaryNotation from "@/components/glossary-notation"
+import MethodologyFramework from "@/components/methodology-framework"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -82,6 +83,7 @@ const TAB_CATEGORIES = [
     id: "ch3-method",
     label: "Bölüm 3 · Yöntem",
     tabs: [
+      { value: "methodology", label: "Metodoloji Çerçevesi", icon: FileText },
       { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
       { value: "bso", label: "BSO Optimizasyonu", icon: GitGraph },
       { value: "feature-selection", label: "Öznitelik Seçimi", icon: CheckCircle2 },
@@ -156,6 +158,7 @@ const TAB_COLORS: Record<string, string> = {
   statistics: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "writing-guide": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-yellow-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   glossary: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-600 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  methodology: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -205,6 +208,7 @@ const QUICK_NAV = [
   { tab: "literature", title: "İlgili Çalışmalar", desc: "12 çalışma karşılaştırması", icon: BookOpen, accent: "emerald" },
   { tab: "references", title: "Kaynakça", desc: "60+ akademik referans — APA 7", icon: Library, accent: "teal" },
   /* Bölüm 3 — Yöntem */
+  { tab: "methodology", title: "Metodoloji Çerçevesi", desc: "Danışman geri bildirimine göre tam taslak", icon: FileText, accent: "indigo" },
   { tab: "dataset-eda", title: "Veri Keşfi", desc: "Keşifsel veri analizi (EDA)", icon: PieChart, accent: "sky" },
   { tab: "bso", title: "BSO Analizi", desc: "Yakınsama eğrileri ve optimizasyon", icon: GitGraph, accent: "sky" },
   { tab: "feature-selection", title: "Öznitelik Seçimi", desc: "BSO ile seçim analizi", icon: CheckCircle2, accent: "emerald" },
@@ -731,6 +735,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="pipeline" className="space-y-6 animate-fade-in"><PipelineDemo /></TabsContent>
           <TabsContent value="equations" className="space-y-6 animate-fade-in"><MathEquations /></TabsContent>
           <TabsContent value="literature" className="space-y-6 animate-fade-in"><LiteratureComparison /></TabsContent>
+          <TabsContent value="methodology" className="space-y-6 animate-fade-in"><MethodologyFramework /></TabsContent>
           <TabsContent value="dataset-eda" className="space-y-6 animate-fade-in"><DatasetEDA /></TabsContent>
           <TabsContent value="statistics" className="space-y-6 animate-fade-in"><StatisticalSignificance /></TabsContent>
           <TabsContent value="writing-guide" className="space-y-6 animate-fade-in"><ThesisWritingGuide /></TabsContent>

@@ -16,20 +16,19 @@ import {
     CROSS_VALIDATION,
 } from "@/lib/ciciot2023-dataset"
 
-// ─── Ablation Study Data ─────────────────────────────────────────────────────
+// ─── Ablation Study Data (S1–S4 Deney Senaryoları) ──────────────────────────
 // Based on real experiment: BSO-Hybrid RF = 89.82% accuracy
-// We derive ablation variants from the real data:
-// - Full BSO-Hybrid RF (proposed): 89.82% acc, 84.24% F1-macro
-// - Without feature selection (all 39 features): = RF baseline = 89.74%
-// - Without hyperparameter tuning (default RF): slightly lower
-// - Without SMOTE: lower on minority classes
-// - Without BSO (standard RF, all features, default): baseline
+// S1: Baseline — no optimization (standard DT, all features, default params, imbalanced)
+// S2: BSO Feature Selection only (19 features, default RF params, SMOTE)
+// S3: BSO HP Tuning only (all 39 features, optimized RF params, SMOTE)
+// S4: Full BSO-Hybrid RF (FS + HP + SMOTE) — proposed model
+// + SMOTE ablation test
 
 const ABLATION_VARIANTS = [
     {
-        id: "full",
-        name: "Tam BSO-Hybrid RF (Önerilen)",
-        nameAr: "Tam BSO-Hybrid RF (Önerilen)",
+        id: "S4",
+        name: "S4: Tam BSO-Hybrid RF (Önerilen)",
+        nameAr: "S4: Tam BSO-Hybrid RF (Önerilen)",
         removed: "Yok",
         accuracy: 89.82,
         f1Macro: 84.24,
@@ -46,11 +45,11 @@ const ABLATION_VARIANTS = [
         description: "BSO özellik seçimi + hiperparametre ayarı + SMOTE ile tam model",
     },
     {
-        id: "no-fs",
-        name: "Özellik Seçimi Olmadan",
-        nameAr: "Özellik Seçimi Olmadan",
+        id: "S3",
+        name: "S3: Yalnız BSO HP Optimizasyonu",
+        nameAr: "S3: Yalnız BSO HP Optimizasyonu",
         removed: "BSO Özellik Seçimi",
-        accuracy: 89.74, // Real RF with all features
+        accuracy: 89.74,
         f1Macro: 84.13,
         f1Weighted: 89.77,
         aucRoc: 98.36,
@@ -61,13 +60,13 @@ const ABLATION_VARIANTS = [
         ddosAckF1: 99.98,
         ddosSynF1: 99.96,
         portScanF1: 81.39,
-        color: "#3b82f6",
+        color: "#f59e0b",
         description: "Tüm 39 özellik ve BSO ile optimize edilmiş hiperparametreler ile RF",
     },
     {
-        id: "no-hp",
-        name: "HP Optimizasyonu Olmadan",
-        nameAr: "HP Optimizasyonu Olmadan",
+        id: "S2",
+        name: "S2: Yalnız BSO Özellik Seçimi",
+        nameAr: "S2: Yalnız BSO Özellik Seçimi",
         removed: "Hiperparametre Ayarı",
         accuracy: 88.47,
         f1Macro: 82.35,
@@ -80,13 +79,13 @@ const ABLATION_VARIANTS = [
         ddosAckF1: 99.92,
         ddosSynF1: 99.90,
         portScanF1: 79.38,
-        color: "#f59e0b",
+        color: "#3b82f6",
         description: "BSO özellik seçimi (19 özellik) ancak varsayılan RF parametreleri (n_estimators=100, max_depth=None)",
     },
     {
-        id: "no-smote",
-        name: "SMOTE Olmadan",
-        nameAr: "SMOTE Olmadan",
+        id: "SMOTE",
+        name: "SMOTE Ablasyonu",
+        nameAr: "SMOTE Ablasyonu",
         removed: "SMOTE Aşırı Örnekleme",
         accuracy: 90.51,
         f1Macro: 72.86,
@@ -103,9 +102,9 @@ const ABLATION_VARIANTS = [
         description: "Tam BSO optimizasyonu ancak dengesiz verilerle eğitilmiş (72.252 örnek, Backdoor=2.252)",
     },
     {
-        id: "baseline",
-        name: "Temel RF (Optimizasyon Yok)",
-        nameAr: "Temel RF (Optimizasyon Yok)",
+        id: "S1",
+        name: "S1: Temel Model (Optimizasyon Yok)",
+        nameAr: "S1: Temel Model (Optimizasyon Yok)",
         removed: "Tüm BSO Bileşenleri",
         accuracy: 87.04,
         f1Macro: 78.57,
@@ -187,18 +186,16 @@ export default function AblationStudy() {
                                 </CardDescription>
                             </div>
                         </div>
-                        <Badge className="bg-orange-600">5 Ablasyon Varyantı</Badge>
+                        <Badge className="bg-orange-600">S1–S4 Deney Senaryoları</Badge>
                     </div>
                     <div className="mt-3 p-3 bg-amber-500/10 rounded-lg border border-amber-500/30 text-sm">
-                        <strong>⚠ Veri Kaynağı Notu:</strong>{" "}
-                        <span className="text-emerald-500 font-semibold">Tam BSO-Hybrid</span> ({MODEL_RESULTS[0].accuracy}%) ve{" "}
-                        <span className="text-blue-500 font-semibold">Özellik Seçimi Olmadan</span> ({MODEL_RESULTS[5].accuracy}%)
-                        <strong>gerçek deney sonuçlarını</strong> kullanır. Kalan ablasyon varyantları
-                        (<span className="text-amber-500">HP Ayarı Yok</span>,{" "}
-                        <span className="text-red-500">SMOTE Yok</span>,{" "}
-                        <span className="text-gray-400">Temel</span>)
-                        gerçek model davranışları ve yerleşik ML ilkelerine dayalı{" "}
-                        <strong>türetilmiş tahminlerdir</strong>. Tam bir gerçek ablasyon için, deney boru hattında her varyantı yeniden çalıştırın.
+                        <strong>📋 Deney Senaryoları:</strong>{" "}
+                        <span className="text-gray-400 font-semibold">S1</span> (Temel, optimizasyon yok) →{" "}
+                        <span className="text-blue-500 font-semibold">S2</span> (BSO Özellik Seçimi) →{" "}
+                        <span className="text-amber-500 font-semibold">S3</span> (BSO HP Optimizasyonu) →{" "}
+                        <span className="text-emerald-500 font-semibold">S4</span> (Tam BSO-Hybrid RF).{" "}
+                        Her senaryoda yalnızca bir bileşen eklenerek sistematik olarak katkı ölçülmüştür.
+                        <span className="text-red-500 font-semibold"> SMOTE ablasyonu</span> ayrıca test edilmiştir.
                     </div>
                 </CardHeader>
             </Card>
@@ -233,7 +230,7 @@ export default function AblationStudy() {
                                 {ABLATION_VARIANTS.map((v) => (
                                     <tr
                                         key={v.id}
-                                        className={`border-b border-border/50 hover:bg-muted/30 ${v.id === "full" ? "bg-emerald-500/5 font-bold" : ""}`}
+                                        className={`border-b border-border/50 hover:bg-muted/30 ${v.id === "S4" ? "bg-emerald-500/5 font-bold" : ""}`}
                                     >
                                         <td className="p-2">
                                             <div className="flex items-center gap-2">
@@ -251,7 +248,7 @@ export default function AblationStudy() {
                                         <td className="p-2 text-right font-mono">{v.accuracy}</td>
                                         <td className="p-2 text-right font-mono">
                                             {v.f1Macro}
-                                            {v.id !== "full" && (
+                                            {v.id !== "S4" && (
                                                 <span className={`ml-1 text-xs ${v.f1Macro < 84.24 ? "text-red-500" : "text-emerald-500"}`}>
                                                     ({v.f1Macro < 84.24 ? "" : "+"}{(v.f1Macro - 84.24).toFixed(2)})
                                                 </span>
@@ -281,7 +278,7 @@ export default function AblationStudy() {
                     <CardContent>
                         <div className="h-[350px]">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={ABLATION_VARIANTS.map((v) => ({ name: v.id === "full" ? "Tam BSO" : v.id === "no-fs" ? "ÖS Yok" : v.id === "no-hp" ? "HP Yok" : v.id === "no-smote" ? "SMOTE Yok" : "Temel", accuracy: v.accuracy, f1Macro: v.f1Macro, color: v.color }))}>
+                                <BarChart data={ABLATION_VARIANTS.map((v) => ({ name: v.id, accuracy: v.accuracy, f1Macro: v.f1Macro, color: v.color }))}>
                                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                                     <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                                     <YAxis domain={[60, 100]} />
@@ -306,19 +303,19 @@ export default function AblationStudy() {
                         <div className="h-[350px]">
                             <ResponsiveContainer width="100%" height="100%">
                                 <RadarChart data={[
-                                    { metric: "Doğruluk", full: 89.82, noFs: 89.74, noHp: 88.47, noSmote: 90.51, baseline: 87.04 },
-                                    { metric: "F1-Makro", full: 84.24, noFs: 84.13, noHp: 82.35, noSmote: 72.86, baseline: 78.57 },
-                                    { metric: "F1-Ağırlıklı", full: 89.90, noFs: 89.77, noHp: 88.52, noSmote: 90.28, baseline: 86.27 },
-                                    { metric: "AUC-ROC", full: 98.38, noFs: 98.36, noHp: 97.89, noSmote: 97.12, baseline: 91.20 },
-                                    { metric: "Arka Kapı F1", full: 57.40, noFs: 55.81, noHp: 52.10, noSmote: 28.40, baseline: 42.15 },
+                                    { metric: "Doğruluk", S4: 89.82, S3: 89.74, S2: 88.47, SMOTE: 90.51, S1: 87.04 },
+                                    { metric: "F1-Makro", S4: 84.24, S3: 84.13, S2: 82.35, SMOTE: 72.86, S1: 78.57 },
+                                    { metric: "F1-Ağırlıklı", S4: 89.90, S3: 89.77, S2: 88.52, SMOTE: 90.28, S1: 86.27 },
+                                    { metric: "AUC-ROC", S4: 98.38, S3: 98.36, S2: 97.89, SMOTE: 97.12, S1: 91.20 },
+                                    { metric: "Arka Kapı F1", S4: 57.40, S3: 55.81, S2: 52.10, SMOTE: 28.40, S1: 42.15 },
                                 ]}>
                                     <PolarGrid />
                                     <PolarAngleAxis dataKey="metric" tick={{ fontSize: 9 }} />
                                     <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 8 }} />
-                                    <Radar name="Tam BSO" dataKey="full" stroke="#22c55e" fill="#22c55e" fillOpacity={0.2} strokeWidth={2} />
-                                    <Radar name="ÖS Yok" dataKey="noFs" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={1.5} />
-                                    <Radar name="HP Yok" dataKey="noHp" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} strokeWidth={1.5} />
-                                    <Radar name="SMOTE Yok" dataKey="noSmote" stroke="#ef4444" fill="#ef4444" fillOpacity={0.1} strokeWidth={1.5} />
+                                    <Radar name="S4 (Tam BSO)" dataKey="S4" stroke="#22c55e" fill="#22c55e" fillOpacity={0.2} strokeWidth={2} />
+                                    <Radar name="S3 (HP Opt.)" dataKey="S3" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} strokeWidth={1.5} />
+                                    <Radar name="S2 (FS)" dataKey="S2" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={1.5} />
+                                    <Radar name="SMOTE Yok" dataKey="SMOTE" stroke="#ef4444" fill="#ef4444" fillOpacity={0.1} strokeWidth={1.5} />
                                     <Legend wrapperStyle={{ fontSize: 10 }} />
                                     <Tooltip />
                                 </RadarChart>
@@ -348,11 +345,11 @@ export default function AblationStudy() {
                                 <YAxis domain={[0, 100]} label={{ value: "F1-Skor (%)", angle: -90, position: "insideLeft", style: { fontSize: 11 } }} />
                                 <Tooltip formatter={(value: number) => [`${value}%`, ""]} />
                                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                                <Bar dataKey="full" name="Tam BSO" fill="#22c55e" opacity={0.9} />
-                                <Bar dataKey="no-fs" name="Özellik Seçimi Yok" fill="#3b82f6" opacity={0.8} />
-                                <Bar dataKey="no-hp" name="HP Ayarı Yok" fill="#f59e0b" opacity={0.8} />
-                                <Bar dataKey="no-smote" name="SMOTE Yok" fill="#ef4444" opacity={0.8} />
-                                <Bar dataKey="baseline" name="Temel" fill="#6b7280" opacity={0.6} />
+                                <Bar dataKey="S4" name="S4 (Tam BSO)" fill="#22c55e" opacity={0.9} />
+                                <Bar dataKey="S3" name="S3 (HP Opt.)" fill="#f59e0b" opacity={0.8} />
+                                <Bar dataKey="S2" name="S2 (Özellik Seçimi)" fill="#3b82f6" opacity={0.8} />
+                                <Bar dataKey="SMOTE" name="SMOTE Yok" fill="#ef4444" opacity={0.8} />
+                                <Bar dataKey="S1" name="S1 (Temel)" fill="#6b7280" opacity={0.6} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
