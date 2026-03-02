@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { BookOpen, Search, ExternalLink, Filter, Copy, CheckCircle2 } from "lucide-react"
+import { BookOpen, Search, ExternalLink, Filter, Copy, CheckCircle2, FileText, GraduationCap } from "lucide-react"
 
 /* ═══════════════════════════════════════════════════════════════
    Akademik Kaynakça — 60+ Gerçek Referans
@@ -104,6 +104,31 @@ const REFERENCES: Reference[] = [
 
 const CATEGORIES = [...new Set(REFERENCES.map((r) => r.category))].sort()
 
+/* ═══════════════════════════════════════════════════════════════
+   PDF Doğrudan Erişim Bağlantıları (Açık Erişim Kaynaklar)
+   ═══════════════════════════════════════════════════════════════ */
+const PDF_URLS: Record<number, string> = {
+    // MDPI — Açık Erişim
+    1: "https://www.mdpi.com/1424-8220/23/13/5941/pdf",
+    // arXiv
+    12: "https://arxiv.org/pdf/1603.02754",
+    41: "https://arxiv.org/pdf/1106.1813",
+    // JMLR — Tüm makaleler açık erişim
+    17: "https://jmlr.org/papers/volume12/pedregosa11a/pedregosa11a.pdf",
+    31: "https://jmlr.org/papers/volume3/guyon03a/guyon03a.pdf",
+    48: "https://jmlr.org/papers/volume7/demsar06a/demsar06a.pdf",
+    60: "https://jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf",
+    // NeurIPS Proceedings
+    13: "https://proceedings.neurips.cc/paper_files/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf",
+    // Kitap — Ücretsiz çevrimiçi
+    20: "https://www.deeplearningbook.org/",
+    // BMC — Açık Erişim
+    45: "https://link.springer.com/content/pdf/10.1186/s12864-019-6413-7.pdf",
+}
+
+const scholarUrl = (title: string) =>
+    `https://scholar.google.com/scholar?q=${encodeURIComponent(title)}`
+
 export default function AcademicReferences() {
     const [search, setSearch] = useState("")
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -156,16 +181,14 @@ export default function AcademicReferences() {
                 </Card>
                 <Card className="border-amber-200 dark:border-amber-800/40">
                     <CardContent className="pt-4 pb-4 text-center">
-                        <div className="text-2xl font-black text-amber-600 dark:text-amber-400">{REFERENCES.filter((r) => r.doi).length}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">DOI Bağlantısı</div>
+                        <div className="text-2xl font-black text-amber-600 dark:text-amber-400">{Object.keys(PDF_URLS).length}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">PDF Erişimi</div>
                     </CardContent>
                 </Card>
                 <Card className="border-rose-200 dark:border-rose-800/40">
                     <CardContent className="pt-4 pb-4 text-center">
-                        <div className="text-2xl font-black text-rose-600 dark:text-rose-400">
-                            {Math.min(...REFERENCES.map((r) => r.year))}–{Math.max(...REFERENCES.map((r) => r.year))}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Yıl Aralığı</div>
+                        <div className="text-2xl font-black text-rose-600 dark:text-rose-400">{REFERENCES.filter((r) => r.doi).length}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">DOI Bağlantısı</div>
                     </CardContent>
                 </Card>
             </div>
@@ -238,21 +261,44 @@ export default function AcademicReferences() {
                                             <span className="text-slate-500 dark:text-slate-400">{ref.journal}.</span>
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-1 flex-shrink-0">
+                                    <div className="flex items-center gap-1.5 flex-shrink-0 flex-wrap justify-end">
+                                        {PDF_URLS[ref.id] && (
+                                            <a
+                                                href={PDF_URLS[ref.id]}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-xs font-semibold transition-colors"
+                                                title="PDF Aç / İndir"
+                                            >
+                                                <FileText className="w-3.5 h-3.5" />
+                                                PDF
+                                            </a>
+                                        )}
+                                        <a
+                                            href={scholarUrl(ref.title)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 text-xs font-semibold transition-colors"
+                                            title="Google Scholar'da Ara"
+                                        >
+                                            <GraduationCap className="w-3.5 h-3.5" />
+                                            Scholar
+                                        </a>
                                         {ref.doi && (
                                             <a
                                                 href={`https://doi.org/${ref.doi}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="p-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-500"
+                                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 text-purple-600 dark:text-purple-400 text-xs font-semibold transition-colors"
                                                 title="DOI Bağlantısı"
                                             >
                                                 <ExternalLink className="w-3.5 h-3.5" />
+                                                DOI
                                             </a>
                                         )}
                                         <button
                                             onClick={() => copyAPA(ref)}
-                                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600"
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-xs font-medium transition-colors"
                                             title="APA Formatında Kopyala"
                                         >
                                             {copiedId === ref.id ? (
@@ -275,8 +321,12 @@ export default function AcademicReferences() {
                     <p>
                         <strong>Not:</strong> Bu kaynakça APA 7th Edition formatında hazırlanmıştır.
                         Referanslar kopyalanarak doğrudan tez metnine yapıştırılabilir.
-                        DOI bağlantıları olan kaynaklar doğrudan erişilebilir durumdadır.
                     </p>
+                    <ul className="mt-2 space-y-1 text-xs list-disc list-inside">
+                        <li><span className="font-semibold text-emerald-700 dark:text-emerald-400">PDF</span> — Açık erişim makalelere doğrudan PDF bağlantısı ({Object.keys(PDF_URLS).length} kaynak)</li>
+                        <li><span className="font-semibold text-blue-700 dark:text-blue-400">Scholar</span> — Google Scholar'da otomatik arama (tüm kaynaklar)</li>
+                        <li><span className="font-semibold text-purple-700 dark:text-purple-400">DOI</span> — Digital Object Identifier ile yayıncı sayfasına erişim</li>
+                    </ul>
                 </CardContent>
             </Card>
         </div>
