@@ -21,7 +21,7 @@ import {
     CROSS_VALIDATION, STATISTICAL_TESTS, BSO_RF_PER_CLASS, BSO_PARAMETERS,
     BSO_SELECTED_FEATURES, CICIOT2023_ATTACK_TYPES, CICIOT2023_FEATURES,
     CONFUSION_MATRICES, DYNAMIC_ENVIRONMENT, STATE_OF_THE_ART, OPTIMIZER_CONVERGENCE,
-    generateBSOConvergenceData, generateROCData,
+    generateBSOConvergenceData, ROC_CURVE_DATA,
 } from "@/lib/ciciot2023-dataset"
 
 // ============================================================================
@@ -29,7 +29,7 @@ import {
 // ============================================================================
 const bsoModel = MODEL_RESULTS[0]
 const convergenceData = generateBSOConvergenceData()
-const rocData = generateROCData()
+const rocData = ROC_CURVE_DATA
 
 // Accuracy bar chart data (sorted)
 const accuracyBarData = [...MODEL_RESULTS]
