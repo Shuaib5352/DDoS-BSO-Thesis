@@ -333,7 +333,7 @@ export default function DDoSDetectionDashboard() {
                   <div className="flex justify-center animate-slide-up">
                     <Badge className="bg-white/15 backdrop-blur-md text-white border border-white/25 text-xs px-5 py-2 flex items-center gap-2 shadow-lg">
                       <GraduationCap className="w-4 h-4" />
-                      Yüksek Lisans Tezi — 2025
+                      Yüksek Lisans Tezi — 2026
                     </Badge>
                   </div>
                   <h2 className="text-xl md:text-3xl font-extrabold leading-relaxed text-white tracking-tight animate-slide-up-delay-1 drop-shadow-lg">
@@ -684,7 +684,7 @@ export default function DDoSDetectionDashboard() {
                       title: "Veri Ön İşleme",
                       items: [
                         "Eksik ve tekrarlanan verilerin kaldırılması",
-                        "Min-Max normalizasyonu [0, 1]",
+                        "StandardScaler normalizasyonu (z-score: μ=0, σ=1)",
                         "Tabakalı bölme: %70 eğitim, %10 doğrulama, %20 test",
                         "SMOTE: 72.252 → 87.500 dengeli eğitim verisi",
                       ],

@@ -3,101 +3,68 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-    TrendingUp, CheckCircle2, XCircle, BarChart3, Award,
+    TrendingUp, CheckCircle2, BarChart3, Award,
     ArrowUpRight, ArrowDownRight, Minus, AlertTriangle, Sigma,
 } from "lucide-react"
-import { MODEL_RESULTS } from "@/lib/ciciot2023-dataset"
+import { MODEL_RESULTS, STATISTICAL_TESTS, CROSS_VALIDATION } from "@/lib/ciciot2023-dataset"
 
 /* ═══════════════════════════════════════════════════════════════
    İstatistiksel Anlamlılık Testleri
-   (Statistical Significance Tests)
+   (Statistical Significance Tests — Real experiment data)
    ═══════════════════════════════════════════════════════════════ */
-
-/* ─── Pairwise comparison data (BSO-RF vs each model) ─── */
-interface PairwiseTest {
-    model: string
-    accuracyDiff: number
-    f1MacroDiff: number
-    aucDiff: number
-    mcnemarPValue: number
-    wilcoxonPValue: number
-    cohensD: number
-    significant: boolean
-    winner: "BSO-RF" | "Opponent" | "Tie"
-}
 
 const PROPOSED = MODEL_RESULTS[0]
 
-/* Simulated statistical test results based on real accuracy/f1 differences */
-const PAIRWISE_TESTS: PairwiseTest[] = MODEL_RESULTS.slice(1).map((m) => {
-    const accDiff = PROPOSED.accuracy - m.accuracy
-    const f1Diff = PROPOSED.f1Macro - m.f1Macro
-    const aucDiff = PROPOSED.aucRoc - m.aucRoc
+/* ─── Build pairwise comparison from real STATISTICAL_TESTS ─── */
+interface PairwiseTest {
+    model: string
+    improvement: string
+    tStatistic: number
+    pValue: number
+    wilcoxonP: number
+    cohensD: number
+    significant: boolean
+    effectSize: string
+    note: string
+    winner: "BSO-RF" | "Opponent" | "Tie"
+}
 
-    /* McNemar p-value approximation: larger diff → smaller p */
-    const absDiff = Math.abs(accDiff)
-    let mcP: number
-    if (absDiff > 5) mcP = 0.0001
-    else if (absDiff > 2) mcP = 0.003
-    else if (absDiff > 1) mcP = 0.021
-    else if (absDiff > 0.3) mcP = 0.048
-    else mcP = 0.312
-
-    /* Wilcoxon p-value (from cross-validation folds) */
-    let wP: number
-    if (Math.abs(f1Diff) > 5) wP = 0.0002
-    else if (Math.abs(f1Diff) > 2) wP = 0.005
-    else if (Math.abs(f1Diff) > 1) wP = 0.028
-    else if (Math.abs(f1Diff) > 0.3) wP = 0.043
-    else wP = 0.289
-
-    /* Cohen's d effect size */
-    const d = absDiff / 2.5
-
-    const significant = mcP < 0.05 || wP < 0.05
-
+const PAIRWISE_TESTS: PairwiseTest[] = STATISTICAL_TESTS.map((t) => {
+    const impNum = parseFloat(t.improvement)
     let winner: "BSO-RF" | "Opponent" | "Tie"
-    if (accDiff > 0.3 && significant) winner = "BSO-RF"
-    else if (accDiff < -0.3 && significant) winner = "Opponent"
+    if (impNum > 0 && t.significant) winner = "BSO-RF"
+    else if (impNum < 0 && t.significant) winner = "Opponent"
     else winner = "Tie"
 
     return {
-        model: m.name,
-        accuracyDiff: accDiff,
-        f1MacroDiff: f1Diff,
-        aucDiff: aucDiff,
-        mcnemarPValue: mcP,
-        wilcoxonPValue: wP,
-        cohensD: d,
-        significant,
+        model: t.comparison.replace("BSO-Hybrid vs ", ""),
+        improvement: t.improvement,
+        tStatistic: t.tStatistic,
+        pValue: t.pValue,
+        wilcoxonP: t.wilcoxonP,
+        cohensD: t.cohenD,
+        significant: t.significant,
+        effectSize: t.effectSize,
+        note: t.note,
         winner,
     }
 })
 
-/* ─── Cross-validation results (5-fold) ─── */
-const CV_RESULTS = [
-    { model: "BSO-Hybrid RF", folds: [90.12, 89.45, 89.98, 89.73, 89.82], mean: 89.82, std: 0.24 },
-    { model: "GWO-RF", folds: [89.92, 89.64, 89.78, 89.91, 89.75], mean: 89.80, std: 0.12 },
-    { model: "GA-RF", folds: [89.52, 89.21, 89.34, 89.48, 89.30], mean: 89.37, std: 0.12 },
-    { model: "PSO-RF", folds: [88.54, 88.12, 88.28, 88.45, 88.36], mean: 88.35, std: 0.15 },
-    { model: "Random Forest", folds: [89.89, 89.62, 89.71, 89.78, 89.70], mean: 89.74, std: 0.10 },
-    { model: "XGBoost", folds: [90.52, 90.24, 90.38, 90.41, 90.30], mean: 90.37, std: 0.10 },
-    { model: "BSO-SVM", folds: [82.45, 81.98, 82.12, 82.28, 82.12], mean: 82.19, std: 0.17 },
-    { model: "SVM (Linear)", folds: [83.34, 82.89, 83.01, 83.18, 83.13], mean: 83.11, std: 0.17 },
-    { model: "Decision Tree", folds: [86.34, 85.89, 86.12, 86.18, 86.07], mean: 86.12, std: 0.16 },
-    { model: "K-Nearest Neighbors", folds: [85.42, 84.98, 85.18, 85.22, 85.20], mean: 85.20, std: 0.16 },
-    { model: "Naive Bayes", folds: [63.21, 62.78, 62.89, 63.01, 62.91], mean: 62.96, std: 0.16 },
-    { model: "Logistic Regression", folds: [82.98, 82.52, 82.68, 82.78, 82.69], mean: 82.73, std: 0.17 },
-]
+/* ─── 10-fold CV confidence intervals (95%) ─── */
+const CV_FOLDS = CROSS_VALIDATION.results
+const CV_MEAN = CROSS_VALIDATION.mean
+const CV_STD = CROSS_VALIDATION.std
 
-/* ─── Confidence intervals (95%) ─── */
-const CONFIDENCE_INTERVALS = CV_RESULTS.map((cv) => ({
-    model: cv.model,
-    mean: cv.mean,
-    ci_lower: cv.mean - 1.96 * (cv.std / Math.sqrt(5)),
-    ci_upper: cv.mean + 1.96 * (cv.std / Math.sqrt(5)),
-    std: cv.std,
-}))
+const CONFIDENCE_INTERVAL_95 = {
+    accuracy: {
+        lower: CV_MEAN.accuracy - 1.96 * (CV_STD.accuracy / Math.sqrt(CROSS_VALIDATION.folds)),
+        upper: CV_MEAN.accuracy + 1.96 * (CV_STD.accuracy / Math.sqrt(CROSS_VALIDATION.folds)),
+    },
+    f1Score: {
+        lower: CV_MEAN.f1Score - 1.96 * (CV_STD.f1Score / Math.sqrt(CROSS_VALIDATION.folds)),
+        upper: CV_MEAN.f1Score + 1.96 * (CV_STD.f1Score / Math.sqrt(CROSS_VALIDATION.folds)),
+    },
+}
 
 function pValueBadge(p: number) {
     if (p < 0.001) return <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[9px]">p&lt;0.001 ***</Badge>
@@ -107,9 +74,10 @@ function pValueBadge(p: number) {
 }
 
 function effectSizeBadge(d: number) {
-    if (d >= 0.8) return <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[9px]">Büyük ({d.toFixed(2)})</Badge>
-    if (d >= 0.5) return <Badge className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[9px]">Orta ({d.toFixed(2)})</Badge>
-    if (d >= 0.2) return <Badge className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-[9px]">Küçük ({d.toFixed(2)})</Badge>
+    const abs = Math.abs(d)
+    if (abs >= 0.8) return <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[9px]">Büyük ({d.toFixed(2)})</Badge>
+    if (abs >= 0.5) return <Badge className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[9px]">Orta ({d.toFixed(2)})</Badge>
+    if (abs >= 0.2) return <Badge className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-[9px]">Küçük ({d.toFixed(2)})</Badge>
     return <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[9px]">İhmal ({d.toFixed(2)})</Badge>
 }
 
@@ -136,7 +104,7 @@ export default function StatisticalSignificance() {
                     { label: "Anlamlı Farklar", value: `${sigCount}/${PAIRWISE_TESTS.length}`, icon: CheckCircle2, color: "text-emerald-600 dark:text-emerald-400" },
                     { label: "BSO-RF Üstün", value: `${bsoWins} model`, icon: Award, color: "text-amber-600 dark:text-amber-400" },
                     { label: "Anlamlılık Düzeyi", value: "α = 0.05", icon: BarChart3, color: "text-blue-600 dark:text-blue-400" },
-                    { label: "CV Katlama", value: "5-Fold", icon: Sigma, color: "text-purple-600 dark:text-purple-400" },
+                    { label: "CV Katlama", value: "10-Fold", icon: Sigma, color: "text-purple-600 dark:text-purple-400" },
                 ].map((m) => (
                     <Card key={m.label}>
                         <CardContent className="pt-3 pb-3 text-center">
@@ -179,7 +147,7 @@ export default function StatisticalSignificance() {
                     </div>
                     <div className="p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800/30">
                         <p className="text-xs text-indigo-700 dark:text-indigo-300">
-                            <strong>Kullanılan Testler:</strong> McNemar Testi (ikili sınıflandırma karşılaştırması), Wilcoxon İşaretli Sıra Testi (çapraz doğrulama katlama karşılaştırması), Cohen&apos;s d (etki büyüklüğü). Anlamlılık düzeyi: α = 0.05.
+                            <strong>Kullanılan Testler:</strong> Eşleştirilmiş t-testi (10-katlı CV skorları üzerinde), Wilcoxon İşaretli Sıra Testi (parametrik olmayan alternatif), Cohen&apos;s d (etki büyüklüğü). Anlamlılık düzeyi: α = 0.05. Tüm testler 10-katlı tabakalı çapraz doğrulama F1-Macro sonuçlarına dayanmaktadır.
                         </p>
                     </div>
                 </CardContent>
@@ -192,52 +160,46 @@ export default function StatisticalSignificance() {
                         <BarChart3 className="w-5 h-5" />
                         İkili Karşılaştırma Tablosu (BSO-RF vs Diğerleri)
                     </CardTitle>
-                    <CardDescription>Tablo 4.X — BSO-Hybrid RF ile diğer modellerin istatistiksel karşılaştırması</CardDescription>
+                    <CardDescription>Tablo 4.5 — 10-katlı CV F1-Macro farkları, eşleştirilmiş t-testi ve Wilcoxon testi sonuçları</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="overflow-x-auto -mx-2">
                         <table className="w-full text-xs">
                             <thead>
                                 <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-                                    {["Model", "ΔAcc", "ΔF1-M", "ΔAUC", "McNemar p", "Wilcoxon p", "Cohen's d", "Sonuç"].map((h) => (
+                                    {["Karşılaştırma", "ΔF1-M (CV)", "t-istatistiği", "p (t-test)", "p (Wilcoxon)", "Cohen's d", "Sonuç"].map((h) => (
                                         <th key={h} className="px-2 py-2 text-left font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {PAIRWISE_TESTS.map((t) => (
-                                    <tr key={t.model} className={`border-b border-slate-100 dark:border-slate-800 ${t.significant ? "" : "opacity-60"}`}>
-                                        <td className="px-2 py-2 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">{t.model}</td>
-                                        <td className="px-2 py-2 font-mono">
-                                            <span className={`flex items-center gap-0.5 ${t.accuracyDiff > 0 ? "text-emerald-600" : t.accuracyDiff < -0.01 ? "text-red-500" : "text-slate-500"}`}>
-                                                {t.accuracyDiff > 0 ? <ArrowUpRight className="w-3 h-3" /> : t.accuracyDiff < -0.01 ? <ArrowDownRight className="w-3 h-3" /> : <Minus className="w-3 h-3" />}
-                                                {t.accuracyDiff > 0 ? "+" : ""}{t.accuracyDiff.toFixed(2)}
-                                            </span>
-                                        </td>
-                                        <td className="px-2 py-2 font-mono">
-                                            <span className={t.f1MacroDiff > 0 ? "text-emerald-600" : t.f1MacroDiff < -0.01 ? "text-red-500" : "text-slate-500"}>
-                                                {t.f1MacroDiff > 0 ? "+" : ""}{t.f1MacroDiff.toFixed(2)}
-                                            </span>
-                                        </td>
-                                        <td className="px-2 py-2 font-mono">
-                                            <span className={t.aucDiff > 0 ? "text-emerald-600" : t.aucDiff < -0.01 ? "text-red-500" : "text-slate-500"}>
-                                                {t.aucDiff > 0 ? "+" : ""}{t.aucDiff.toFixed(2)}
-                                            </span>
-                                        </td>
-                                        <td className="px-2 py-2">{pValueBadge(t.mcnemarPValue)}</td>
-                                        <td className="px-2 py-2">{pValueBadge(t.wilcoxonPValue)}</td>
-                                        <td className="px-2 py-2">{effectSizeBadge(t.cohensD)}</td>
-                                        <td className="px-2 py-2">
-                                            {t.winner === "BSO-RF" ? (
-                                                <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[9px]">BSO-RF ✓</Badge>
-                                            ) : t.winner === "Opponent" ? (
-                                                <Badge className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-[9px]">{t.model.split(" ")[0]} ✓</Badge>
-                                            ) : (
-                                                <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[9px]">Fark yok</Badge>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {PAIRWISE_TESTS.map((t) => {
+                                    const impNum = parseFloat(t.improvement)
+                                    return (
+                                        <tr key={t.model} className={`border-b border-slate-100 dark:border-slate-800 ${t.significant ? "" : "opacity-60"}`}>
+                                            <td className="px-2 py-2 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">{t.model}</td>
+                                            <td className="px-2 py-2 font-mono">
+                                                <span className={`flex items-center gap-0.5 ${impNum > 0 ? "text-emerald-600" : impNum < -0.01 ? "text-red-500" : "text-slate-500"}`}>
+                                                    {impNum > 0 ? <ArrowUpRight className="w-3 h-3" /> : impNum < -0.01 ? <ArrowDownRight className="w-3 h-3" /> : <Minus className="w-3 h-3" />}
+                                                    {t.improvement}
+                                                </span>
+                                            </td>
+                                            <td className="px-2 py-2 font-mono text-slate-600 dark:text-slate-400">{t.tStatistic.toFixed(2)}</td>
+                                            <td className="px-2 py-2">{pValueBadge(t.pValue)}</td>
+                                            <td className="px-2 py-2">{pValueBadge(t.wilcoxonP)}</td>
+                                            <td className="px-2 py-2">{effectSizeBadge(t.cohensD)}</td>
+                                            <td className="px-2 py-2">
+                                                {t.winner === "BSO-RF" ? (
+                                                    <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[9px]">BSO-RF ✓</Badge>
+                                                ) : t.winner === "Opponent" ? (
+                                                    <Badge className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-[9px]">{t.model.split(" ")[0]} ✓</Badge>
+                                                ) : (
+                                                    <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[9px]">Fark yok</Badge>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -246,8 +208,7 @@ export default function StatisticalSignificance() {
                         <span>** p &lt; 0.01</span>
                         <span>* p &lt; 0.05</span>
                         <span>ns = anlamlı değil</span>
-                        <span>ΔAcc = Accuracy farkı</span>
-                        <span>ΔF1-M = F1-Macro farkı</span>
+                        <span>ΔF1-M = 10-katlı CV F1-Macro farkı</span>
                     </div>
                 </CardContent>
             </Card>
@@ -257,48 +218,49 @@ export default function StatisticalSignificance() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
                         <Sigma className="w-5 h-5" />
-                        5-Katlı Çapraz Doğrulama Sonuçları
+                        10-Katlı Tabakalı Çapraz Doğrulama Sonuçları (BSO-Hybrid RF)
                     </CardTitle>
-                    <CardDescription>Tablo 4.X — 5-fold CV doğruluk oranları ve %95 güven aralıkları</CardDescription>
+                    <CardDescription>Tablo 4.6 — 10-fold Stratified CV doğruluk, kesinlik, duyarlılık ve F1 oranları</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="overflow-x-auto -mx-2">
                         <table className="w-full text-xs">
                             <thead>
                                 <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-                                    {["Model", "K1", "K2", "K3", "K4", "K5", "Ort.", "Std", "%95 GA"].map((h) => (
+                                    {["Katlama", "Doğruluk (%)", "Kesinlik (%)", "Duyarlılık (%)", "F1-Skor (%)"].map((h) => (
                                         <th key={h} className="px-2 py-2 text-left font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {CV_RESULTS.map((cv, idx) => {
-                                    const ci = CONFIDENCE_INTERVALS[idx]
-                                    const isBSO = cv.model === "BSO-Hybrid RF"
-                                    return (
-                                        <tr
-                                            key={cv.model}
-                                            className={`border-b border-slate-100 dark:border-slate-800 ${isBSO ? "bg-emerald-50/50 dark:bg-emerald-950/20 font-medium" : ""}`}
-                                        >
-                                            <td className="px-2 py-1.5 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">
-                                                {isBSO && <Award className="w-3 h-3 inline mr-1 text-emerald-500" />}
-                                                {cv.model}
-                                            </td>
-                                            {cv.folds.map((f, fi) => (
-                                                <td key={fi} className="px-2 py-1.5 font-mono text-slate-600 dark:text-slate-400">{f.toFixed(2)}</td>
-                                            ))}
-                                            <td className={`px-2 py-1.5 font-mono font-bold ${isBSO ? "text-emerald-600 dark:text-emerald-400" : "text-slate-800 dark:text-slate-200"}`}>
-                                                {cv.mean.toFixed(2)}
-                                            </td>
-                                            <td className="px-2 py-1.5 font-mono text-slate-500">±{cv.std.toFixed(2)}</td>
-                                            <td className="px-2 py-1.5 font-mono text-slate-500 whitespace-nowrap">
-                                                [{ci.ci_lower.toFixed(2)}, {ci.ci_upper.toFixed(2)}]
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
+                                {CV_FOLDS.map((fold) => (
+                                    <tr key={fold.fold} className="border-b border-slate-100 dark:border-slate-800">
+                                        <td className="px-2 py-1.5 font-medium text-slate-800 dark:text-slate-200">K{fold.fold}</td>
+                                        <td className="px-2 py-1.5 font-mono text-slate-600 dark:text-slate-400">{fold.accuracy.toFixed(2)}</td>
+                                        <td className="px-2 py-1.5 font-mono text-slate-600 dark:text-slate-400">{fold.precision.toFixed(2)}</td>
+                                        <td className="px-2 py-1.5 font-mono text-slate-600 dark:text-slate-400">{fold.recall.toFixed(2)}</td>
+                                        <td className="px-2 py-1.5 font-mono text-slate-600 dark:text-slate-400">{fold.f1Score.toFixed(2)}</td>
+                                    </tr>
+                                ))}
+                                {/* Ortalama satırı */}
+                                <tr className="border-t-2 border-slate-300 dark:border-slate-600 bg-emerald-50/50 dark:bg-emerald-950/20 font-bold">
+                                    <td className="px-2 py-2 text-emerald-700 dark:text-emerald-300">
+                                        <Award className="w-3 h-3 inline mr-1" />Ort.
+                                    </td>
+                                    <td className="px-2 py-2 font-mono text-emerald-700 dark:text-emerald-300">{CV_MEAN.accuracy.toFixed(2)} ±{CV_STD.accuracy}</td>
+                                    <td className="px-2 py-2 font-mono text-emerald-700 dark:text-emerald-300">{CV_MEAN.precision.toFixed(2)} ±{CV_STD.precision}</td>
+                                    <td className="px-2 py-2 font-mono text-emerald-700 dark:text-emerald-300">{CV_MEAN.recall.toFixed(2)} ±{CV_STD.recall}</td>
+                                    <td className="px-2 py-2 font-mono text-emerald-700 dark:text-emerald-300">{CV_MEAN.f1Score.toFixed(2)} ±{CV_STD.f1Score}</td>
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div className="mt-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-800/30">
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                            <strong>%95 Güven Aralığı (Doğruluk):</strong> [{CONFIDENCE_INTERVAL_95.accuracy.lower.toFixed(2)}, {CONFIDENCE_INTERVAL_95.accuracy.upper.toFixed(2)}]
+                            &nbsp;|&nbsp;
+                            <strong>F1-Skor:</strong> [{CONFIDENCE_INTERVAL_95.f1Score.lower.toFixed(2)}, {CONFIDENCE_INTERVAL_95.f1Score.upper.toFixed(2)}]
+                        </p>
                     </div>
                 </CardContent>
             </Card>
@@ -308,47 +270,37 @@ export default function StatisticalSignificance() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-teal-700 dark:text-teal-300">
                         <BarChart3 className="w-5 h-5" />
-                        %95 Güven Aralıkları — Görsel Karşılaştırma
+                        Model Karşılaştırması — Test Seti Doğruluğu
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
-                        {CONFIDENCE_INTERVALS.sort((a, b) => b.mean - a.mean).map((ci) => {
-                            const isBSO = ci.model === "BSO-Hybrid RF"
-                            /* Normalize positions on a 60-100 scale */
+                        {MODEL_RESULTS.slice().sort((a, b) => b.accuracy - a.accuracy).map((m) => {
+                            const isBSO = m.name === "BSO-Hybrid RF (Proposed)"
                             const scaleMin = 60
                             const scaleMax = 92
                             const range = scaleMax - scaleMin
-                            const meanPos = ((ci.mean - scaleMin) / range) * 100
-                            const lowerPos = ((ci.ci_lower - scaleMin) / range) * 100
-                            const upperPos = ((ci.ci_upper - scaleMin) / range) * 100
-                            const barWidth = upperPos - lowerPos
+                            const accPos = ((m.accuracy - scaleMin) / range) * 100
 
                             return (
-                                <div key={ci.model} className="flex items-center gap-2">
-                                    <span className={`text-[10px] w-32 text-right truncate ${isBSO ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-slate-600 dark:text-slate-400"}`}>
-                                        {ci.model}
+                                <div key={m.name} className="flex items-center gap-2">
+                                    <span className={`text-[10px] w-36 text-right truncate ${isBSO ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-slate-600 dark:text-slate-400"}`}>
+                                        {m.name.replace(" (Proposed)", "")}
                                     </span>
                                     <div className="flex-1 h-5 bg-slate-100 dark:bg-slate-800 rounded relative">
-                                        {/* CI bar */}
                                         <div
                                             className={`absolute top-0.5 h-4 rounded ${isBSO ? "bg-emerald-400/60 dark:bg-emerald-600/40" : "bg-blue-300/50 dark:bg-blue-700/30"}`}
-                                            style={{ left: `${Math.max(0, lowerPos)}%`, width: `${Math.min(barWidth, 100)}%` }}
-                                        />
-                                        {/* Mean dot */}
-                                        <div
-                                            className={`absolute top-0.5 w-1 h-4 rounded ${isBSO ? "bg-emerald-600" : "bg-blue-500"}`}
-                                            style={{ left: `${Math.max(0, Math.min(meanPos, 99))}%` }}
+                                            style={{ width: `${Math.max(0, Math.min(accPos, 100))}%` }}
                                         />
                                     </div>
-                                    <span className={`text-[10px] font-mono w-12 ${isBSO ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-slate-500"}`}>
-                                        {ci.mean.toFixed(1)}%
+                                    <span className={`text-[10px] font-mono w-14 ${isBSO ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-slate-500"}`}>
+                                        {m.accuracy.toFixed(1)}%
                                     </span>
                                 </div>
                             )
                         })}
                     </div>
-                    <div className="flex justify-between text-[9px] text-slate-400 mt-1 px-34">
+                    <div className="flex justify-between text-[9px] text-slate-400 mt-1 px-38">
                         <span>%60</span>
                         <span>%70</span>
                         <span>%80</span>
@@ -366,14 +318,15 @@ export default function StatisticalSignificance() {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-green-700 dark:text-green-300">
                         <div className="space-y-1.5">
-                            <p>• BSO-Hybrid RF, {bsoWins} modele karşı istatistiksel olarak anlamlı üstünlük gösterir (p &lt; 0.05).</p>
-                            <p>• GWO-RF ve standart RF ile arasındaki fark istatistiksel olarak anlamlı değildir (p &gt; 0.05).</p>
-                            <p>• XGBoost, tüm öznitelikleri kullanarak BSO-RF&apos;den yüksek doğruluk elde eder ancak %51.3 daha fazla öznitelik gerektirir.</p>
+                            <p>• {sigCount}/{PAIRWISE_TESTS.length} karşılaştırmada istatistiksel olarak anlamlı fark tespit edilmiştir (p &lt; 0.05).</p>
+                            <p>• BSO-Hybrid RF, {bsoWins} modele karşı istatistiksel olarak anlamlı üstünlük gösterir.</p>
+                            <p>• GWO-RF ile arasındaki fark istatistiksel olarak anlamlı değildir (p = 0.76).</p>
+                            <p>• XGBoost ve Random Forest, BSO-RF&apos;den marjinal olarak daha yüksek CV F1-Macro elde eder ancak %51.3 daha fazla öznitelik gerektirir.</p>
                         </div>
                         <div className="space-y-1.5">
-                            <p>• 5-fold CV sonuçları BSO-RF&apos;nin tutarlı performans gösterdiğini doğrular (Std = 0.24).</p>
+                            <p>• 10-katlı CV sonuçları BSO-RF&apos;nin tutarlı performans gösterdiğini doğrular (Std = {CV_STD.accuracy}).</p>
                             <p>• Cohen&apos;s d etki büyüklüğü, BSO-SVM, Naive Bayes ve SVM karşılaştırmalarında &quot;büyük&quot; olarak sınıflandırılmıştır.</p>
-                            <p>• %95 güven aralığı BSO-RF için [89.61, 90.03] olup dar aralık yüksek güvenilirlik gösterir.</p>
+                            <p>• %95 güven aralığı (doğruluk): [{CONFIDENCE_INTERVAL_95.accuracy.lower.toFixed(2)}, {CONFIDENCE_INTERVAL_95.accuracy.upper.toFixed(2)}] — dar aralık yüksek güvenilirlik gösterir.</p>
                         </div>
                     </div>
                 </CardContent>

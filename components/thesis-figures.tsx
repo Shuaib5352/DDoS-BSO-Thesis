@@ -543,7 +543,7 @@ function RelatedWorksSVG() {
 function SystemArchitectureSVG() {
     const steps = [
         { y: 10, label: "CICIoT2023 Veri Seti", sub: "118.466 örnek, 39 özellik, 5 sınıf", color: "#3b82f6", icon: "📊" },
-        { y: 70, label: "Ön İşleme", sub: "Min-Max [0,1], eksik veri kontrolü, normalizasyon", color: "#6366f1", icon: "🔧" },
+        { y: 70, label: "Ön İşleme", sub: "StandardScaler (z-score), eksik veri kontrolü, normalizasyon", color: "#6366f1", icon: "🔧" },
         { y: 130, label: "Veri Bölme (70/10/20)", sub: "Eğitim: 72.252 | Doğrulama: 10.322 | Test: 20.644", color: "#8b5cf6", icon: "✂️" },
         { y: 190, label: "SMOTE Dengeleme (Yalnız Eğitim)", sub: "72.252 → 87.500 dengeli örnek", color: "#a855f7", icon: "⚖️" },
         { y: 250, label: "BSO Optimizasyonu (25 yarasa × 50 iter.)", sub: "Eşzamanlı: Özellik Seçimi (39→19) + HP Ayarlama", color: "#059669", icon: "🦇" },

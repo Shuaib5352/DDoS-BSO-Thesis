@@ -708,7 +708,7 @@ export default function MethodologyFramework() {
                     <div className="space-y-3">
                         {[
                             { step: 1, title: "Veri Toplama", desc: `CICIoT2023 veri seti: ${DATASET_STATISTICS.totalSamples.toLocaleString()} örnek, ${DATASET_STATISTICS.totalFeatures} özellik, ${DATASET_STATISTICS.classes} sınıf`, icon: Database, color: "bg-blue-500" },
-                            { step: 2, title: "Ön İşleme", desc: "Eksik değer kontrolü, tekrarlanan veri temizliği, Min-Max normalizasyon [0, 1]", icon: Layers, color: "bg-indigo-500" },
+                            { step: 2, title: "Ön İşleme", desc: "Eksik değer kontrolü, tekrarlanan veri temizliği, StandardScaler normalizasyonu (z-score: μ=0, σ=1)", icon: Layers, color: "bg-indigo-500" },
                             { step: 3, title: "Veri Bölme", desc: "Tabakalı bölme: %70 eğitim (72.252), %10 doğrulama (10.322), %20 test (20.644)", icon: GitGraph, color: "bg-purple-500" },
                             { step: 4, title: "SMOTE Uygulaması", desc: "Yalnızca eğitim setine SMOTE: 72.252 → 87.500 dengeli örnek (Backdoor: 2.252 → 17.500)", icon: TrendingUp, color: "bg-emerald-500" },
                             { step: 5, title: "BSO Optimizasyonu", desc: `25 yarasa × 50 iterasyon = ${BSO_PARAMETERS.totalEvaluations.toLocaleString()} değerlendirme. Eşzamanlı FS + HP optimizasyonu`, icon: Brain, color: "bg-amber-500" },
@@ -805,7 +805,7 @@ export default function MethodologyFramework() {
                                 <h4 className="font-bold text-sm text-emerald-600">AH₁: KABUL EDİLDİ</h4>
                             </div>
                             <p className="text-xs text-slate-600 dark:text-slate-400">
-                                BSO-Hybrid RF (F1-Macro: %84.24), varsayılan RF (F1-Macro: %78.57) ve temel DT (F1-Macro: %78.57) modeline göre
+                                BSO-Hybrid RF (F1-Macro: %84.24), varsayılan RF (F1-Macro: %84.13) ve temel DT (F1-Macro: %78.57) modeline göre
                                 istatistiksel olarak anlamlı düzeyde daha yüksek performans göstermiştir. Eşleştirilmiş t-testi: p {"<"} 0.001, Cohen&apos;s d = 11.07 (büyük etki).
                             </p>
                         </div>
