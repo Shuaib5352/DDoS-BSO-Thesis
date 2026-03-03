@@ -8,6 +8,10 @@ import {
     TrendingUp, AlertTriangle, CheckCircle2, ArrowRight,
 } from "lucide-react"
 import {
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, Legend, Cell,
+} from "recharts"
+import {
     CICIOT2023_FEATURES,
     CICIOT2023_ATTACK_TYPES,
     DATASET_STATISTICS,
@@ -159,6 +163,51 @@ export default function DatasetEDA() {
                                 </div>
                             )
                         })}
+                        {/* ─── SMOTE Before / After Bar Chart ─── */}
+                        <div className="mt-6">
+                            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
+                                <BarChart3 className="w-4 h-4 text-emerald-500" />
+                                Şekil 3.X: SMOTE Öncesi ve Sonrası Sınıf Dağılımı Karşılaştırması
+                            </h4>
+                            <div className="h-[340px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        data={CICIOT2023_ATTACK_TYPES.map((cls) => ({
+                                            name: cls.name.length > 18 ? cls.name.slice(0, 16) + "…" : cls.name,
+                                            fullName: cls.name,
+                                            "SMOTE Öncesi": cls.trainingSamples,
+                                            "SMOTE Sonrası": cls.smoteSamples,
+                                            color: cls.color,
+                                        }))}
+                                        margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                                        <YAxis tickFormatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(0)}K` : `${v}`} />
+                                        <Tooltip
+                                            formatter={(value: number, name: string) => [value.toLocaleString("tr-TR") + " örnek", name]}
+                                            labelFormatter={(label) => {
+                                                const cls = CICIOT2023_ATTACK_TYPES.find((c) =>
+                                                    label === (c.name.length > 18 ? c.name.slice(0, 16) + "…" : c.name)
+                                                )
+                                                return cls?.name || label
+                                            }}
+                                        />
+                                        <Legend />
+                                        <Bar dataKey="SMOTE Öncesi" fill="#94a3b8" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="SMOTE Sonrası" radius={[4, 4, 0, 0]}>
+                                            {CICIOT2023_ATTACK_TYPES.map((cls, index) => (
+                                                <Cell key={index} fill={cls.color} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="mt-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-[10px] text-slate-500 dark:text-slate-400 text-center">
+                                Gri çubuklar = SMOTE öncesi (dengesiz) | Renkli çubuklar = SMOTE sonrası (17.500 / sınıf dengeli)
+                            </div>
+                        </div>
+
                         {/* SMOTE summary */}
                         <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 mt-4">
                             <div className="flex items-center gap-2">
@@ -219,12 +268,12 @@ export default function DatasetEDA() {
                                                 <Badge
                                                     variant="outline"
                                                     className={`text-[9px] ${f.skewness === "Aşırı çarpık"
-                                                            ? "text-red-500 border-red-300"
-                                                            : f.skewness === "Sağa çarpık"
-                                                                ? "text-amber-500 border-amber-300"
-                                                                : f.skewness === "Sola çarpık"
-                                                                    ? "text-blue-500 border-blue-300"
-                                                                    : "text-green-500 border-green-300"
+                                                        ? "text-red-500 border-red-300"
+                                                        : f.skewness === "Sağa çarpık"
+                                                            ? "text-amber-500 border-amber-300"
+                                                            : f.skewness === "Sola çarpık"
+                                                                ? "text-blue-500 border-blue-300"
+                                                                : "text-green-500 border-green-300"
                                                         }`}
                                                 >
                                                     {f.skewness}
@@ -355,10 +404,10 @@ export default function DatasetEDA() {
                             <div
                                 key={q.title}
                                 className={`p-4 rounded-xl border ${q.color === "emerald"
-                                        ? "border-emerald-200 dark:border-emerald-800/40 bg-emerald-50/50 dark:bg-emerald-950/20"
-                                        : q.color === "amber"
-                                            ? "border-amber-200 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20"
-                                            : "border-blue-200 dark:border-blue-800/40 bg-blue-50/50 dark:bg-blue-950/20"
+                                    ? "border-emerald-200 dark:border-emerald-800/40 bg-emerald-50/50 dark:bg-emerald-950/20"
+                                    : q.color === "amber"
+                                        ? "border-amber-200 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20"
+                                        : "border-blue-200 dark:border-blue-800/40 bg-blue-50/50 dark:bg-blue-950/20"
                                     }`}
                             >
                                 <div className="flex items-center gap-2 mb-2">
@@ -374,10 +423,10 @@ export default function DatasetEDA() {
                                 <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">{q.detail}</p>
                                 <Badge
                                     className={`text-[10px] ${q.color === "emerald"
-                                            ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
-                                            : q.color === "amber"
-                                                ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
-                                                : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                                        ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
+                                        : q.color === "amber"
+                                            ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                                            : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                                         }`}
                                 >
                                     {q.metric}

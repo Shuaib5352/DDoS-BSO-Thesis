@@ -283,6 +283,97 @@ export default function ModelRankingDashboard() {
                 </Card>
             </div>
 
+            {/* ═════════ Top 4 Raw-Metric Radar ═════════ */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                        <Target className="w-5 h-5 text-emerald-500" />
+                        Şekil 4.X: İlk 4 Model — Ham Performans Radar Grafiği
+                    </CardTitle>
+                    <CardDescription>
+                        BSO-Hybrid RF, XGBoost, GWO-RF ve Random Forest modelleri 5 metrikte doğrudan karşılaştırma (%)
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {(() => {
+                        const radarModels = [
+                            { key: "BSO-Hybrid RF (Proposed)", label: "BSO-Hybrid RF", color: "#22c55e" },
+                            { key: "XGBoost", label: "XGBoost", color: "#f59e0b" },
+                            { key: "GWO-RF", label: "GWO-RF", color: "#3b82f6" },
+                            { key: "Random Forest", label: "Random Forest", color: "#8b5cf6" },
+                        ]
+                        const models = radarModels.map((rm) => MODEL_RESULTS.find((m) => m.name === rm.key)!).filter(Boolean)
+
+                        const rawRadarData = [
+                            { metric: "Doğruluk" },
+                            { metric: "Kesinlik" },
+                            { metric: "Duyarlılık" },
+                            { metric: "F1-Makro" },
+                            { metric: "AUC-ROC" },
+                        ].map((row) => {
+                            const result: Record<string, number | string> = { metric: row.metric }
+                            models.forEach((m, i) => {
+                                const lbl = radarModels[i].label
+                                if (row.metric === "Doğruluk") result[lbl] = m.accuracy
+                                else if (row.metric === "Kesinlik") result[lbl] = m.precision
+                                else if (row.metric === "Duyarlılık") result[lbl] = m.recall
+                                else if (row.metric === "F1-Makro") result[lbl] = m.f1Macro
+                                else if (row.metric === "AUC-ROC") result[lbl] = m.aucRoc
+                            })
+                            return result
+                        })
+
+                        return (
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2 h-[420px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <RadarChart data={rawRadarData}>
+                                            <PolarGrid />
+                                            <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11 }} />
+                                            <PolarRadiusAxis domain={[75, 100]} tick={{ fontSize: 9 }} />
+                                            {radarModels.map((rm, i) => (
+                                                <Radar
+                                                    key={rm.label}
+                                                    name={rm.label}
+                                                    dataKey={rm.label}
+                                                    stroke={rm.color}
+                                                    fill={rm.color}
+                                                    fillOpacity={i === 0 ? 0.25 : 0.05}
+                                                    strokeWidth={i === 0 ? 2.5 : 1.5}
+                                                    strokeDasharray={i === 0 ? "" : "4 2"}
+                                                />
+                                            ))}
+                                            <Legend wrapperStyle={{ fontSize: 11 }} />
+                                            <Tooltip formatter={(v: number) => [`${v.toFixed(2)}%`, ""]} />
+                                        </RadarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="space-y-3">
+                                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">Model Özeti</h4>
+                                    {radarModels.map((rm) => {
+                                        const m = MODEL_RESULTS.find((mr) => mr.name === rm.key)!
+                                        return (
+                                            <div key={rm.label} className="p-3 rounded-lg border border-slate-200 dark:border-slate-700" style={{ borderLeftColor: rm.color, borderLeftWidth: 3 }}>
+                                                <div className="text-xs font-bold" style={{ color: rm.color }}>{rm.label}</div>
+                                                <div className="grid grid-cols-2 gap-1 mt-1 text-[10px] text-slate-600 dark:text-slate-400">
+                                                    <span>Doğruluk: <b>{m.accuracy}%</b></span>
+                                                    <span>F1-Makro: <b>{m.f1Macro}%</b></span>
+                                                    <span>AUC: <b>{m.aucRoc}%</b></span>
+                                                    <span>Öznitelik: <b>{m.featuresUsed}</b></span>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                    <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 text-[10px] text-emerald-700 dark:text-emerald-300">
+                                        <strong>Not:</strong> BSO-RF en az öznitelik (19) ile en yüksek F1-Makro/alan oranını elde eder.
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })()}
+                </CardContent>
+            </Card>
+
             {/* Efficiency Scatter: Accuracy vs Training Time */}
             <Card>
                 <CardHeader>

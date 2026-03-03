@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle } from "lucide-react"
+import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle, Code2, Table2 } from "lucide-react"
 
 function downloadBlob(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob)
@@ -116,6 +116,107 @@ export default function PrintExportPanel() {
         }
     }
 
+    const handleExportLaTeX = async () => {
+        setExporting("latex")
+        try {
+            const mod = await import("@/lib/ciciot2023-dataset")
+            const models = mod.MODEL_RESULTS as { name: string; accuracy: number; precision: number; recall: number; f1Score: number; f1Macro: number; aucRoc: number; mcc: number; featuresUsed: number; trainingTime: number; predictionTime: number }[]
+            const features = mod.BSO_SELECTED_FEATURES as { rank: number; name: string; importance: number }[]
+
+            let latex = `% ═══════════════════════════════════════════════════════════════\n`
+            latex += `% BSO-Hybrid RF Tez Tabloları — LaTeX Dışa Aktarma\n`
+            latex += `% Oluşturulma Tarihi: ${new Date().toISOString()}\n`
+            latex += `% Yazar: SHUAIB AYAD JASIM\n`
+            latex += `% ═══════════════════════════════════════════════════════════════\n\n`
+
+            // Table 1: Model Comparison
+            latex += `% ─── Tablo 4.1: Model Karşılaştırma Sonuçları ───\n`
+            latex += `\\begin{table}[htbp]\n`
+            latex += `\\centering\n`
+            latex += `\\caption{CICIoT2023 Veri Seti Üzerinde Model Karşılaştırma Sonuçları}\n`
+            latex += `\\label{tab:model-comparison}\n`
+            latex += `\\resizebox{\\textwidth}{!}{%\n`
+            latex += `\\begin{tabular}{lcccccccc}\n`
+            latex += `\\hline\n`
+            latex += `\\textbf{Model} & \\textbf{Doğruluk} & \\textbf{Kesinlik} & \\textbf{Duyarlılık} & \\textbf{F1-Ağ.} & \\textbf{F1-Makro} & \\textbf{AUC-ROC} & \\textbf{MCC} & \\textbf{Öznitelik} \\\\\n`
+            latex += `\\hline\n`
+            models.forEach((m) => {
+                const name = m.name.replace("(Proposed)", "(Önerilen)").replace(/ /g, "~")
+                latex += `${name} & ${m.accuracy} & ${m.precision} & ${m.recall} & ${m.f1Score} & ${m.f1Macro} & ${m.aucRoc} & ${m.mcc.toFixed(4)} & ${m.featuresUsed} \\\\\n`
+            })
+            latex += `\\hline\n`
+            latex += `\\end{tabular}}\n`
+            latex += `\\end{table}\n\n`
+
+            // Table 2: BSO Selected Features
+            latex += `% ─── Tablo 4.2: BSO Seçilmiş Öznitelikler ───\n`
+            latex += `\\begin{table}[htbp]\n`
+            latex += `\\centering\n`
+            latex += `\\caption{BSO Algoritması ile Seçilen 19 Öznitelik}\n`
+            latex += `\\label{tab:bso-features}\n`
+            latex += `\\begin{tabular}{clc}\n`
+            latex += `\\hline\n`
+            latex += `\\textbf{Sıra} & \\textbf{Öznitelik Adı} & \\textbf{Önem Değeri} \\\\\n`
+            latex += `\\hline\n`
+            features.forEach((f) => {
+                const name = f.name.replace(/_/g, "\\_")
+                latex += `${f.rank} & ${name} & ${f.importance.toFixed(6)} \\\\\n`
+            })
+            latex += `\\hline\n`
+            latex += `\\end{tabular}\n`
+            latex += `\\end{table}\n\n`
+
+            // Table 3: Cross-Validation Results
+            const cv = mod.CROSS_VALIDATION as { results: { fold: number; accuracy: number; precision: number; recall: number; f1Score: number }[], mean: { accuracy: number; precision: number; recall: number; f1Score: number }, std: { accuracy: number; precision: number; recall: number; f1Score: number } }
+            latex += `% ─── Tablo 4.3: 10-Katlı Çapraz Doğrulama Sonuçları ───\n`
+            latex += `\\begin{table}[htbp]\n`
+            latex += `\\centering\n`
+            latex += `\\caption{BSO-Hybrid RF 10-Katlı Tabakalı Çapraz Doğrulama Sonuçları}\n`
+            latex += `\\label{tab:cross-validation}\n`
+            latex += `\\begin{tabular}{ccccc}\n`
+            latex += `\\hline\n`
+            latex += `\\textbf{Katlama} & \\textbf{Doğruluk (\\%)} & \\textbf{Kesinlik (\\%)} & \\textbf{Duyarlılık (\\%)} & \\textbf{F1-Skor (\\%)} \\\\\n`
+            latex += `\\hline\n`
+            cv.results.forEach((r) => {
+                latex += `K${r.fold} & ${r.accuracy.toFixed(2)} & ${r.precision.toFixed(2)} & ${r.recall.toFixed(2)} & ${r.f1Score.toFixed(2)} \\\\\n`
+            })
+            latex += `\\hline\n`
+            latex += `\\textbf{Ort.} & ${cv.mean.accuracy.toFixed(2)} $\\pm$ ${cv.std.accuracy} & ${cv.mean.precision.toFixed(2)} $\\pm$ ${cv.std.precision} & ${cv.mean.recall.toFixed(2)} $\\pm$ ${cv.std.recall} & ${cv.mean.f1Score.toFixed(2)} $\\pm$ ${cv.std.f1Score} \\\\\n`
+            latex += `\\hline\n`
+            latex += `\\end{tabular}\n`
+            latex += `\\end{table}\n`
+
+            const blob = new Blob([latex], { type: "text/x-tex;charset=utf-8" })
+            downloadBlob(blob, "thesis-tables.tex")
+            setExporting(null)
+            showResult("success", "LaTeX tabloları başarıyla dışa aktarıldı (3 tablo)")
+        } catch (err) {
+            setExporting(null)
+            showResult("error", `LaTeX dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+        }
+    }
+
+    const handleExportFeaturesCSV = async () => {
+        setExporting("features-csv")
+        try {
+            const mod = await import("@/lib/ciciot2023-dataset")
+            const features = mod.BSO_SELECTED_FEATURES as { rank: number; name: string; importance: number; originalIndex: number }[]
+            const headers = ["Rank", "Feature Name", "Importance", "Original Index", "Contribution (%)"]
+            const totalImp = features.reduce((s, f) => s + f.importance, 0)
+            const rows = features.map((f) => [
+                f.rank, `"${f.name}"`, f.importance.toFixed(6), f.originalIndex, ((f.importance / totalImp) * 100).toFixed(2),
+            ])
+            const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n")
+            const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" })
+            downloadBlob(blob, "bso-selected-features.csv")
+            setExporting(null)
+            showResult("success", "Öznitelik CSV dosyası başarıyla dışa aktarıldı")
+        } catch (err) {
+            setExporting(null)
+            showResult("error", `Öznitelik CSV dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+        }
+    }
+
     const exportOptions = [
         {
             id: "print",
@@ -156,6 +257,26 @@ export default function PrintExportPanel() {
             color: "from-amber-500 to-amber-600",
             borderColor: "border-amber-500/30",
             onClick: handleExportCSV,
+        },
+        {
+            id: "latex",
+            title: "LaTeX Tabloları Dışa Aktar",
+            titleAr: "Tabloları LaTeX formatında dışa aktar",
+            description: "Tez için hazır 3 tablo: model karşılaştırma, BSO öznitelikleri ve çapraz doğrulama sonuçları (.tex dosyası).",
+            icon: Code2,
+            color: "from-rose-500 to-rose-600",
+            borderColor: "border-rose-500/30",
+            onClick: handleExportLaTeX,
+        },
+        {
+            id: "features-csv",
+            title: "Öznitelik Tablosu (CSV)",
+            titleAr: "BSO seçilmiş öznitelikleri CSV olarak dışa aktar",
+            description: "BSO tarafından seçilen 19 özniteliğin önem değerleri ve sıralamasını CSV olarak indirin.",
+            icon: Table2,
+            color: "from-teal-500 to-teal-600",
+            borderColor: "border-teal-500/30",
+            onClick: handleExportFeaturesCSV,
         },
     ]
 

@@ -2,7 +2,10 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import {
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
+    Legend,
+} from "recharts"
 import { AlertCircle, CheckCircle2, Shield, Zap } from "lucide-react"
 import { BSO_SELECTED_FEATURES, MODEL_RESULTS, DATASET_STATISTICS } from "@/lib/ciciot2023-dataset"
 
@@ -275,6 +278,79 @@ export default function FeatureSelectionAnalysis() {
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-4 text-center italic">
                         Not: BSO-Hybrid RF yalnızca 19 öznitelik ile 39 öznitelik kullanan modellere karşı rekabetçi performans göstermiştir.
                     </p>
+                </CardContent>
+            </Card>
+
+            {/* ════════════════════ 39 vs 19 ÖZNİTELİK KARŞILAŞTIRMA GRAFİĞİ ════════════════════ */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Zap className="w-5 h-5 text-purple-500" />
+                        Şekil 4.X: 39 vs 19 Öznitelik — Model Performans Karşılaştırması
+                    </CardTitle>
+                    <CardDescription>
+                        Aynı modelin tüm öznitelikler (39) ve BSO seçimi (19) ile elde ettiği doğruluk, F1-Macro ve AUC-ROC karşılaştırması
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {(() => {
+                        /* Build chart data: BSO optimized models vs their All-feature counterparts */
+                        const bsoModel = MODEL_RESULTS[0] // BSO-Hybrid RF (19 features)
+                        const rfAll = MODEL_RESULTS.find((m) => m.name === "Random Forest")! // RF (39 features)
+                        const xgbAll = MODEL_RESULTS.find((m) => m.name === "XGBoost")! // XGBoost (39 features)
+                        const svmAll = MODEL_RESULTS.find((m) => m.name === "SVM (Linear)")! // SVM (39 features)
+                        const bsoSvm = MODEL_RESULTS[1]  // BSO-SVM (19 features)
+
+                        const grouped = [
+                            { metric: "Doğruluk (%)", "BSO-RF (19)": bsoModel.accuracy, "RF (39)": rfAll.accuracy, "XGBoost (39)": xgbAll.accuracy },
+                            { metric: "F1-Macro (%)", "BSO-RF (19)": bsoModel.f1Macro, "RF (39)": rfAll.f1Macro, "XGBoost (39)": xgbAll.f1Macro },
+                            { metric: "AUC-ROC (%)", "BSO-RF (19)": bsoModel.aucRoc, "RF (39)": rfAll.aucRoc, "XGBoost (39)": xgbAll.aucRoc },
+                            { metric: "MCC (×100)", "BSO-RF (19)": +(bsoModel.mcc * 100).toFixed(1), "RF (39)": +(rfAll.mcc * 100).toFixed(1), "XGBoost (39)": +(xgbAll.mcc * 100).toFixed(1) },
+                        ]
+
+                        return (
+                            <>
+                                <div className="h-[350px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={grouped} margin={{ top: 10, right: 30, left: 20, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                                            <XAxis dataKey="metric" tick={{ fontSize: 11 }} />
+                                            <YAxis domain={[50, 100]} tick={{ fontSize: 10 }} />
+                                            <Tooltip formatter={(v: number) => [`${v.toFixed(2)}`, ""]} />
+                                            <Legend wrapperStyle={{ fontSize: 11 }} />
+                                            <Bar dataKey="BSO-RF (19)" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                                            <Bar dataKey="RF (39)" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                            <Bar dataKey="XGBoost (39)" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div className="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/30 text-center">
+                                        <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">BSO-RF (19 Öznitelik)</div>
+                                        <div className="text-lg font-black text-emerald-700 dark:text-emerald-300">%{bsoModel.accuracy}</div>
+                                        <div className="text-[10px] text-emerald-600/70">%51.3 daha az öznitelik</div>
+                                    </div>
+                                    <div className="p-3 bg-blue-500/10 rounded-lg border border-blue-500/30 text-center">
+                                        <div className="text-xs text-blue-600 dark:text-blue-400 font-bold">RF (39 Öznitelik)</div>
+                                        <div className="text-lg font-black text-blue-700 dark:text-blue-300">%{rfAll.accuracy}</div>
+                                        <div className="text-[10px] text-blue-600/70">Δ = {(bsoModel.accuracy - rfAll.accuracy).toFixed(2)}%</div>
+                                    </div>
+                                    <div className="p-3 bg-amber-500/10 rounded-lg border border-amber-500/30 text-center">
+                                        <div className="text-xs text-amber-600 dark:text-amber-400 font-bold">XGBoost (39 Öznitelik)</div>
+                                        <div className="text-lg font-black text-amber-700 dark:text-amber-300">%{xgbAll.accuracy}</div>
+                                        <div className="text-[10px] text-amber-600/70">Δ = {(bsoModel.accuracy - xgbAll.accuracy).toFixed(2)}%</div>
+                                    </div>
+                                </div>
+                                <div className="mt-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800/40">
+                                    <p className="text-xs text-purple-700 dark:text-purple-300">
+                                        <strong>Temel Bulgu:</strong> BSO-RF sadece 19 öznitelik ile (%51.3 azaltma), 39 öznitelik kullanan RF&apos;ye karşı
+                                        rekabetçi performans (Δ = +{(bsoModel.accuracy - rfAll.accuracy).toFixed(2)}%) sergiler ve XGBoost&apos;a yakın sonuçlar (Δ = {(bsoModel.accuracy - xgbAll.accuracy).toFixed(2)}%) elde eder.
+                                        Bu, BSO öznitelik seçiminin gürültülü/artık öznitelikleri eleyerek modelin genelleme yeteneğini koruduğunu gösterir.
+                                    </p>
+                                </div>
+                            </>
+                        )
+                    })()}
                 </CardContent>
             </Card>
 

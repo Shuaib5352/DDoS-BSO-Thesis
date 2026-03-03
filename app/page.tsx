@@ -11,7 +11,7 @@ import {
   BookOpen, ChevronRight, ArrowRight, GraduationCap,
   Activity, Layers, Brain, Award, Clock, Calendar,
   Sparkles, BarChart2, Network, MessageCircleQuestion, Library, ScanSearch, Workflow, Sigma,
-  PieChart, List,
+  PieChart, List, Github,
 } from "lucide-react"
 import BSOVisualization from "@/components/bso-visualization"
 import MLClassificationPanel from "@/components/ml-classification-panel"
@@ -283,6 +283,16 @@ export default function DDoSDetectionDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2.5 flex-shrink-0">
+              <a
+                href="https://github.com/Shuaib5352/DDoS-BSO-Thesis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-sm"
+                aria-label="GitHub Kaynak Kodu"
+              >
+                <Github className="w-4 h-4" />
+                <span className="hidden sm:inline">GitHub</span>
+              </a>
               <ThemeToggle />
               <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] px-3 py-1.5 shadow-md shadow-emerald-500/20 font-semibold border-0">
                 <Sparkles className="w-3 h-3 mr-1" />

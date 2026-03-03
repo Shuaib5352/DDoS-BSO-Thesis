@@ -6,6 +6,11 @@ import {
     TrendingUp, CheckCircle2, BarChart3, Award,
     ArrowUpRight, ArrowDownRight, Minus, AlertTriangle, Sigma,
 } from "lucide-react"
+import {
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, Cell, Legend, ScatterChart, Scatter,
+    ZAxis, ComposedChart, Line, Area, ErrorBar,
+} from "recharts"
 import { MODEL_RESULTS, STATISTICAL_TESTS, CROSS_VALIDATION } from "@/lib/ciciot2023-dataset"
 
 /* ═══════════════════════════════════════════════════════════════
@@ -262,6 +267,158 @@ export default function StatisticalSignificance() {
                             <strong>F1-Skor:</strong> [{CONFIDENCE_INTERVAL_95.f1Score.lower.toFixed(2)}, {CONFIDENCE_INTERVAL_95.f1Score.upper.toFixed(2)}]
                         </p>
                     </div>
+                </CardContent>
+            </Card>
+
+            {/* ════════════════════ CV KUTU GRAFİĞİ (BOX PLOT) ════════════════════ */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-cyan-700 dark:text-cyan-300">
+                        <BarChart3 className="w-5 h-5" />
+                        Şekil 4.X: 10-Katlı CV Dağılımı — Kutu Grafiği (Box Plot)
+                    </CardTitle>
+                    <CardDescription>BSO-Hybrid RF modelinin 10-katlı çapraz doğrulama varyansı ve kararlılık analizi</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {(() => {
+                        /* Build box plot data from CV results */
+                        const metrics = [
+                            { key: "accuracy" as const, label: "Doğruluk (%)", color: "#22c55e" },
+                            { key: "precision" as const, label: "Kesinlik (%)", color: "#3b82f6" },
+                            { key: "recall" as const, label: "Duyarlılık (%)", color: "#f59e0b" },
+                            { key: "f1Score" as const, label: "F1-Skor (%)", color: "#8b5cf6" },
+                        ]
+
+                        const boxData = metrics.map((m) => {
+                            const values = CV_FOLDS.map((f) => f[m.key]).sort((a, b) => a - b)
+                            const q1 = values[Math.floor(values.length * 0.25)]
+                            const median = values[Math.floor(values.length * 0.5)]
+                            const q3 = values[Math.floor(values.length * 0.75)]
+                            const min = values[0]
+                            const max = values[values.length - 1]
+                            const iqr = q3 - q1
+                            const mean = values.reduce((s, v) => s + v, 0) / values.length
+                            return {
+                                name: m.label,
+                                min: +min.toFixed(2),
+                                q1: +q1.toFixed(2),
+                                median: +median.toFixed(2),
+                                q3: +q3.toFixed(2),
+                                max: +max.toFixed(2),
+                                iqr: +iqr.toFixed(3),
+                                mean: +mean.toFixed(2),
+                                color: m.color,
+                                range: +(max - min).toFixed(2),
+                            }
+                        })
+
+                        return (
+                            <div className="space-y-6">
+                                {/* Visual Box Plot using CSS */}
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    {boxData.map((d) => {
+                                        const scaleMin = Math.floor(d.min - 0.5)
+                                        const scaleMax = Math.ceil(d.max + 0.5)
+                                        const range = scaleMax - scaleMin
+                                        const toPos = (v: number) => ((v - scaleMin) / range) * 100
+
+                                        return (
+                                            <div key={d.name} className="p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-3 text-center">{d.name}</div>
+                                                <div className="relative h-48 flex items-center justify-center">
+                                                    {/* Vertical box plot */}
+                                                    <div className="relative w-16 h-full">
+                                                        {/* Whisker line (min to max) */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-px bg-slate-400 dark:bg-slate-500"
+                                                            style={{
+                                                                bottom: `${toPos(d.min)}%`,
+                                                                height: `${toPos(d.max) - toPos(d.min)}%`,
+                                                            }}
+                                                        />
+                                                        {/* Min whisker cap */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-6 h-px bg-slate-500"
+                                                            style={{ bottom: `${toPos(d.min)}%` }}
+                                                        />
+                                                        {/* Max whisker cap */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-6 h-px bg-slate-500"
+                                                            style={{ bottom: `${toPos(d.max)}%` }}
+                                                        />
+                                                        {/* Box (Q1 to Q3) */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-12 rounded border-2 opacity-80"
+                                                            style={{
+                                                                bottom: `${toPos(d.q1)}%`,
+                                                                height: `${Math.max(toPos(d.q3) - toPos(d.q1), 2)}%`,
+                                                                backgroundColor: d.color + "30",
+                                                                borderColor: d.color,
+                                                            }}
+                                                        />
+                                                        {/* Median line */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-12 h-0.5"
+                                                            style={{
+                                                                bottom: `${toPos(d.median)}%`,
+                                                                backgroundColor: d.color,
+                                                            }}
+                                                        />
+                                                        {/* Mean dot */}
+                                                        <div
+                                                            className="absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900"
+                                                            style={{
+                                                                bottom: `calc(${toPos(d.mean)}% - 5px)`,
+                                                                backgroundColor: d.color,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    {/* Scale labels */}
+                                                    <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[9px] text-slate-400 font-mono">
+                                                        <span>{scaleMax}</span>
+                                                        <span>{scaleMin}</span>
+                                                    </div>
+                                                </div>
+                                                {/* Stats below */}
+                                                <div className="mt-3 space-y-1 text-[10px] text-slate-600 dark:text-slate-400">
+                                                    <div className="flex justify-between"><span>Min:</span><span className="font-mono">{d.min}%</span></div>
+                                                    <div className="flex justify-between"><span>Q1:</span><span className="font-mono">{d.q1}%</span></div>
+                                                    <div className="flex justify-between font-bold text-slate-800 dark:text-slate-200"><span>Medyan:</span><span className="font-mono">{d.median}%</span></div>
+                                                    <div className="flex justify-between"><span>Q3:</span><span className="font-mono">{d.q3}%</span></div>
+                                                    <div className="flex justify-between"><span>Max:</span><span className="font-mono">{d.max}%</span></div>
+                                                    <div className="flex justify-between text-slate-500"><span>IQR:</span><span className="font-mono">{d.iqr}</span></div>
+                                                    <div className="flex justify-between text-slate-500"><span>Aralık:</span><span className="font-mono">{d.range}</span></div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                {/* Fold-by-fold bar chart */}
+                                <div className="h-[280px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={CV_FOLDS} margin={{ top: 10, right: 30, left: 20, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                                            <XAxis dataKey="fold" tickFormatter={(v: number) => `K${v}`} tick={{ fontSize: 10 }} />
+                                            <YAxis domain={[88, 93]} tick={{ fontSize: 10 }} />
+                                            <Tooltip formatter={(v: number) => [`${v.toFixed(2)}%`, ""]} />
+                                            <Legend wrapperStyle={{ fontSize: 10 }} />
+                                            <Bar dataKey="accuracy" name="Doğruluk" fill="#22c55e" opacity={0.85} radius={[3, 3, 0, 0]} />
+                                            <Bar dataKey="precision" name="Kesinlik" fill="#3b82f6" opacity={0.85} radius={[3, 3, 0, 0]} />
+                                            <Bar dataKey="recall" name="Duyarlılık" fill="#f59e0b" opacity={0.85} radius={[3, 3, 0, 0]} />
+                                            <Bar dataKey="f1Score" name="F1-Skor" fill="#8b5cf6" opacity={0.85} radius={[3, 3, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="p-3 rounded-lg bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-800/40">
+                                    <p className="text-xs text-cyan-700 dark:text-cyan-300">
+                                        <strong>Yorum:</strong> 10-katlı CV sonuçlarında düşük varyans (IQR &lt; 0.5, Aralık &lt; 1.0) modelin aşırı öğrenme (overfitting)
+                                        yapmadığını ve farklı veri alt kümelerinde tutarlı performans gösterdiğini kanıtlamaktadır.
+                                        Kutu grafikleri tüm metrikler için sıkı bir dağılım sergilemektedir.
+                                    </p>
+                                </div>
+                            </div>
+                        )
+                    })()}
                 </CardContent>
             </Card>
 
