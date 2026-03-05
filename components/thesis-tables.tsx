@@ -13,6 +13,7 @@ import {
     TrendingUp, GraduationCap, Camera,
 } from "lucide-react"
 import ExportPngButton, { ExportAllPngButton } from "@/components/export-png-button"
+import CopyLatexButton from "@/components/copy-latex-button"
 import {
     DATASET_STATISTICS,
     MODEL_RESULTS,
@@ -60,6 +61,12 @@ function AcademicTable({
                     label="PNG"
                     pixelRatio={3}
                     className="no-print ml-2 flex-shrink-0"
+                />
+                <CopyLatexButton
+                    targetId={tableId}
+                    caption={caption}
+                    label={number.replace(/\./g, "-")}
+                    className="no-print ml-1 flex-shrink-0"
                 />
             </div>
             <div className="rounded-lg border border-slate-300 dark:border-slate-600 overflow-hidden shadow-sm">

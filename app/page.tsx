@@ -46,6 +46,7 @@ import MethodologyFramework from "@/components/methodology-framework"
 import ThesisFigures from "@/components/thesis-figures"
 import ThesisChapterOrganizer from "@/components/thesis-chapter-organizer"
 import ConclusionRecommendations from "@/components/conclusion-recommendations"
+import AcademicParagraphs from "@/components/academic-paragraphs"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -133,6 +134,7 @@ const TAB_CATEGORIES = [
       { value: "figures", label: "Tez Şekilleri", icon: FileText },
       { value: "chapter-org", label: "Bölüm Düzenleyici", icon: GraduationCap },
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
+      { value: "paragraphs", label: "Akademik Metin", icon: BookOpen },
       { value: "writing-guide", label: "Yazım Rehberi", icon: GraduationCap },
       { value: "glossary", label: "Semboller", icon: List },
       { value: "export", label: "Dışa Aktar", icon: Printer },
@@ -174,6 +176,7 @@ const TAB_COLORS: Record<string, string> = {
   conclusion: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   figures: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "chapter-org": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  paragraphs: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -774,6 +777,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="conclusion" className="space-y-6 animate-fade-in"><ConclusionRecommendations /></TabsContent>
           <TabsContent value="figures" className="space-y-6 animate-fade-in"><ThesisFigures /></TabsContent>
           <TabsContent value="chapter-org" className="space-y-6 animate-fade-in"><ThesisChapterOrganizer /></TabsContent>
+          <TabsContent value="paragraphs" className="space-y-6 animate-fade-in"><AcademicParagraphs /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}

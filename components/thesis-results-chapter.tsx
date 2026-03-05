@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
 import ExportPngButton from "@/components/export-png-button"
+import CopyLatexButton from "@/components/copy-latex-button"
 import {
     MODEL_RESULTS, DATASET_STATISTICS, COMPUTATIONAL_EFFICIENCY, FEATURE_SELECTION_COMPARISON,
     CROSS_VALIDATION, STATISTICAL_TESTS, BSO_RF_PER_CLASS, BSO_PARAMETERS,
@@ -331,6 +332,7 @@ export default function ThesisResultsChapter() {
                                     </h4>
                                     <div className="flex gap-1 no-print">
                                         <CopyTableButton targetId="result-attack-distribution" label="Kopyala" />
+                                        <CopyLatexButton targetId="result-attack-distribution" caption="CICIoT2023 Attack Types Distribution" label="attack-distribution" />
                                         <ExportPngButton targetId="result-attack-distribution" filename="Tablo_Saldiri_Dagilimi" label="PNG" pixelRatio={3} />
                                     </div>
                                 </div>
@@ -432,6 +434,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-table-4-1" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-table-4-1" caption="Classification Performance Metrics on CICIoT2023 Test Set" label="model-comparison" />
                                     <ExportPngButton targetId="result-table-4-1" filename="Tablo_4_1_Model_Karsilastirma" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
@@ -494,6 +497,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-table-4-2" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-table-4-2" caption="Per-Class Performance of BSO-Hybrid RF" label="per-class" />
                                     <ExportPngButton targetId="result-table-4-2" filename="Tablo_4_2_Sinif_Bazinda" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
@@ -552,6 +556,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-table-4-3" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-table-4-3" caption="Confusion Matrix — BSO-Hybrid RF" label="cm-bso-rf" />
                                     <ExportPngButton targetId="result-table-4-3" filename="Tablo_4_3_CM_BSO_RF" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
@@ -596,6 +601,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-table-4-4" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-table-4-4" caption="Confusion Matrix — XGBoost" label="cm-xgboost" />
                                     <ExportPngButton targetId="result-table-4-4" filename="Tablo_4_4_CM_XGBoost" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
@@ -1111,6 +1117,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-efficiency" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-efficiency" caption="Computational Efficiency Comparison" label="efficiency" />
                                     <ExportPngButton targetId="result-efficiency" filename="Bolum_4_6_Verimlilik" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
@@ -1195,6 +1202,7 @@ export default function ThesisResultsChapter() {
                                 </CardTitle>
                                 <div className="flex gap-1 no-print">
                                     <CopyTableButton targetId="result-statistical" label="Kopyala" />
+                                    <CopyLatexButton targetId="result-statistical" caption="Statistical Significance Tests" label="statistical" />
                                     <ExportPngButton targetId="result-statistical" filename="Bolum_4_7_Istatistik" label="PNG" pixelRatio={3} />
                                 </div>
                             </div>
