@@ -10,8 +10,9 @@ import {
 import {
     BookOpen, Database, Brain, BarChart3, FileText,
     Target, Shield, CheckCircle2, Layers, Award,
-    TrendingUp, GraduationCap,
+    TrendingUp, GraduationCap, Camera,
 } from "lucide-react"
+import ExportPngButton, { ExportAllPngButton } from "@/components/export-png-button"
 import {
     DATASET_STATISTICS,
     MODEL_RESULTS,
@@ -44,13 +45,23 @@ function AcademicTable({
     source?: string
     children: React.ReactNode
 }) {
+    const tableId = `table-${number.replace(/\./g, "-")}`
     return (
-        <div className="my-8 print:my-4">
+        <div className="my-8 print:my-4 academic-table" id={tableId}>
             {/* IEEE/Scopus style — caption ABOVE table, bold number */}
-            <p className="text-sm font-semibold text-slate-900 dark:text-white mb-3 leading-relaxed">
-                <span className="font-bold">Tablo {number}.</span>{" "}
-                <span className="font-normal text-slate-700 dark:text-slate-300">{caption}</span>
-            </p>
+            <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
+                    <span className="font-bold">Tablo {number}.</span>{" "}
+                    <span className="font-normal text-slate-700 dark:text-slate-300">{caption}</span>
+                </p>
+                <ExportPngButton
+                    targetId={tableId}
+                    filename={`Tablo_${number}`}
+                    label="PNG"
+                    pixelRatio={3}
+                    className="no-print ml-2 flex-shrink-0"
+                />
+            </div>
             <div className="rounded-lg border border-slate-300 dark:border-slate-600 overflow-hidden shadow-sm">
                 {children}
             </div>
@@ -148,6 +159,14 @@ export default function ThesisTables() {
                             <span>6 Bölüm</span>
                             <span className="w-1 h-1 rounded-full bg-white/50 mt-2" />
                             <span>%100 Gerçek Deney Verisi</span>
+                        </div>
+                        <div className="flex justify-center pt-4 no-print">
+                            <ExportAllPngButton
+                                targetSelector=".academic-table"
+                                filenamePrefix="Tablo"
+                                label="Tüm Tabloları PNG Olarak İndir"
+                                pixelRatio={3}
+                            />
                         </div>
                     </div>
                 </CardContent>

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle, Code2, Table2 } from "lucide-react"
+import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle, Code2, Table2, Camera } from "lucide-react"
 
 function downloadBlob(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob)
@@ -217,6 +217,61 @@ export default function PrintExportPanel() {
         }
     }
 
+    const handleExportFiguresPNG = async () => {
+        setExporting("figures-png")
+        try {
+            const { toPng } = await import("html-to-image")
+            const nodes = document.querySelectorAll("[id^='svg-']")
+            if (nodes.length === 0) {
+                showResult("error", "Şekil bulunamadı. Lütfen önce 'Şekiller' sekmesine gidin ve şekilleri açın.")
+                setExporting(null)
+                return
+            }
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i] as HTMLElement
+                const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+                const link = document.createElement("a")
+                link.download = `${node.id}.png`
+                link.href = dataUrl
+                link.click()
+                await new Promise((r) => setTimeout(r, 300))
+            }
+            setExporting(null)
+            showResult("success", `${nodes.length} şekil yüksek çözünürlüklü PNG olarak indirildi`)
+        } catch (err) {
+            setExporting(null)
+            showResult("error", `PNG dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+        }
+    }
+
+    const handleExportTablesPNG = async () => {
+        setExporting("tables-png")
+        try {
+            const { toPng } = await import("html-to-image")
+            const nodes = document.querySelectorAll(".academic-table")
+            if (nodes.length === 0) {
+                showResult("error", "Tablo bulunamadı. Lütfen önce 'Tablolar' sekmesine gidin.")
+                setExporting(null)
+                return
+            }
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i] as HTMLElement
+                const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+                const link = document.createElement("a")
+                const id = node.id || `table_${String(i + 1).padStart(2, "0")}`
+                link.download = `${id}.png`
+                link.href = dataUrl
+                link.click()
+                await new Promise((r) => setTimeout(r, 300))
+            }
+            setExporting(null)
+            showResult("success", `${nodes.length} tablo yüksek çözünürlüklü PNG olarak indirildi`)
+        } catch (err) {
+            setExporting(null)
+            showResult("error", `PNG dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+        }
+    }
+
     const exportOptions = [
         {
             id: "print",
@@ -277,6 +332,26 @@ export default function PrintExportPanel() {
             color: "from-teal-500 to-teal-600",
             borderColor: "border-teal-500/30",
             onClick: handleExportFeaturesCSV,
+        },
+        {
+            id: "figures-png",
+            title: "Şekilleri PNG Olarak İndir",
+            titleAr: "Tüm şekilleri yüksek çözünürlüklü PNG olarak indir",
+            description: "Açık olan tüm şekilleri 300 DPI yüksek çözünürlüklü PNG formatında indirin. Önce Şekiller sekmesinde şekilleri açın.",
+            icon: Camera,
+            color: "from-sky-500 to-cyan-600",
+            borderColor: "border-sky-500/30",
+            onClick: handleExportFiguresPNG,
+        },
+        {
+            id: "tables-png",
+            title: "Tabloları PNG Olarak İndir",
+            titleAr: "Görünen tabloları yüksek çözünürlüklü PNG olarak indir",
+            description: "Görünen tüm tabloları 300 DPI yüksek çözünürlüklü PNG formatında indirin. Önce Tablolar sekmesine gidin.",
+            icon: Camera,
+            color: "from-indigo-500 to-violet-600",
+            borderColor: "border-indigo-500/30",
+            onClick: handleExportTablesPNG,
         },
     ]
 

@@ -8,9 +8,10 @@ import {
     Brain, Target, Layers, GitGraph, BarChart3, Network,
     AlertTriangle, Zap, FileText, ArrowRight, ArrowDown,
     Activity, Cpu, FlaskConical, TrendingUp, Award, PieChart,
-    ChevronDown, ChevronUp, Eye,
+    ChevronDown, ChevronUp, Eye, Camera,
 } from "lucide-react"
 import { useState } from "react"
+import ExportPngButton, { ExportAllPngButton } from "@/components/export-png-button"
 import {
     MODEL_RESULTS, DATASET_STATISTICS, BSO_PARAMETERS,
     BSO_SELECTED_FEATURES, CROSS_VALIDATION, BSO_RF_PER_CLASS,
@@ -1047,13 +1048,21 @@ export default function ThesisFigures() {
                             <div className="p-2 bg-sky-500/10 rounded-lg"><Image className="w-6 h-6 text-sky-500" /></div>
                             <div>
                                 <CardTitle className="text-xl">Tez Şekilleri ve Diyagramları</CardTitle>
-                                <CardDescription>{THESIS_FIGURES.length} akademik şekil — tümü SVG olarak çizilmiştir. Tıklayarak açın, SVG olarak indirin.</CardDescription>
+                                <CardDescription>{THESIS_FIGURES.length} akademik şekil — tümü SVG olarak çizilmiştir. Tıklayarak açın, SVG veya yüksek çözünürlüklü PNG olarak indirin.</CardDescription>
                             </div>
                         </div>
                         <div className="flex gap-2 items-center">
                             <Badge className="bg-sky-600 text-white">{THESIS_FIGURES.length} Şekil</Badge>
                             <Badge className="bg-emerald-600 text-white">{Object.keys(SVG_RENDERERS).length} SVG</Badge>
                         </div>
+                    </div>
+                    <div className="flex justify-end mt-3 no-print">
+                        <ExportAllPngButton
+                            targetSelector="[id^='svg-']"
+                            filenamePrefix="Sekil"
+                            label="Tüm Şekilleri PNG Olarak İndir"
+                            pixelRatio={3}
+                        />
                     </div>
                 </CardHeader>
             </Card>
@@ -1072,75 +1081,85 @@ export default function ThesisFigures() {
             </div>
 
             {/* Figures */}
-            {filtered.map((fig) => {
-                const typeConf = figureTypeConfig[fig.type] || figureTypeConfig.system
-                const TypeIcon = typeConf.icon
-                const Renderer = SVG_RENDERERS[fig.id] as (() => React.ReactNode) | undefined
-                const captionText = `${fig.number}: ${fig.title}`
-                const isOpen = expanded.has(fig.id)
+            {
+                filtered.map((fig) => {
+                    const typeConf = figureTypeConfig[fig.type] || figureTypeConfig.system
+                    const TypeIcon = typeConf.icon
+                    const Renderer = SVG_RENDERERS[fig.id] as (() => React.ReactNode) | undefined
+                    const captionText = `${fig.number}: ${fig.title}`
+                    const isOpen = expanded.has(fig.id)
 
-                return (
-                    <Card key={fig.id} id={`figure-${fig.id}`} className="overflow-hidden">
-                        <CardHeader className="pb-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors select-none" onClick={() => toggle(fig.id)}>
-                            <div className="flex items-center justify-between flex-wrap gap-3">
-                                <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-lg ${typeConf.bg}`}><TypeIcon className={`w-5 h-5 ${typeConf.color}`} /></div>
-                                    <div>
-                                        <CardTitle className="text-base flex items-center gap-2">
-                                            {fig.number}: {fig.title}
-                                            {isOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                                        </CardTitle>
-                                        <CardDescription className="text-[11px] mt-0.5">{fig.titleEn}</CardDescription>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                                    <Badge variant="outline" className="text-[10px]">Bölüm {fig.chapter}</Badge>
-                                    <Button variant="outline" size="sm" className="text-[10px] h-7 px-2" onClick={() => copy(`cap-${fig.id}`, captionText)}>
-                                        {copied === `cap-${fig.id}` ? <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-500" /> : <Copy className="w-3 h-3 mr-1" />} Başlık
-                                    </Button>
-                                    {Renderer && (
-                                        <Button variant="outline" size="sm" className="text-[10px] h-7 px-2" onClick={() => downloadSVG(fig.id)}>
-                                            <Download className="w-3 h-3 mr-1" /> SVG
-                                        </Button>
-                                    )}
-                                </div>
-                            </div>
-                        </CardHeader>
-
-                        {isOpen && (
-                            <CardContent className="space-y-3 pt-0">
-                                {Renderer ? (
-                                    <div id={`svg-${fig.id}`} className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
-                                        <Renderer />
-                                    </div>
-                                ) : (
-                                    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 text-center">
-                                        <TypeIcon className={`w-12 h-12 mx-auto mb-3 ${typeConf.color} opacity-40`} />
-                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400">{fig.title}</p>
-                                    </div>
-                                )}
-                                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                                    <div className="flex items-start gap-2">
-                                        <FileText className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
-                                        <p className="text-xs text-slate-600 dark:text-slate-400">{fig.description}</p>
-                                    </div>
-                                </div>
-                                <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800/40">
-                                    <div className="flex items-start justify-between gap-2">
-                                        <div className="flex items-start gap-2 flex-1">
-                                            <AlertTriangle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                                            <div className="text-[11px] text-blue-700 dark:text-blue-300"><strong>Kaynak:</strong> {fig.source}</div>
+                    return (
+                        <Card key={fig.id} id={`figure-${fig.id}`} className="overflow-hidden">
+                            <CardHeader className="pb-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors select-none" onClick={() => toggle(fig.id)}>
+                                <div className="flex items-center justify-between flex-wrap gap-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-lg ${typeConf.bg}`}><TypeIcon className={`w-5 h-5 ${typeConf.color}`} /></div>
+                                        <div>
+                                            <CardTitle className="text-base flex items-center gap-2">
+                                                {fig.number}: {fig.title}
+                                                {isOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                                            </CardTitle>
+                                            <CardDescription className="text-[11px] mt-0.5">{fig.titleEn}</CardDescription>
                                         </div>
-                                        <Button variant="ghost" size="sm" className="text-[10px] h-6 px-2 text-blue-600" onClick={() => copy(`src-${fig.id}`, fig.source)}>
-                                            {copied === `src-${fig.id}` ? <CheckCircle2 className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                    </div>
+                                    <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                                        <Badge variant="outline" className="text-[10px]">Bölüm {fig.chapter}</Badge>
+                                        <Button variant="outline" size="sm" className="text-[10px] h-7 px-2" onClick={() => copy(`cap-${fig.id}`, captionText)}>
+                                            {copied === `cap-${fig.id}` ? <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-500" /> : <Copy className="w-3 h-3 mr-1" />} Başlık
                                         </Button>
+                                        {Renderer && (
+                                            <Button variant="outline" size="sm" className="text-[10px] h-7 px-2" onClick={() => downloadSVG(fig.id)}>
+                                                <Download className="w-3 h-3 mr-1" /> SVG
+                                            </Button>
+                                        )}
+                                        {Renderer && (
+                                            <ExportPngButton
+                                                targetId={`svg-${fig.id}`}
+                                                filename={`Sekil_${fig.number.replace(/[^\w]/g, "_")}`}
+                                                label="PNG"
+                                                pixelRatio={3}
+                                            />
+                                        )}
                                     </div>
                                 </div>
-                            </CardContent>
-                        )}
-                    </Card>
-                )
-            })}
+                            </CardHeader>
+
+                            {isOpen && (
+                                <CardContent className="space-y-3 pt-0">
+                                    {Renderer ? (
+                                        <div id={`svg-${fig.id}`} className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+                                            <Renderer />
+                                        </div>
+                                    ) : (
+                                        <div className="p-8 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 text-center">
+                                            <TypeIcon className={`w-12 h-12 mx-auto mb-3 ${typeConf.color} opacity-40`} />
+                                            <p className="text-sm font-bold text-slate-600 dark:text-slate-400">{fig.title}</p>
+                                        </div>
+                                    )}
+                                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+                                        <div className="flex items-start gap-2">
+                                            <FileText className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                                            <p className="text-xs text-slate-600 dark:text-slate-400">{fig.description}</p>
+                                        </div>
+                                    </div>
+                                    <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800/40">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="flex items-start gap-2 flex-1">
+                                                <AlertTriangle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                                                <div className="text-[11px] text-blue-700 dark:text-blue-300"><strong>Kaynak:</strong> {fig.source}</div>
+                                            </div>
+                                            <Button variant="ghost" size="sm" className="text-[10px] h-6 px-2 text-blue-600" onClick={() => copy(`src-${fig.id}`, fig.source)}>
+                                                {copied === `src-${fig.id}` ? <CheckCircle2 className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            )}
+                        </Card>
+                    )
+                })
+            }
 
             {/* Summary Footer */}
             <Card className="bg-gradient-to-r from-sky-500/5 to-blue-500/5 border-sky-500/20">
@@ -1153,9 +1172,9 @@ export default function ThesisFigures() {
                             </div>
                         ))}
                     </div>
-                    <p className="text-center text-xs text-slate-500 mt-3">Tüm {THESIS_FIGURES.length} şekil SVG olarak çizilmiştir. Başlıkları kopyalayın, SVG olarak indirin.</p>
+                    <p className="text-center text-xs text-slate-500 mt-3">Tüm {THESIS_FIGURES.length} şekil SVG olarak çizilmiştir. Başlıkları kopyalayın, SVG veya yüksek çözünürlüklü PNG olarak indirin.</p>
                 </CardContent>
             </Card>
-        </div>
+        </div >
     )
 }
