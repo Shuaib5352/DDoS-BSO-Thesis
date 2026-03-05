@@ -13,9 +13,10 @@ import {
 import {
     Shield, Target, TrendingUp, Zap, CheckCircle2, Award, Cpu, Layers,
     BarChart3, Clock, Database, GitBranch, AlertTriangle, ArrowUp, ArrowDown,
-    Minus, BookOpen, FlaskConical, Settings2, Network, Activity,
+    Minus, BookOpen, FlaskConical, Settings2, Network, Activity, Camera, Copy,
 } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
+import ExportPngButton from "@/components/export-png-button"
 import {
     MODEL_RESULTS, DATASET_STATISTICS, COMPUTATIONAL_EFFICIENCY, FEATURE_SELECTION_COMPARISON,
     CROSS_VALIDATION, STATISTICAL_TESTS, BSO_RF_PER_CLASS, BSO_PARAMETERS,
@@ -23,6 +24,48 @@ import {
     CONFUSION_MATRICES, DYNAMIC_ENVIRONMENT, STATE_OF_THE_ART, OPTIMIZER_CONVERGENCE,
     generateBSOConvergenceData, ROC_CURVE_DATA,
 } from "@/lib/ciciot2023-dataset"
+
+// ============================================================================
+// HELPER COMPONENTS — PNG Export & Copy
+// ============================================================================
+
+/** Wrap any figure / table section with an id + PNG export button */
+function SectionExport({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+    return (
+        <div id={id} className="relative">
+            <div className="absolute top-2 right-2 z-10 no-print flex gap-1">
+                <ExportPngButton targetId={id} filename={id} label={label} pixelRatio={3} />
+            </div>
+            {children}
+        </div>
+    )
+}
+
+/** Copy a table element's text content to clipboard */
+function CopyTableButton({ targetId, label = "Kopyala" }: { targetId: string; label?: string }) {
+    const [copied, setCopied] = useState(false)
+    const handleCopy = () => {
+        const el = document.getElementById(targetId)
+        if (!el) return
+        const table = el.querySelector("table")
+        if (!table) return
+        const rows: string[] = []
+        table.querySelectorAll("tr").forEach((tr) => {
+            const cells: string[] = []
+            tr.querySelectorAll("th, td").forEach((td) => cells.push((td as HTMLElement).innerText.trim()))
+            rows.push(cells.join("\t"))
+        })
+        navigator.clipboard.writeText(rows.join("\n"))
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
+    return (
+        <button onClick={handleCopy} className="inline-flex items-center gap-1 text-[10px] h-7 px-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground no-print">
+            {copied ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+            {copied ? "✓" : label}
+        </button>
+    )
+}
 
 // ============================================================================
 // PRECOMPUTED DATA
@@ -280,11 +323,17 @@ export default function ThesisResultsChapter() {
                             </div>
 
                             {/* Attack Types Table */}
-                            <div className="mt-6">
-                                <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
-                                    <AlertTriangle className="w-4 h-4 text-amber-500" />
-                                    {t("Attack Types Distribution", "توزيع أنواع الهجمات", "Saldırı Türleri Dağılımı")}
-                                </h4>
+                            <div className="mt-6" id="result-attack-distribution">
+                                <div className="flex items-center justify-between mb-3">
+                                    <h4 className="font-semibold text-sm flex items-center gap-2">
+                                        <AlertTriangle className="w-4 h-4 text-amber-500" />
+                                        {t("Attack Types Distribution", "توزيع أنواع الهجمات", "Saldırı Türleri Dağılımı")}
+                                    </h4>
+                                    <div className="flex gap-1 no-print">
+                                        <CopyTableButton targetId="result-attack-distribution" label="Kopyala" />
+                                        <ExportPngButton targetId="result-attack-distribution" filename="Tablo_Saldiri_Dagilimi" label="PNG" pixelRatio={3} />
+                                    </div>
+                                </div>
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
@@ -319,13 +368,16 @@ export default function ThesisResultsChapter() {
                             </div>
 
                             {/* SMOTE Before/After Visualization */}
-                            <div className="mt-6">
-                                <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
-                                    <TrendingUp className="w-4 h-4 text-purple-500" />
-                                    {t("Figure 4.1: Class Distribution Before & After SMOTE",
-                                        "الشكل 4.1: توزيع الأصناف قبل وبعد SMOTE",
-                                        "Şekil 4.1: SMOTE Öncesi ve Sonrası Sınıf Dağılımı")}
-                                </h4>
+                            <div className="mt-6" id="result-fig-4-1">
+                                <div className="flex items-center justify-between mb-3">
+                                    <h4 className="font-semibold text-sm flex items-center gap-2">
+                                        <TrendingUp className="w-4 h-4 text-purple-500" />
+                                        {t("Figure 4.1: Class Distribution Before & After SMOTE",
+                                            "الشكل 4.1: توزيع الأصناف قبل وبعد SMOTE",
+                                            "Şekil 4.1: SMOTE Öncesi ve Sonrası Sınıf Dağılımı")}
+                                    </h4>
+                                    <ExportPngButton targetId="result-fig-4-1" filename="Sekil_4_1_SMOTE" label="PNG" pixelRatio={3} className="no-print" />
+                                </div>
                                 <ResponsiveContainer width="100%" height={250}>
                                     <BarChart data={CICIOT2023_ATTACK_TYPES.map(a => ({
                                         name: a.name.replace("DDoS-ACK_Fragmentation", "ACK_Frag").replace("DDoS-SYN_Flood", "SYN_Flood").replace("Backdoor_Malware", "Backdoor").replace("Recon-PortScan", "PortScan").replace("BenignTraffic", "Benign"),
@@ -369,14 +421,20 @@ export default function ThesisResultsChapter() {
                 {/* ================================================================ */}
                 <TabsContent value="metrics" className="space-y-6">
                     {/* Main Metrics Table */}
-                    <Card>
+                    <Card id="result-table-4-1">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Target className="w-5 h-5 text-primary" />
-                                {t("4.2 Classification Performance Metrics",
-                                    "4.2 مقاييس أداء التصنيف",
-                                    "4.2 Sınıflandırma Performans Metrikleri")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Target className="w-5 h-5 text-primary" />
+                                    {t("4.2 Classification Performance Metrics",
+                                        "4.2 مقاييس أداء التصنيف",
+                                        "4.2 Sınıflandırma Performans Metrikleri")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-table-4-1" label="Kopyala" />
+                                    <ExportPngButton targetId="result-table-4-1" filename="Tablo_4_1_Model_Karsilastirma" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                             <CardDescription>
                                 {t("Table 4.1: Standard IDS evaluation metrics on CICIoT2023 test set (20,644 samples)",
                                     "الجدول 4.1: مقاييس التقييم القياسية لنظام كشف التسلل على مجموعة اختبار CICIoT2023 (20,644 عينة)",
@@ -425,14 +483,20 @@ export default function ThesisResultsChapter() {
                     </Card>
 
                     {/* Per-Class Performance */}
-                    <Card>
+                    <Card id="result-table-4-2">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                                <Layers className="w-5 h-5 text-primary" />
-                                {t("Table 4.2 / Figure 4.2: Per-Class Performance (BSO-Hybrid RF)",
-                                    "الجدول 4.2 / الشكل 4.2: الأداء لكل صنف (BSO-Hybrid RF)",
-                                    "Tablo 4.2 / Şekil 4.2: Sınıf Bazında Performans (BSO-Hybrid RF)")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <Layers className="w-5 h-5 text-primary" />
+                                    {t("Table 4.2 / Figure 4.2: Per-Class Performance (BSO-Hybrid RF)",
+                                        "الجدول 4.2 / الشكل 4.2: الأداء لكل صنف (BSO-Hybrid RF)",
+                                        "Tablo 4.2 / Şekil 4.2: Sınıf Bazında Performans (BSO-Hybrid RF)")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-table-4-2" label="Kopyala" />
+                                    <ExportPngButton targetId="result-table-4-2" filename="Tablo_4_2_Sinif_Bazinda" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -477,14 +541,20 @@ export default function ThesisResultsChapter() {
                     </Card>
 
                     {/* Confusion Matrix (BSO-RF) */}
-                    <Card>
+                    <Card id="result-table-4-3">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                                <Target className="w-5 h-5 text-primary" />
-                                {t("Table 4.3: Confusion Matrix — BSO-Hybrid RF (20,644 test samples)",
-                                    "الجدول 4.3: مصفوفة الارتباك — BSO-Hybrid RF (20,644 عينة اختبار)",
-                                    "Tablo 4.3: Karışıklık Matrisi — BSO-Hybrid RF (20.644 test örneği)")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <Target className="w-5 h-5 text-primary" />
+                                    {t("Table 4.3: Confusion Matrix — BSO-Hybrid RF (20,644 test samples)",
+                                        "الجدول 4.3: مصفوفة الارتباك — BSO-Hybrid RF (20,644 عينة اختبار)",
+                                        "Tablo 4.3: Karışıklık Matrisi — BSO-Hybrid RF (20.644 test örneği)")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-table-4-3" label="Kopyala" />
+                                    <ExportPngButton targetId="result-table-4-3" filename="Tablo_4_3_CM_BSO_RF" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="overflow-x-auto">
@@ -515,14 +585,20 @@ export default function ThesisResultsChapter() {
                     </Card>
 
                     {/* XGBoost Confusion Matrix for Comparison */}
-                    <Card>
+                    <Card id="result-table-4-4">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                                <Target className="w-5 h-5 text-amber-500" />
-                                {t("Table 4.4: Confusion Matrix — XGBoost (Best Accuracy Baseline)",
-                                    "الجدول 4.4: مصفوفة الارتباك — XGBoost (أفضل دقة مرجعية)",
-                                    "Tablo 4.4: Karışıklık Matrisi — XGBoost (En İyi Doğruluk Temel Çizgisi)")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <Target className="w-5 h-5 text-amber-500" />
+                                    {t("Table 4.4: Confusion Matrix — XGBoost (Best Accuracy Baseline)",
+                                        "الجدول 4.4: مصفوفة الارتباك — XGBoost (أفضل دقة مرجعية)",
+                                        "Tablo 4.4: Karışıklık Matrisi — XGBoost (En İyi Doğruluk Temel Çizgisi)")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-table-4-4" label="Kopyala" />
+                                    <ExportPngButton targetId="result-table-4-4" filename="Tablo_4_4_CM_XGBoost" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                             <CardDescription className="text-[10px]">
                                 {t("XGBoost achieves 90.37% accuracy using all 39 features vs BSO-Hybrid RF 89.82% with only 19 features",
                                     "XGBoost يحقق دقة 90.37% باستخدام جميع الميزات الـ 39 مقابل BSO-Hybrid RF بدقة 89.82% بـ 19 ميزة فقط",
@@ -563,12 +639,15 @@ export default function ThesisResultsChapter() {
                     </Card>
 
                     {/* ROC Curves */}
-                    <Card>
+                    <Card id="result-fig-4-3">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                                <TrendingUp className="w-5 h-5 text-primary" />
-                                {t("Figure 4.3: ROC Curves & AUC-ROC", "الشكل 4.3: منحنيات ROC ومساحة تحت المنحنى", "Şekil 4.3: ROC Eğrileri & AUC-ROC")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <TrendingUp className="w-5 h-5 text-primary" />
+                                    {t("Figure 4.3: ROC Curves & AUC-ROC", "الشكل 4.3: منحنيات ROC ومساحة تحت المنحنى", "Şekil 4.3: ROC Eğrileri & AUC-ROC")}
+                                </CardTitle>
+                                <ExportPngButton targetId="result-fig-4-3" filename="Sekil_4_3_ROC" label="PNG" pixelRatio={3} className="no-print" />
+                            </div>
                             <CardDescription className="text-[10px]">
                                 {t("Note: Curves are interpolated from real AUC-ROC values for smooth visualization. Actual AUC values from sklearn.metrics.roc_auc_score().",
                                     "ملاحظة: المنحنيات محسوبة من قيم AUC-ROC الحقيقية للعرض السلس. قيم AUC الفعلية من sklearn.metrics.roc_auc_score().",
@@ -599,20 +678,23 @@ export default function ThesisResultsChapter() {
                             </ResponsiveContainer>
                         </CardContent>
                     </Card>
-                </TabsContent>
+                </TabsContent >
 
                 {/* ================================================================ */}
                 {/* SECTION 3: COMPARATIVE ANALYSIS */}
                 {/* ================================================================ */}
                 <TabsContent value="comparison" className="space-y-6">
-                    <Card>
+                    <Card id="result-fig-4-4">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <BarChart3 className="w-5 h-5 text-primary" />
-                                {t("4.3 Comparative Analysis",
-                                    "4.3 التحليل المقارن",
-                                    "4.3 Karşılaştırmalı Analiz")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <BarChart3 className="w-5 h-5 text-primary" />
+                                    {t("4.3 Comparative Analysis",
+                                        "4.3 التحليل المقارن",
+                                        "4.3 Karşılaştırmalı Analiz")}
+                                </CardTitle>
+                                <ExportPngButton targetId="result-fig-4-4" filename="Sekil_4_4_Dogruluk_Karsilastirma" label="PNG" pixelRatio={3} className="no-print" />
+                            </div>
                         </CardHeader>
                         <CardContent>
                             {/* Accuracy Bar Chart */}
@@ -718,14 +800,17 @@ export default function ThesisResultsChapter() {
                     </div>
 
                     {/* Optimizer Convergence Comparison */}
-                    <Card>
+                    <Card id="result-fig-4-5">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                                <TrendingUp className="w-5 h-5 text-primary" />
-                                {t("Figure 4.5: Convergence Speed Comparison (BSO vs PSO vs GA vs GWO)",
-                                    "الشكل 4.5: مقارنة سرعة التقارب (BSO مقابل PSO مقابل GA مقابل GWO)",
-                                    "Şekil 4.5: Yakınsama Hızı Karşılaştırması (BSO vs PSO vs GA vs GWO)")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <TrendingUp className="w-5 h-5 text-primary" />
+                                    {t("Figure 4.5: Convergence Speed Comparison (BSO vs PSO vs GA vs GWO)",
+                                        "الشكل 4.5: مقارنة سرعة التقارب (BSO مقابل PSO مقابل GA مقابل GWO)",
+                                        "Şekil 4.5: Yakınsama Hızı Karşılaştırması (BSO vs PSO vs GA vs GWO)")}
+                                </CardTitle>
+                                <ExportPngButton targetId="result-fig-4-5" filename="Sekil_4_5_Yakinsama" label="PNG" pixelRatio={3} className="no-print" />
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <ResponsiveContainer width="100%" height={300}>
@@ -749,14 +834,17 @@ export default function ThesisResultsChapter() {
                 {/* SECTION 4: BSO IMPACT */}
                 {/* ================================================================ */}
                 <TabsContent value="bso" className="space-y-6">
-                    <Card>
+                    <Card id="result-bso-impact">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <GitBranch className="w-5 h-5 text-primary" />
-                                {t("4.4 Impact of BSO Optimization",
-                                    "4.4 تأثير تحسين BSO",
-                                    "4.4 BSO Optimizasyonunun Etkisi")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <GitBranch className="w-5 h-5 text-primary" />
+                                    {t("4.4 Impact of BSO Optimization",
+                                        "4.4 تأثير تحسين BSO",
+                                        "4.4 BSO Optimizasyonunun Etkisi")}
+                                </CardTitle>
+                                <ExportPngButton targetId="result-bso-impact" filename="Bolum_4_4_BSO_Etkisi" label="PNG" pixelRatio={3} className="no-print" />
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Hyperparameter Tuning */}
@@ -868,14 +956,17 @@ export default function ThesisResultsChapter() {
                 {/* SECTION 5: DYNAMIC ENVIRONMENT */}
                 {/* ================================================================ */}
                 <TabsContent value="dynamic" className="space-y-6">
-                    <Card>
+                    <Card id="result-dynamic-env">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Network className="w-5 h-5 text-primary" />
-                                {t("4.5 Performance in Dynamic Network Environments",
-                                    "4.5 الأداء في البيئات الشبكية الديناميكية",
-                                    "4.5 Dinamik Ağ Ortamlarında Performans")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Network className="w-5 h-5 text-primary" />
+                                    {t("4.5 Performance in Dynamic Network Environments",
+                                        "4.5 الأداء في البيئات الشبكية الديناميكية",
+                                        "4.5 Dinamik Ağ Ortamlarında Performans")}
+                                </CardTitle>
+                                <ExportPngButton targetId="result-dynamic-env" filename="Bolum_4_5_Dinamik_Ortam" label="PNG" pixelRatio={3} className="no-print" />
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Noise Robustness */}
@@ -1009,14 +1100,20 @@ export default function ThesisResultsChapter() {
                 {/* SECTION 6: COMPUTATIONAL EFFICIENCY */}
                 {/* ================================================================ */}
                 <TabsContent value="efficiency" className="space-y-6">
-                    <Card>
+                    <Card id="result-efficiency">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Clock className="w-5 h-5 text-primary" />
-                                {t("4.6 Computational Efficiency",
-                                    "4.6 الكفاءة الحسابية والوقتية",
-                                    "4.6 Hesaplama Verimliliği")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Clock className="w-5 h-5 text-primary" />
+                                    {t("4.6 Computational Efficiency",
+                                        "4.6 الكفاءة الحسابية والوقتية",
+                                        "4.6 Hesaplama Verimliliği")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-efficiency" label="Kopyala" />
+                                    <ExportPngButton targetId="result-efficiency" filename="Bolum_4_6_Verimlilik" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Full Efficiency Table */}
@@ -1087,14 +1184,20 @@ export default function ThesisResultsChapter() {
                 {/* SECTION 7: STATISTICAL ANALYSIS */}
                 {/* ================================================================ */}
                 <TabsContent value="statistical" className="space-y-6">
-                    <Card>
+                    <Card id="result-statistical">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <FlaskConical className="w-5 h-5 text-primary" />
-                                {t("4.7 Statistical Significance Analysis",
-                                    "4.7 تحليل الدلالة الإحصائية",
-                                    "4.7 İstatistiksel Anlamlılık Analizi")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <FlaskConical className="w-5 h-5 text-primary" />
+                                    {t("4.7 Statistical Significance Analysis",
+                                        "4.7 تحليل الدلالة الإحصائية",
+                                        "4.7 İstatistiksel Anlamlılık Analizi")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <CopyTableButton targetId="result-statistical" label="Kopyala" />
+                                    <ExportPngButton targetId="result-statistical" filename="Bolum_4_7_Istatistik" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Statistical Tests Table */}
@@ -1186,12 +1289,17 @@ export default function ThesisResultsChapter() {
                 {/* SECTION 8: DISCUSSION */}
                 {/* ================================================================ */}
                 <TabsContent value="discussion" className="space-y-6">
-                    <Card>
+                    <Card id="result-discussion">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <BookOpen className="w-5 h-5 text-primary" />
-                                {t("4.8 Discussion", "4.8 المناقشة", "4.8 Tartışma")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <BookOpen className="w-5 h-5 text-primary" />
+                                    {t("4.8 Discussion", "4.8 المناقشة", "4.8 Tartışma")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <ExportPngButton targetId="result-discussion" filename="Bolum_4_8_Tartisma" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Why BSO-Hybrid achieved these results */}
@@ -1250,12 +1358,17 @@ export default function ThesisResultsChapter() {
                     </Card>
 
                     {/* Final Summary Card */}
-                    <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 via-background to-emerald-500/5">
+                    <Card id="result-summary" className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 via-background to-emerald-500/5">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Award className="w-5 h-5 text-primary" />
-                                {t("Summary of Key Results", "ملخص النتائج الرئيسية", "Temel Sonuçların Özeti")}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Award className="w-5 h-5 text-primary" />
+                                    {t("Summary of Key Results", "ملخص النتائج الرئيسية", "Temel Sonuçların Özeti")}
+                                </CardTitle>
+                                <div className="flex gap-1 no-print">
+                                    <ExportPngButton targetId="result-summary" filename="Sonuc_Ozeti" label="PNG" pixelRatio={3} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1279,10 +1392,10 @@ export default function ThesisResultsChapter() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-            </Tabs>
+            </Tabs >
 
             {/* Data Source Footer */}
-            <Card className="border border-dashed border-emerald-500/30 bg-emerald-500/5">
+            < Card className="border border-dashed border-emerald-500/30 bg-emerald-500/5" >
                 <CardContent className="py-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
                         <div className="flex items-center gap-2">
@@ -1304,7 +1417,7 @@ export default function ThesisResultsChapter() {
                         </div>
                     </div>
                 </CardContent>
-            </Card>
-        </div>
+            </Card >
+        </div >
     )
 }
