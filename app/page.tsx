@@ -50,6 +50,7 @@ import AcademicParagraphs from "@/components/academic-paragraphs"
 import ThesisAbstract from "@/components/thesis-abstract"
 import OptimizerConvergenceComparison from "@/components/optimizer-convergence-comparison"
 import ConceptDriftSimulation from "@/components/concept-drift-simulation"
+import JournalPublicationCharts from "@/components/journal-publication-charts"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -123,6 +124,7 @@ const TAB_CATEGORIES = [
       { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
       { value: "concept-drift", label: "Dinamik Ortam", icon: Shuffle },
       { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
+      { value: "journal-charts", label: "Yayın Şekilleri", icon: BarChart3 },
     ],
   },
   {
@@ -186,6 +188,7 @@ const TAB_COLORS: Record<string, string> = {
   abstract: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   convergence: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "concept-drift": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "journal-charts": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-fuchsia-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -586,7 +589,7 @@ export default function DDoSDetectionDashboard() {
                       },
                       {
                         title: "Kapsamlı 12 Model Karşılaştırması",
-                        desc: `BSO-Hibrit RF, %${MODEL_RESULTS[0].accuracy} doğruluk ve %${MODEL_RESULTS[0].f1Macro} F1-makro ile tüm temel modelleri geride bıraktı.`,
+                        desc: `BSO-Hibrit RF, %${MODEL_RESULTS[0].accuracy} doğruluk ile yalnızca 19 öznitelik kullanarak 39 öznitelikli modellere rekabetçi performans gösterdi (XGBoost: %${MODEL_RESULTS[11].accuracy}).`,
                         icon: Trophy,
                       },
                     ].map((item, i) => (
@@ -711,7 +714,7 @@ export default function DDoSDetectionDashboard() {
                     <Award className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-sm font-bold text-white">
-                    En İyi Model: BSO-Hibrit RF — Nihai Sonuçlar
+                    Önerilen Model: BSO-Hibrit RF — Nihai Sonuçlar
                   </h3>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
@@ -884,6 +887,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="abstract" className="space-y-6 animate-fade-in"><ThesisAbstract /></TabsContent>
           <TabsContent value="convergence" className="space-y-6 animate-fade-in"><OptimizerConvergenceComparison /></TabsContent>
           <TabsContent value="concept-drift" className="space-y-6 animate-fade-in"><ConceptDriftSimulation /></TabsContent>
+          <TabsContent value="journal-charts" className="space-y-6 animate-fade-in"><JournalPublicationCharts /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}
