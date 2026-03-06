@@ -68,7 +68,8 @@ function PerClassPerformanceChart() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                         Sınıf Bazlı Performans — BSO-Hibrit RF
                     </h3>
-                    <Badge className="ml-2 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 text-[10px] border-0">
+                    <Badge className="ml-2 bg-indigo-600 text-white text-[10px] border-0 font-mono font-bold">Şekil 4.9</Badge>
+                    <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 text-[10px] border-0">
                         5 Sınıf
                     </Badge>
                 </div>
@@ -143,7 +144,8 @@ function ComputationalEfficiencyChart() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                         Hesaplama Verimliliği Karşılaştırması
                     </h3>
-                    <Badge className="ml-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-[10px] border-0">
+                    <Badge className="ml-2 bg-indigo-600 text-white text-[10px] border-0 font-mono font-bold">Şekil 4.10–4.11</Badge>
+                    <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-[10px] border-0">
                         12 Model
                     </Badge>
                 </div>
@@ -294,7 +296,8 @@ function MultiModelRadarChart() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                         Çok Metrikli Model Karşılaştırması — Radar Grafiği
                     </h3>
-                    <Badge className="ml-2 bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 text-[10px] border-0">
+                    <Badge className="ml-2 bg-indigo-600 text-white text-[10px] border-0 font-mono font-bold">Şekil 4.12</Badge>
+                    <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 text-[10px] border-0">
                         6 Model × 6 Metrik
                     </Badge>
                 </div>
@@ -354,7 +357,8 @@ function CVComparisonChart() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                         10-Katlı Çapraz Doğrulama Karşılaştırması
                     </h3>
-                    <Badge className="ml-2 bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300 text-[10px] border-0">
+                    <Badge className="ml-2 bg-indigo-600 text-white text-[10px] border-0 font-mono font-bold">Şekil 4.13</Badge>
+                    <Badge className="bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300 text-[10px] border-0">
                         SMOTE Her Katta İçeride
                     </Badge>
                 </div>
@@ -450,7 +454,8 @@ function ReproducibilityInfo() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                         Tekrarlanabilirlik Bilgileri
                     </h3>
-                    <Badge className="ml-2 bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-[10px] border-0">
+                    <Badge className="ml-2 bg-indigo-600 text-white text-[10px] border-0 font-mono font-bold">Tablo 4.14</Badge>
+                    <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-[10px] border-0">
                         Reproducibility
                     </Badge>
                 </div>

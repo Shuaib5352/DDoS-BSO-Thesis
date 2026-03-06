@@ -142,6 +142,7 @@ export default function PerClassRocCurves() {
                             <TrendingUp className="w-5 h-5" />
                             Sınıf Bazlı ROC Eğrileri (One-vs-Rest)
                         </h2>
+                        <span className="inline-block bg-white/20 text-white text-[11px] font-mono font-bold px-3 py-0.5 rounded-full">Şekil 4.14</span>
                         <p className="text-xs text-white/80 max-w-2xl mx-auto">
                             Her saldırı sınıfı için ayrı ROC eğrisi ve AUC değeri — 6 model karşılaştırması
                         </p>

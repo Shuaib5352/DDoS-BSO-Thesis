@@ -123,6 +123,7 @@ export default function TsneVisualization() {
                             <Eye className="w-5 h-5" />
                             t-SNE Boyut İndirgeme Görselleştirmesi
                         </h2>
+                        <span className="inline-block bg-white/20 text-white text-[11px] font-mono font-bold px-3 py-0.5 rounded-full">Şekil 4.16</span>
                         <p className="text-xs text-white/80 max-w-2xl mx-auto">
                             BSO tarafından seçilen 19 öznitelik ile test verisinin 2D projeksiyon haritası —
                             sınıf kümelerinin ayrılabilirliğini gösterir

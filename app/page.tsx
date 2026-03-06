@@ -54,6 +54,7 @@ import JournalPublicationCharts from "@/components/journal-publication-charts"
 import PerClassRocCurves from "@/components/per-class-roc-curves"
 import PrecisionRecallCurves from "@/components/precision-recall-curves"
 import TsneVisualization from "@/components/tsne-visualization"
+import FigureTableIndex from "@/components/figure-table-index"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -145,6 +146,7 @@ const TAB_CATEGORIES = [
     label: "Araçlar",
     tabs: [
       { value: "abstract", label: "Tez Özeti", icon: BookOpen },
+      { value: "fig-index", label: "Şekil/Tablo Dizini", icon: Library },
       { value: "figures", label: "Tez Şekilleri", icon: FileText },
       { value: "chapter-org", label: "Bölüm Düzenleyici", icon: GraduationCap },
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
@@ -198,6 +200,7 @@ const TAB_COLORS: Record<string, string> = {
   "roc-curves": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "pr-curves": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-green-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "tsne": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "fig-index": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-700 data-[state=active]:to-slate-800 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -889,6 +892,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="writing-guide" className="space-y-6 animate-fade-in"><ThesisWritingGuide /></TabsContent>
           <TabsContent value="glossary" className="space-y-6 animate-fade-in"><GlossaryNotation /></TabsContent>
           <TabsContent value="export" className="space-y-6 animate-fade-in"><PrintExportPanel /></TabsContent>
+          <TabsContent value="fig-index" className="space-y-6 animate-fade-in"><FigureTableIndex /></TabsContent>
           <TabsContent value="conclusion" className="space-y-6 animate-fade-in"><ConclusionRecommendations /></TabsContent>
           <TabsContent value="figures" className="space-y-6 animate-fade-in"><ThesisFigures /></TabsContent>
           <TabsContent value="chapter-org" className="space-y-6 animate-fade-in"><ThesisChapterOrganizer /></TabsContent>

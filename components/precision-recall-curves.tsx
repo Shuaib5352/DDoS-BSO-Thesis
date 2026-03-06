@@ -135,6 +135,7 @@ export default function PrecisionRecallCurves() {
                             <BarChart3 className="w-5 h-5" />
                             Kesinlik-Duyarlılık Eğrileri (Precision-Recall)
                         </h2>
+                        <span className="inline-block bg-white/20 text-white text-[11px] font-mono font-bold px-3 py-0.5 rounded-full">Şekil 4.15 · Tablo 4.13</span>
                         <p className="text-xs text-white/80 max-w-2xl mx-auto">
                             Dengesiz sınıflar için ROC&apos;dan daha bilgilendirici — özellikle Backdoor_Malware (%3.1 oran) için kritik
                         </p>
