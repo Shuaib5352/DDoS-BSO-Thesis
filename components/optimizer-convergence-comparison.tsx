@@ -169,8 +169,8 @@ export default function OptimizerConvergenceComparison() {
                     <Card
                         key={opt.key}
                         className={`relative overflow-hidden transition-all cursor-default ${opt.key === "BSO"
-                                ? "ring-2 ring-indigo-500/50 border-indigo-300 dark:border-indigo-700"
-                                : "border-slate-200 dark:border-slate-700"
+                            ? "ring-2 ring-indigo-500/50 border-indigo-300 dark:border-indigo-700"
+                            : "border-slate-200 dark:border-slate-700"
                             }`}
                         onMouseEnter={() => setHoveredOptimizer(opt.key)}
                         onMouseLeave={() => setHoveredOptimizer(null)}
@@ -178,7 +178,7 @@ export default function OptimizerConvergenceComparison() {
                         {opt.key === "BSO" && (
                             <div className="absolute top-2 right-2">
                                 <Badge className="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5">
-                                    <Trophy className="w-3 h-3 mr-0.5" /> EN İYİ
+                                    <Trophy className="w-3 h-3 mr-0.5" /> EN İYİ FİTNESS
                                 </Badge>
                             </div>
                         )}
@@ -380,8 +380,8 @@ export default function OptimizerConvergenceComparison() {
                                 <tr
                                     key={opt.key}
                                     className={`border-b border-slate-100 dark:border-slate-800 ${opt.key === "BSO"
-                                            ? "bg-indigo-50/50 dark:bg-indigo-950/20 font-semibold"
-                                            : "hover:bg-slate-50 dark:hover:bg-slate-800/40"
+                                        ? "bg-indigo-50/50 dark:bg-indigo-950/20 font-semibold"
+                                        : "hover:bg-slate-50 dark:hover:bg-slate-800/40"
                                         }`}
                                 >
                                     <td className="py-3 px-3">
@@ -452,10 +452,10 @@ export default function OptimizerConvergenceComparison() {
                                 <div
                                     key={f.name}
                                     className={`flex items-center justify-between p-2.5 rounded-lg border text-xs ${f.selectedBy.length === 4
-                                            ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800"
-                                            : f.selectedBy.length === 1
-                                                ? "bg-slate-50 dark:bg-slate-800/30 border-slate-200 dark:border-slate-700"
-                                                : "bg-blue-50/50 dark:bg-blue-950/10 border-blue-100 dark:border-blue-900"
+                                        ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800"
+                                        : f.selectedBy.length === 1
+                                            ? "bg-slate-50 dark:bg-slate-800/30 border-slate-200 dark:border-slate-700"
+                                            : "bg-blue-50/50 dark:bg-blue-950/10 border-blue-100 dark:border-blue-900"
                                         }`}
                                 >
                                     <span className="font-mono font-medium text-slate-700 dark:text-slate-300 truncate">
@@ -466,8 +466,8 @@ export default function OptimizerConvergenceComparison() {
                                             <div
                                                 key={alg}
                                                 className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white ${f.selectedBy.includes(alg)
-                                                        ? ""
-                                                        : "opacity-15"
+                                                    ? ""
+                                                    : "opacity-15"
                                                     }`}
                                                 style={{ backgroundColor: COLORS[alg] }}
                                                 title={`${alg}: ${f.selectedBy.includes(alg) ? "Seçti" : "Seçmedi"}`}
@@ -487,7 +487,7 @@ export default function OptimizerConvergenceComparison() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-indigo-100">
                         <Award className="w-5 h-5 text-indigo-500" />
-                        Sonuç: BSO-Hybrid Neden En İyisi?
+                        Sonuç: BSO-Hybrid Optimizasyon Analizi
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -496,7 +496,7 @@ export default function OptimizerConvergenceComparison() {
                             {
                                 icon: TrendingDown,
                                 title: "En Düşük Fitness Değeri",
-                                desc: `BSO-Hybrid ${bestOptimizer.finalFitness.toFixed(6)} fitness değerine ulaşarak PSO'dan %${((OPTIMIZER_CONVERGENCE.PSO.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.PSO.finalBestFitness * 100).toFixed(1)}, GA'dan %${((OPTIMIZER_CONVERGENCE.GA.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.GA.finalBestFitness * 100).toFixed(1)}, GWO'dan %${((OPTIMIZER_CONVERGENCE.GWO.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.GWO.finalBestFitness * 100).toFixed(1)} daha iyi performans gösterdi.`,
+                                desc: `BSO-Hybrid ${bestOptimizer.finalFitness.toFixed(6)} fitness değerine ulaşarak PSO'dan %${((OPTIMIZER_CONVERGENCE.PSO.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.PSO.finalBestFitness * 100).toFixed(1)}, GA'dan %${((OPTIMIZER_CONVERGENCE.GA.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.GA.finalBestFitness * 100).toFixed(1)}, GWO'dan %${((OPTIMIZER_CONVERGENCE.GWO.finalBestFitness - OPTIMIZER_CONVERGENCE.BSO.finalBestFitness) / OPTIMIZER_CONVERGENCE.GWO.finalBestFitness * 100).toFixed(1)} daha iyi fitness elde etti. Not: Bu, özellik seçimi + HP ayarlarının birleşik optimizasyonunu yansıtır.`,
                                 color: "text-indigo-600 dark:text-indigo-400",
                             },
                             {
@@ -507,14 +507,14 @@ export default function OptimizerConvergenceComparison() {
                             },
                             {
                                 icon: Target,
-                                title: "Optimal Öznitelik Dengesi",
-                                desc: `BSO 19 öznitelikle (%51.3 azaltma) en iyi doğruluk-boyut dengesini sağladı. PSO 18, GA 21, GWO 23 öznitelik seçti ancak hiçbiri BSO'nun fitness'ına ulaşamadı.`,
+                                title: "Boyut Azaltma Katkısı",
+                                desc: `BSO 19 öznitelikle (%51.3 azaltma) rekabetçi doğruluk sağladı (%89.82 — tam özellik XGBoost'tan yalnızca %0.55 düşük). Bu, kaynak kısıtlı IoT ortamlarında kritik bir avantajdır.`,
                                 color: "text-amber-600 dark:text-amber-400",
                             },
                             {
                                 icon: Zap,
-                                title: "Hibrit Strateji Avantajı",
-                                desc: `BSO'nun frekans ayarlı sonar mekanizması + Lévy uçuşu + üstel azalan darbeli emisyon oranı, yerel minimumlardan kaçmayı ve global optimuma yaklaşmayı sağladı.`,
+                                title: "Karşılaştırma Notu",
+                                desc: `BSO hem özellik seçimi hem de HP ayarı yapar; PSO/GA/GWO yalnızca özellik seçimi yapar (varsayılan RF parametreleriyle). Bu farklı optimizasyon kapsamları nedeniyle doğrudan karşılaştırma sınırlıdır.`,
                                 color: "text-purple-600 dark:text-purple-400",
                             },
                         ].map((item) => (

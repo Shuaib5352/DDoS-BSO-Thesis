@@ -121,7 +121,7 @@ const TAB_CATEGORIES = [
       { value: "errors", label: "Hata Analizi", icon: AlertTriangle },
       { value: "learning", label: "Öğrenme Eğrileri", icon: Gauge },
       { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
-      { value: "concept-drift", label: "Kavram Kayması", icon: Shuffle },
+      { value: "concept-drift", label: "Dinamik Ortam", icon: Shuffle },
       { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
     ],
   },

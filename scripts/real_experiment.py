@@ -183,6 +183,10 @@ def preprocess(data):
     X_train, X_val, y_train, y_val = train_test_split(
         X_trainval, y_trainval, test_size=0.125, random_state=RANDOM_SEED, stratify=y_trainval)
 
+    # Save pre-SMOTE training data for proper CV later
+    X_train_raw = X_train.copy()
+    y_train_raw = y_train.copy()
+
     # SMOTE on training data
     smote_info = {'applied': False}
     pre_smote = dict(zip(*np.unique(y_train, return_counts=True)))
@@ -201,11 +205,17 @@ def preprocess(data):
 
     print(f"  Split: Train={len(X_train):,} | Val={len(X_val):,} | Test={len(X_test):,}")
 
+    # Store pre-SMOTE train+val for proper CV (SMOTE will be applied inside each fold)
+    X_trainval_raw = np.vstack([X_train_raw, X_val])
+    y_trainval_raw = np.concatenate([y_train_raw, y_val])
+
     return {
         'X_train': X_train, 'X_val': X_val, 'X_test': X_test,
         'y_train': y_train, 'y_val': y_val, 'y_test': y_test,
         'X_train_full': np.vstack([X_train, X_val]),
         'y_train_full': np.concatenate([y_train, y_val]),
+        'X_trainval_raw': X_trainval_raw,      # pre-SMOTE for proper CV
+        'y_trainval_raw': y_trainval_raw,       # pre-SMOTE for proper CV
         'feature_names': feature_names, 'class_names': class_names,
         'label_encoder': le, 'scaler': scaler,
         'n_features': n_features, 'n_classes': n_classes,
@@ -706,40 +716,83 @@ def train_all_models(prep, bso_result, comp_results):
 
 
 # =============================================================================
-# PHASE 5: CROSS-VALIDATION (simplified - only RF models for speed)
+# PHASE 5: CROSS-VALIDATION (ALL models, SMOTE inside each fold)
 # =============================================================================
-def run_cv(prep, bso_result, model_results):
+def run_cv(prep, bso_result, comp_results, model_results):
     print("\n" + "=" * 70)
-    print(f"PHASE 5: {CV_FOLDS}-Fold Stratified Cross-Validation")
+    print(f"PHASE 5: {CV_FOLDS}-Fold Stratified Cross-Validation (ALL models)")
+    print("  NOTE: Using pre-SMOTE data; SMOTE applied inside each fold")
     print("=" * 70)
 
     bso_idx = np.array(bso_result['selectedIndices'])
     hp = bso_result['bestHyperparameters']
-    X, y = prep['X_train_full'], prep['y_train_full']
+    # Use PRE-SMOTE data to avoid data leakage
+    X, y = prep['X_trainval_raw'], prep['y_trainval_raw']
     skf = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_SEED)
+
+    # Feature indices for each optimizer
+    feat_indices = {'BSO': bso_idx}
+    for opt_name in ['PSO', 'GA', 'GWO']:
+        if opt_name in comp_results:
+            feat_indices[opt_name] = np.array(comp_results[opt_name]['selectedIndices'])
 
     cv_models = [
         ('BSO-Hybrid RF (Proposed)', lambda: RandomForestClassifier(
             n_estimators=hp['n_estimators'], max_depth=hp['max_depth'],
             min_samples_split=hp['min_samples_split'], max_features=hp['max_features'],
-            class_weight='balanced', random_state=RANDOM_SEED, n_jobs=-1), bso_idx),
+            class_weight='balanced', random_state=RANDOM_SEED, n_jobs=-1), feat_indices['BSO']),
+        ('BSO-SVM', lambda: CalibratedClassifierCV(
+            LinearSVC(max_iter=2000, class_weight='balanced', random_state=RANDOM_SEED), cv=3), feat_indices['BSO']),
+    ]
+
+    # Add PSO/GA/GWO-RF
+    for opt_name in ['PSO', 'GA', 'GWO']:
+        if opt_name in feat_indices:
+            cv_models.append((
+                f'{opt_name}-RF',
+                lambda: RandomForestClassifier(n_estimators=RF_FINAL_TREES, class_weight='balanced',
+                                                random_state=RANDOM_SEED, n_jobs=-1),
+                feat_indices[opt_name],
+            ))
+
+    # Add baselines (all features)
+    cv_models.extend([
         ('Random Forest', lambda: RandomForestClassifier(
             n_estimators=RF_FINAL_TREES, class_weight='balanced',
             random_state=RANDOM_SEED, n_jobs=-1), None),
+        ('SVM (Linear)', lambda: CalibratedClassifierCV(
+            LinearSVC(max_iter=2000, class_weight='balanced',
+                      random_state=RANDOM_SEED), cv=3), None),
         ('Decision Tree', lambda: DecisionTreeClassifier(
             class_weight='balanced', random_state=RANDOM_SEED), None),
+        ('KNN', lambda: KNeighborsClassifier(n_neighbors=5, n_jobs=-1), None),
+        ('Naive Bayes', lambda: GaussianNB(), None),
         ('Logistic Regression', lambda: LogisticRegression(
             max_iter=2000, class_weight='balanced',
             random_state=RANDOM_SEED, n_jobs=-1), None),
-    ]
+    ])
+    if HAS_XGB:
+        cv_models.append(('XGBoost', lambda: XGBClassifier(
+            n_estimators=200, max_depth=8, learning_rate=0.1,
+            random_state=RANDOM_SEED, n_jobs=-1,
+            eval_metric='mlogloss', verbosity=0), None))
 
     cv_results = {}
     for name, clf_fn, fi in cv_models:
         Xc = X[:, fi] if fi is not None else X
         acc_s, f1_s, prec_s, rec_s = [], [], [], []
         for tr_i, te_i in skf.split(Xc, y):
+            X_fold_train, y_fold_train = Xc[tr_i], y[tr_i]
+            # Apply SMOTE INSIDE each CV fold to avoid data leakage
+            if HAS_SMOTE:
+                try:
+                    k_fold = min(5, min(dict(zip(*np.unique(y_fold_train, return_counts=True))).values()) - 1)
+                    smote_fold = SMOTE(random_state=RANDOM_SEED, k_neighbors=max(1, k_fold))
+                    X_fold_train, y_fold_train = smote_fold.fit_resample(X_fold_train, y_fold_train)
+                except Exception:
+                    pass  # If SMOTE fails for a fold, use original data
             clf = clf_fn()
-            clf.fit(Xc[tr_i], y[tr_i])
+            clf.fit(X_fold_train, y_fold_train)
             yp = clf.predict(Xc[te_i])
             acc_s.append(accuracy_score(y[te_i], yp) * 100)
             f1_s.append(f1_score(y[te_i], yp, average='macro', zero_division=0) * 100)
@@ -954,7 +1007,7 @@ def main():
 
     bso_result, comp_results = run_optimization(prep)
     model_results = train_all_models(prep, bso_result, comp_results)
-    cv_results = run_cv(prep, bso_result, model_results)
+    cv_results = run_cv(prep, bso_result, comp_results, model_results)
     stat_tests = run_stats(cv_results)
     dynamic = test_dynamic(prep, bso_result)
     feat_analysis = analyze_features(prep, bso_result)

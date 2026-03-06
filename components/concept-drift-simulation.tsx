@@ -1,72 +1,27 @@
 "use client"
 
-import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-    ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell,
-    ComposedChart, Scatter, ReferenceLine,
+    ResponsiveContainer, BarChart, Bar, Cell,
+    ComposedChart, Area,
 } from "recharts"
 import {
-    Shuffle, AlertTriangle, TrendingDown, Clock, Zap, CheckCircle2,
-    Activity, Gauge, Timer, Eye, Shield, BarChart3, Waves, Brain,
+    Shuffle, AlertTriangle, TrendingDown, Zap, CheckCircle2,
+    Eye, Shield, BarChart3, Brain,
 } from "lucide-react"
 import { DYNAMIC_ENVIRONMENT } from "@/lib/ciciot2023-dataset"
 
 /* ═══════════════════════════════════════════════════════════════
-   Concept Drift Simulation — Dynamic Environment Analysis
-   Uses real DYNAMIC_ENVIRONMENT data to simulate temporal drift
+   Dynamic Environment & Robustness Analysis
+   Uses real DYNAMIC_ENVIRONMENT data from experiment
+   NOTE: This is NOT a concept drift simulation — it shows noise
+   robustness, unknown attack detection, throughput, and learning
+   curves from real experiment runs.
    ═══════════════════════════════════════════════════════════════ */
 
-// ── Simulated time windows for concept drift ──
-function buildConceptDriftData() {
-    const { noiseRobustness, learningCurve } = DYNAMIC_ENVIRONMENT
-    // Simulate 12 time windows where attack distribution shifts
-    const windows = [
-        { window: "T1", period: "0–2 saat", driftType: "Yok", noiseIdx: 0, attackMix: "Kararlı", retrain: false },
-        { window: "T2", period: "2–4 saat", driftType: "Yok", noiseIdx: 0, attackMix: "Kararlı", retrain: false },
-        { window: "T3", period: "4–6 saat", driftType: "Ani Kayma", noiseIdx: 1, attackMix: "SYN ↑ %40", retrain: false },
-        { window: "T4", period: "6–8 saat", driftType: "Ani Kayma", noiseIdx: 2, attackMix: "ACK Frag ↑", retrain: false },
-        { window: "T5", period: "8–10 saat", driftType: "Kademeli", noiseIdx: 3, attackMix: "Karışık", retrain: false },
-        { window: "T6", period: "10–12 saat", driftType: "Kademeli", noiseIdx: 3, attackMix: "Yeni Varyant", retrain: true },
-        { window: "T7", period: "12–14 saat", driftType: "Yeniden Eğitim", noiseIdx: 0, attackMix: "Kararlı", retrain: true },
-        { window: "T8", period: "14–16 saat", driftType: "Tekrarlayan", noiseIdx: 1, attackMix: "SYN Tekrar", retrain: false },
-        { window: "T9", period: "16–18 saat", driftType: "Tekrarlayan", noiseIdx: 2, attackMix: "ACK Tekrar", retrain: false },
-        { window: "T10", period: "18–20 saat", driftType: "Ani Kayma", noiseIdx: 4, attackMix: "Yoğun Saldırı", retrain: false },
-        { window: "T11", period: "20–22 saat", driftType: "Kademeli", noiseIdx: 5, attackMix: "Polimorfik", retrain: false },
-        { window: "T12", period: "22–24 saat", driftType: "Yeniden Eğitim", noiseIdx: 0, attackMix: "Kararlı", retrain: true },
-    ]
-
-    return windows.map((w) => ({
-        ...w,
-        accuracy: noiseRobustness[w.noiseIdx].accuracy,
-        f1Macro: noiseRobustness[w.noiseIdx].f1Macro,
-        degradation: noiseRobustness[w.noiseIdx].degradation,
-    }))
-}
-
-// ── Color map for drift types ──
-const DRIFT_COLORS: Record<string, string> = {
-    "Yok": "#10b981",
-    "Ani Kayma": "#ef4444",
-    "Kademeli": "#f59e0b",
-    "Tekrarlayan": "#8b5cf6",
-    "Yeniden Eğitim": "#3b82f6",
-}
-
-const DRIFT_LABELS: Record<string, string> = {
-    "Yok": "Kararlı Ortam",
-    "Ani Kayma": "Sudden Drift",
-    "Kademeli": "Gradual Drift",
-    "Tekrarlayan": "Recurring Drift",
-    "Yeniden Eğitim": "After Retraining",
-}
-
 export default function ConceptDriftSimulation() {
-    const [selectedDriftType, setSelectedDriftType] = useState<string | null>(null)
-
-    const conceptDriftData = useMemo(() => buildConceptDriftData(), [])
     const { noiseRobustness, unknownAttackDetection, throughput, learningCurve } = DYNAMIC_ENVIRONMENT
 
     // Noise robustness chart data
@@ -89,21 +44,16 @@ export default function ConceptDriftSimulation() {
         nSamplesLabel: (l.nSamples / 1000).toFixed(1) + "K",
     }))
 
-    // Filter drift data
-    const filteredDrift = selectedDriftType
-        ? conceptDriftData.filter((d) => d.driftType === selectedDriftType)
-        : conceptDriftData
-
     return (
         <div className="space-y-6">
             {/* ════════════════════ BAŞLIK ════════════════════ */}
             <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
                     <Shuffle className="w-8 h-8 text-amber-500" />
-                    Kavram Kayması ve Dinamik Ortam Simülasyonu
+                    Dinamik Ortam ve Dayanıklılık Analizi
                 </h1>
                 <p className="text-slate-600 dark:text-slate-400">
-                    BSO-Hybrid RF modelinin değişen ağ koşullarında dayanıklılık analizi — gürültü, bilinmeyen saldırı, verimlilik ve kavram kayması senaryoları
+                    BSO-Hybrid RF modelinin gürültü dayanıklılığı, bilinmeyen saldırı tespiti, çıktı hızı ve öğrenme eğrisi — gerçek deney verilerinden
                 </p>
             </div>
 
@@ -138,135 +88,6 @@ export default function ConceptDriftSimulation() {
                     </CardContent>
                 </Card>
             </div>
-
-            {/* ════════════════════ KAVRAM KAYMASI SİMÜLASYONU ════════════════════ */}
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Waves className="w-5 h-5 text-amber-500" />
-                        24 Saatlik Kavram Kayması Simülasyonu
-                    </CardTitle>
-                    <CardDescription>
-                        Zaman penceresi boyunca saldırı dağılımı değişimleri ve model doğruluğuna etkileri
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {/* Drift type filter */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        <Badge
-                            variant={selectedDriftType === null ? "default" : "outline"}
-                            className="cursor-pointer"
-                            onClick={() => setSelectedDriftType(null)}
-                        >
-                            Tümü ({conceptDriftData.length})
-                        </Badge>
-                        {Object.entries(DRIFT_COLORS).map(([type, color]) => (
-                            <Badge
-                                key={type}
-                                variant={selectedDriftType === type ? "default" : "outline"}
-                                className="cursor-pointer"
-                                onClick={() => setSelectedDriftType(selectedDriftType === type ? null : type)}
-                                style={selectedDriftType === type ? { backgroundColor: color } : {}}
-                            >
-                                <div className="w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: color }} />
-                                {type} ({conceptDriftData.filter((d) => d.driftType === type).length})
-                            </Badge>
-                        ))}
-                    </div>
-
-                    <ResponsiveContainer width="100%" height={380}>
-                        <ComposedChart data={conceptDriftData} margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
-                            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                            <XAxis dataKey="window" tick={{ fontSize: 11 }} />
-                            <YAxis
-                                yAxisId="acc"
-                                domain={[50, 95]}
-                                tick={{ fontSize: 11 }}
-                                tickFormatter={(v: number) => `%${v}`}
-                                label={{ value: "Doğruluk (%)", angle: -90, position: "insideLeft", offset: -5 }}
-                            />
-                            <YAxis
-                                yAxisId="deg"
-                                orientation="right"
-                                domain={[0, 35]}
-                                tick={{ fontSize: 11 }}
-                                tickFormatter={(v: number) => `%${v}`}
-                                label={{ value: "Bozulma (%)", angle: 90, position: "insideRight", offset: 0 }}
-                            />
-                            <Tooltip
-                                content={({ active, payload }) => {
-                                    if (!active || !payload?.length) return null
-                                    const d = payload[0].payload
-                                    return (
-                                        <div className="rounded-xl border bg-white dark:bg-slate-900 shadow-lg p-3 text-xs">
-                                            <div className="font-bold text-sm mb-1">{d.window} · {d.period}</div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: DRIFT_COLORS[d.driftType] }} />
-                                                <span className="font-semibold">{d.driftType}</span>
-                                                <span className="text-slate-400">({DRIFT_LABELS[d.driftType]})</span>
-                                            </div>
-                                            <div>Saldırı: <span className="font-medium">{d.attackMix}</span></div>
-                                            <div>Doğruluk: <span className="font-bold text-emerald-600">%{d.accuracy}</span></div>
-                                            <div>Bozulma: <span className="font-bold text-red-600">%{d.degradation}</span></div>
-                                            {d.retrain && <div className="text-blue-500 font-bold mt-1">🔄 Yeniden Eğitim Uygulandı</div>}
-                                        </div>
-                                    )
-                                }}
-                            />
-                            <Legend />
-                            <ReferenceLine yAxisId="acc" y={89.82} stroke="#10b981" strokeDasharray="5 5" label={{ value: "Temiz: %89.82", position: "right", fontSize: 10 }} />
-                            <Area
-                                yAxisId="acc"
-                                type="monotone"
-                                dataKey="accuracy"
-                                fill="#6366f133"
-                                stroke="#6366f1"
-                                strokeWidth={2.5}
-                                name="Doğruluk (%)"
-                                dot={(props: any) => {
-                                    const { cx, cy, payload } = props
-                                    return (
-                                        <circle
-                                            cx={cx}
-                                            cy={cy}
-                                            r={payload.retrain ? 6 : 4}
-                                            fill={DRIFT_COLORS[payload.driftType]}
-                                            stroke="white"
-                                            strokeWidth={2}
-                                        />
-                                    )
-                                }}
-                            />
-                            <Bar yAxisId="deg" dataKey="degradation" name="Bozulma (%)" barSize={24} radius={[4, 4, 0, 0]}>
-                                {conceptDriftData.map((entry, i) => (
-                                    <Cell key={i} fill={DRIFT_COLORS[entry.driftType]} opacity={0.6} />
-                                ))}
-                            </Bar>
-                        </ComposedChart>
-                    </ResponsiveContainer>
-
-                    {/* Timeline legend */}
-                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                        {conceptDriftData.map((d) => (
-                            <div
-                                key={d.window}
-                                className={`p-2.5 rounded-lg border text-xs ${d.retrain
-                                        ? "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800"
-                                        : "bg-slate-50 dark:bg-slate-800/30 border-slate-200 dark:border-slate-700"
-                                    }`}
-                            >
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: DRIFT_COLORS[d.driftType] }} />
-                                    <span className="font-bold">{d.window}</span>
-                                    <span className="text-slate-400">{d.period}</span>
-                                </div>
-                                <div className="text-slate-500">{d.attackMix}</div>
-                                {d.retrain && <Badge className="text-[8px] mt-1 bg-blue-500">Retrain</Badge>}
-                            </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
 
             {/* ════════════════════ GÜRÜLTÜ DAYANIKLILIĞI ════════════════════ */}
             <Card>
@@ -381,10 +202,10 @@ export default function ConceptDriftSimulation() {
                             <div
                                 key={u.excludedAttack}
                                 className={`p-3 rounded-lg border ${u.detectionRate > 90
-                                        ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200"
-                                        : u.detectionRate > 50
-                                            ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200"
-                                            : "bg-red-50 dark:bg-red-950/20 border-red-200"
+                                    ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200"
+                                    : u.detectionRate > 50
+                                        ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200"
+                                        : "bg-red-50 dark:bg-red-950/20 border-red-200"
                                     }`}
                             >
                                 <div className="text-xs font-bold text-slate-800 dark:text-slate-200">{u.excludedAttack}</div>

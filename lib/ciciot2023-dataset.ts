@@ -1297,6 +1297,10 @@ export const BSO_RF_PER_CLASS: PerClassMetric[] = [
 
 // ---------------------------------------------------------------------------
 // 10. STATISTICAL SIGNIFICANCE TESTS (10-fold CV, from real experiment)
+// NOTE: Only 3 real tests from original experiment (RF, DT, LR).
+// After re-running real_experiment.py (v5), all 11 comparisons will be
+// legitimate with SMOTE applied inside each CV fold.
+// PLACEHOLDER values are marked — replace after new experiment run.
 // ---------------------------------------------------------------------------
 export const STATISTICAL_TESTS = [
   {
@@ -1331,94 +1335,6 @@ export const STATISTICAL_TESTS = [
     effectSize: "large",
     wilcoxonP: 0.001953,
     note: "Lojistik Regresyona göre anlamlı iyileştirme",
-  },
-  {
-    comparison: "BSO-Hybrid vs XGBoost",
-    improvement: "-0.55%",
-    tStatistic: -4.2814,
-    pValue: 0.002038,
-    significant: true,
-    cohenD: -1.427,
-    effectSize: "large",
-    wilcoxonP: 0.003906,
-    note: "XGBoost marjinal üstünlük sağlar ancak 39 özellik kullanır; BSO-Hybrid 19 ile rekabet eder",
-  },
-  {
-    comparison: "BSO-Hybrid vs PSO-RF",
-    improvement: "+1.47%",
-    tStatistic: 15.3264,
-    pValue: 0.0,
-    significant: true,
-    cohenD: 5.1088,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "BSO, PSO tabanlı özellik seçimine göre anlamlı üstünlük sağlar",
-  },
-  {
-    comparison: "BSO-Hybrid vs GA-RF",
-    improvement: "+0.45%",
-    tStatistic: 6.8421,
-    pValue: 0.000071,
-    significant: true,
-    cohenD: 2.2807,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "BSO, GA tabanlı özellik seçimine göre anlamlı üstünlük ve daha az özellik kullanır",
-  },
-  {
-    comparison: "BSO-Hybrid vs GWO-RF",
-    improvement: "+0.02%",
-    tStatistic: 0.3142,
-    pValue: 0.7609,
-    significant: false,
-    cohenD: 0.1047,
-    effectSize: "small",
-    wilcoxonP: 0.625,
-    note: "GWO ile istatistiksel fark yok; ancak BSO 19 özellik, GWO 23 özellik kullanır",
-  },
-  {
-    comparison: "BSO-Hybrid vs BSO-SVM",
-    improvement: "+7.63%",
-    tStatistic: 52.8736,
-    pValue: 0.0,
-    significant: true,
-    cohenD: 17.6245,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "RF sınıflandırıcısı SVM'ye göre çok daha iyi performans gösterir",
-  },
-  {
-    comparison: "BSO-Hybrid vs KNN",
-    improvement: "+4.62%",
-    tStatistic: 38.4217,
-    pValue: 0.0,
-    significant: true,
-    cohenD: 12.8072,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "KNN'ye göre anlamlı iyileştirme, daha hızlı tahmin süresi ile",
-  },
-  {
-    comparison: "BSO-Hybrid vs Naive Bayes",
-    improvement: "+26.86%",
-    tStatistic: 142.8531,
-    pValue: 0.0,
-    significant: true,
-    cohenD: 47.6177,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "Naive Bayes karmaşık trafik kalıplarını modellemede yetersiz kalır",
-  },
-  {
-    comparison: "BSO-Hybrid vs SVM (Linear)",
-    improvement: "+6.71%",
-    tStatistic: 48.2163,
-    pValue: 0.0,
-    significant: true,
-    cohenD: 16.0721,
-    effectSize: "large",
-    wilcoxonP: 0.001953,
-    note: "Doğrusal SVM, doğrusal olmayan sınıflandırma görevlerinde yetersiz kalır",
   },
 ]
 
@@ -1602,29 +1518,8 @@ export function generateRealisticTraffic(
 }
 
 // ---------------------------------------------------------------------------
-// 17. TRAINING HISTORY (loss & accuracy per epoch — RF convergence simulation)
+// 17. TRAINING HISTORY — REMOVED
+// Random Forest does not have epoch-based training (no loss/accuracy curve).
+// This section previously contained a fabricated Math.exp() simulation.
+// It has been removed for scientific integrity.
 // ---------------------------------------------------------------------------
-export function generateTrainingHistory(): {
-  epoch: number
-  trainLoss: number
-  valLoss: number
-  trainAccuracy: number
-  valAccuracy: number
-}[] {
-  const data = []
-  for (let epoch = 1; epoch <= 50; epoch++) {
-    const trainLoss = 0.45 * Math.exp(-epoch / 8) + 0.102 + Math.random() * 0.005
-    const valLoss = 0.48 * Math.exp(-epoch / 9) + 0.108 + Math.random() * 0.008
-    const trainAccuracy = (1 - trainLoss) * 100
-    const valAccuracy = (1 - valLoss) * 100
-
-    data.push({
-      epoch,
-      trainLoss: Math.max(0.102, trainLoss),
-      valLoss: Math.max(0.108, valLoss),
-      trainAccuracy: Math.min(90.5, trainAccuracy),
-      valAccuracy: Math.min(90.0, valAccuracy),
-    })
-  }
-  return data
-}

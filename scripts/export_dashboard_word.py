@@ -164,14 +164,6 @@ STATISTICAL_TESTS = [
     {"comparison":"BSO-Hybrid vs Random Forest","improvement":"-0.45%","tStatistic":-9.7019,"pValue":0.000005,"significant":True,"cohenD":-3.234,"effectSize":"large","wilcoxonP":0.001953},
     {"comparison":"BSO-Hybrid vs Decision Tree","improvement":"+3.62%","tStatistic":33.1978,"pValue":0.0,"significant":True,"cohenD":11.0659,"effectSize":"large","wilcoxonP":0.001953},
     {"comparison":"BSO-Hybrid vs Logistic Regression","improvement":"+10.51%","tStatistic":86.4492,"pValue":0.0,"significant":True,"cohenD":28.8164,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs XGBoost","improvement":"-0.55%","tStatistic":-4.2814,"pValue":0.002038,"significant":True,"cohenD":-1.427,"effectSize":"large","wilcoxonP":0.003906},
-    {"comparison":"BSO-Hybrid vs PSO-RF","improvement":"+1.47%","tStatistic":15.3264,"pValue":0.0,"significant":True,"cohenD":5.1088,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs GA-RF","improvement":"+0.45%","tStatistic":6.8421,"pValue":0.000071,"significant":True,"cohenD":2.2807,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs GWO-RF","improvement":"+0.02%","tStatistic":0.3142,"pValue":0.7609,"significant":False,"cohenD":0.1047,"effectSize":"small","wilcoxonP":0.625},
-    {"comparison":"BSO-Hybrid vs BSO-SVM","improvement":"+7.63%","tStatistic":52.8736,"pValue":0.0,"significant":True,"cohenD":17.6245,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs KNN","improvement":"+4.62%","tStatistic":38.4217,"pValue":0.0,"significant":True,"cohenD":12.8072,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs Naive Bayes","improvement":"+26.86%","tStatistic":142.8531,"pValue":0.0,"significant":True,"cohenD":47.6177,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs SVM (Linear)","improvement":"+6.71%","tStatistic":48.2163,"pValue":0.0,"significant":True,"cohenD":16.0721,"effectSize":"large","wilcoxonP":0.001953},
 ]
 
 BSO_CONVERGENCE = [

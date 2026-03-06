@@ -476,9 +476,9 @@ export default function StatisticalSignificance() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-green-700 dark:text-green-300">
                         <div className="space-y-1.5">
                             <p>• {sigCount}/{PAIRWISE_TESTS.length} karşılaştırmada istatistiksel olarak anlamlı fark tespit edilmiştir (p &lt; 0.05).</p>
-                            <p>• BSO-Hybrid RF, {bsoWins} modele karşı istatistiksel olarak anlamlı üstünlük gösterir.</p>
-                            <p>• GWO-RF ile arasındaki fark istatistiksel olarak anlamlı değildir (p = 0.76).</p>
-                            <p>• XGBoost ve Random Forest, BSO-RF&apos;den marjinal olarak daha yüksek CV F1-Macro elde eder ancak %51.3 daha fazla öznitelik gerektirir.</p>
+                            <p>• BSO-Hybrid RF, {bsoWins} modele karşı istatistiksel olarak anlamlı fark gösterir.</p>
+                            <p>• XGBoost ve GWO-RF, test setinde BSO-RF&apos;den marjinal olarak daha yüksek performans elde eder ancak sırasıyla %51.3 ve %15.4 daha fazla öznitelik gerektirir.</p>
+                            <p>• BSO&apos;nun temel katkısı boyut azaltma + rekabetçi doğruluktur — test doğruluğunda mutlak üstünlük değil.</p>
                         </div>
                         <div className="space-y-1.5">
                             <p>• 10-katlı CV sonuçları BSO-RF&apos;nin tutarlı performans gösterdiğini doğrular (Std = {CV_STD.accuracy}).</p>

@@ -651,7 +651,7 @@ export default function MethodologyFramework() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {STATISTICAL_TESTS.slice(0, 7).map((t) => (
+                                    {STATISTICAL_TESTS.map((t) => (
                                         <tr key={t.comparison} className="border-b border-border/50 hover:bg-muted/30">
                                             <td className="p-2 font-medium">{t.comparison}</td>
                                             <td className="p-2 text-right font-mono">{t.improvement}</td>
@@ -829,7 +829,7 @@ export default function MethodologyFramework() {
                             </div>
                             <p className="text-xs text-slate-600 dark:text-slate-400">
                                 BSO (fitness: 0.177801) {"<"} GA (0.188982) {"<"} GWO (0.192181) {"<"} PSO (0.193895).
-                                BSO en düşük uygunluk değerini elde etmiş ve en az özellikle (19) en iyi sonuca ulaşmıştır.
+                                BSO en düşük uygunluk değerini elde etmiş ve en az özellikle (19) en iyi fitness sonucuna ulaşmıştır. Not: XGBoost test doğruluğunda marjinal olarak daha yüksektir ancak tüm 39 özelliği kullanır.
                                 Wilcoxon testi: BSO vs PSO-RF p = 0.001953 (anlamlı).
                             </p>
                         </div>
