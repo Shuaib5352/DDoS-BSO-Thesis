@@ -1445,6 +1445,21 @@ export const CROSS_VALIDATION = {
   ],
   mean: { accuracy: 89.47, precision: 82.88, recall: 85.36, f1Score: 83.83 },
   std: { accuracy: 0.219, precision: 0.571, recall: 0.297, f1Score: 0.479 },
+  // All 12 models — 10-fold CV summary (from real experiment)
+  foldResults: [
+    { model: "BSO-Hybrid RF (Proposed)", meanAccuracy: 89.47, stdAccuracy: 0.219 },
+    { model: "BSO-SVM", meanAccuracy: 81.98, stdAccuracy: 0.414 },
+    { model: "PSO-RF", meanAccuracy: 88.2, stdAccuracy: 0.24 },
+    { model: "GA-RF", meanAccuracy: 89.21, stdAccuracy: 0.281 },
+    { model: "GWO-RF", meanAccuracy: 89.35, stdAccuracy: 0.295 },
+    { model: "Random Forest", meanAccuracy: 89.45, stdAccuracy: 0.272 },
+    { model: "SVM (Linear)", meanAccuracy: 82.85, stdAccuracy: 0.248 },
+    { model: "Decision Tree", meanAccuracy: 85.72, stdAccuracy: 0.356 },
+    { model: "KNN", meanAccuracy: 85.04, stdAccuracy: 0.25 },
+    { model: "Naive Bayes", meanAccuracy: 62.96, stdAccuracy: 0.314 },
+    { model: "Logistic Regression", meanAccuracy: 82.65, stdAccuracy: 0.331 },
+    { model: "XGBoost", meanAccuracy: 90.09, stdAccuracy: 0.29 },
+  ],
 }
 
 // ---------------------------------------------------------------------------
