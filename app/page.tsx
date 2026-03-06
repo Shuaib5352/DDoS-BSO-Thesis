@@ -47,6 +47,7 @@ import ThesisFigures from "@/components/thesis-figures"
 import ThesisChapterOrganizer from "@/components/thesis-chapter-organizer"
 import ConclusionRecommendations from "@/components/conclusion-recommendations"
 import AcademicParagraphs from "@/components/academic-paragraphs"
+import ThesisAbstract from "@/components/thesis-abstract"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -131,6 +132,7 @@ const TAB_CATEGORIES = [
     id: "tools",
     label: "Araçlar",
     tabs: [
+      { value: "abstract", label: "Tez Özeti", icon: BookOpen },
       { value: "figures", label: "Tez Şekilleri", icon: FileText },
       { value: "chapter-org", label: "Bölüm Düzenleyici", icon: GraduationCap },
       { value: "defense", label: "Savunma S&C", icon: MessageCircleQuestion },
@@ -177,6 +179,7 @@ const TAB_COLORS: Record<string, string> = {
   figures: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "chapter-org": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   paragraphs: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  abstract: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -778,6 +781,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="figures" className="space-y-6 animate-fade-in"><ThesisFigures /></TabsContent>
           <TabsContent value="chapter-org" className="space-y-6 animate-fade-in"><ThesisChapterOrganizer /></TabsContent>
           <TabsContent value="paragraphs" className="space-y-6 animate-fade-in"><AcademicParagraphs /></TabsContent>
+          <TabsContent value="abstract" className="space-y-6 animate-fade-in"><ThesisAbstract /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}

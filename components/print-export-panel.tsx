@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle, Code2, Table2, Camera } from "lucide-react"
+import { Printer, Download, FileText, Image, CheckCircle2, Loader2, AlertCircle, Code2, Table2, Camera, FileDown } from "lucide-react"
 
 function downloadBlob(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob)
@@ -272,7 +272,82 @@ export default function PrintExportPanel() {
         }
     }
 
+    const handleExportPDF = async () => {
+        setExporting("pdf")
+        try {
+            const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+                import("html2canvas"),
+                import("jspdf"),
+            ])
+
+            const target =
+                (document.querySelector("[role='tabpanel'][data-state='active']") as HTMLElement) ||
+                (document.querySelector("main") as HTMLElement) ||
+                document.body
+
+            const canvas = await html2canvas(target, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff",
+                logging: false,
+                windowWidth: target.scrollWidth,
+                windowHeight: target.scrollHeight,
+            })
+
+            const imgData = canvas.toDataURL("image/jpeg", 0.95)
+            const pdfW = 210
+            const pdfH = 297
+            const margin = 10
+            const cW = pdfW - margin * 2
+            const ratio = cW / canvas.width
+            const cH = pdfH - margin * 2
+            const pagePixH = cH / ratio
+
+            const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" })
+            let yOff = 0
+            let pg = 0
+            while (yOff < canvas.height) {
+                if (pg > 0) pdf.addPage()
+                const sliceH = Math.min(pagePixH, canvas.height - yOff)
+                const sliceCanvas = document.createElement("canvas")
+                sliceCanvas.width = canvas.width
+                sliceCanvas.height = sliceH
+                const ctx = sliceCanvas.getContext("2d")
+                if (ctx) {
+                    ctx.drawImage(canvas, 0, yOff, canvas.width, sliceH, 0, 0, canvas.width, sliceH)
+                    pdf.addImage(sliceCanvas.toDataURL("image/jpeg", 0.95), "JPEG", margin, margin, cW, sliceH * ratio)
+                }
+                yOff += pagePixH
+                pg++
+            }
+            const total = pdf.getNumberOfPages()
+            for (let i = 1; i <= total; i++) {
+                pdf.setPage(i)
+                pdf.setFontSize(7)
+                pdf.setTextColor(150)
+                pdf.text(`BSO-Hybrid RF Thesis — SHUAIB AYAD JASIM — Page ${i}/${total}`, pdfW / 2, pdfH - 5, { align: "center" })
+            }
+            pdf.save("thesis-active-tab.pdf")
+            setExporting(null)
+            showResult("success", `PDF başarıyla oluşturuldu (${total} sayfa)`)
+        } catch (err) {
+            setExporting(null)
+            showResult("error", `PDF dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+        }
+    }
+
     const exportOptions = [
+        {
+            id: "pdf",
+            title: "PDF Olarak İndir (Aktif Sekme)",
+            titleAr: "Açık olan sekmeyi yüksek kalitede PDF olarak indir",
+            description: "Şu an açık olan sekmeyi yüksek çözünürlüklü A4 PDF dosyasına dönüştürüp indirin. Tüm grafikler ve tablolar dahildir.",
+            icon: FileDown,
+            color: "from-red-500 to-rose-600",
+            borderColor: "border-red-500/30",
+            onClick: handleExportPDF,
+        },
         {
             id: "print",
             title: "Yazdır / PDF Olarak Kaydet",
