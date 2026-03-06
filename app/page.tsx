@@ -265,6 +265,81 @@ export default function DDoSDetectionDashboard() {
   const [activeTab, setActiveTab] = useState("home")
   useForceTurkish()
 
+  // ── Handle cross-tab PNG export requests from export panel ──
+  useEffect(() => {
+    const handler = async (e: Event) => {
+      const detail = (e as CustomEvent).detail as { type: "figures" | "tables" }
+      if (!detail?.type) return
+      const prevTab = activeTab
+
+      try {
+        const { toPng } = await import("html-to-image")
+
+        if (detail.type === "figures") {
+          setActiveTab("figures")
+          await new Promise(r => setTimeout(r, 2500))
+
+          const nodes = document.querySelectorAll("[id^='svg-'], [id^='figure-'], [id^='fig-'], .recharts-wrapper")
+          if (nodes.length === 0) {
+            alert("Şekil bulunamadı. Lütfen 'Tez Şekilleri' sekmesinde şekilleri açın ve tekrar deneyin.")
+            setActiveTab(prevTab)
+            return
+          }
+
+          let count = 0
+          for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i] as HTMLElement
+            try {
+              const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+              const link = document.createElement("a")
+              link.download = `${node.id || `figure_${String(i + 1).padStart(2, "0")}`}.png`
+              link.href = dataUrl
+              link.click()
+              count++
+              await new Promise(r => setTimeout(r, 400))
+            } catch { /* skip */ }
+          }
+          alert(`✅ ${count} şekil yüksek çözünürlüklü PNG olarak indirildi`)
+
+        } else if (detail.type === "tables") {
+          setActiveTab("tables")
+          await new Promise(r => setTimeout(r, 2500))
+
+          const nodes = document.querySelectorAll(".academic-table, [id^='table-'], [id^='result-']")
+          if (nodes.length === 0) {
+            alert("Tablo bulunamadı. Lütfen tekrar deneyin.")
+            setActiveTab(prevTab)
+            return
+          }
+
+          let count = 0
+          for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i] as HTMLElement
+            try {
+              const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+              const link = document.createElement("a")
+              const id = node.id || `table_${String(i + 1).padStart(2, "0")}`
+              link.download = `${id}.png`
+              link.href = dataUrl
+              link.click()
+              count++
+              await new Promise(r => setTimeout(r, 400))
+            } catch { /* skip */ }
+          }
+          alert(`✅ ${count} tablo yüksek çözünürlüklü PNG olarak indirildi`)
+        }
+      } catch (err) {
+        alert(`PNG dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
+      }
+
+      // Switch back to export tab
+      setActiveTab("export")
+    }
+
+    window.addEventListener("export-png-request", handler)
+    return () => window.removeEventListener("export-png-request", handler)
+  }, [activeTab])
+
   return (
     <div className="min-h-screen mesh-bg bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* ════════════════════ HEADER ════════════════════ */}
