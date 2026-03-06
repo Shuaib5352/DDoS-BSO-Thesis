@@ -1,37 +1,20 @@
 /**
  * Service Worker - DDoS Tespiti Uygulaması
- * Çevrimdışı desteği ve veri önbelleklemesi
+ * Network-first strateji: her zaman en güncel sürümü sunar,
+ * yalnızca çevrimdışıyken önbellekten yanıt verir.
  */
 
-const CACHE_NAME = 'ddos-bso-v2.0.0';
-const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/icon-192.png',
-    '/icon-512.png'
-];
+const CACHE_NAME = 'ddos-bso-v3.0.0';
 
-// Kurulum - Uygulamayı kuruntuya hazırla
+// Kurulum — eski SW'yi hemen devre dışı bırak
 self.addEventListener('install', (event) => {
-    console.log('Service Worker kuruluyor...');
-
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('Temel varlıklar önbelleğe alınıyor');
-            return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
-                console.warn('Bazı varlıklar önbelleğe alınamadı:', err);
-            });
-        })
-    );
-
+    console.log('Service Worker kuruluyor (network-first)...');
     self.skipWaiting();
 });
 
-// Etkinleştirme - Eski önbellekleri temizle
+// Etkinleştirme — tüm eski önbellekleri temizle
 self.addEventListener('activate', (event) => {
     console.log('Service Worker etkinleştiriliyor...');
-
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -44,96 +27,46 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
-
     self.clients.claim();
 });
 
-// İstekleri işle - Çevrimdışı modda çalış
+// İstekleri işle — Network-first: önce ağ, yalnızca çevrimdışıyken önbellek
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Sadece HTTP(S) istekleri
-    if (!url.protocol.startsWith('http')) {
+    if (!url.protocol.startsWith('http') || request.method !== 'GET') {
         return;
     }
 
-    // GET istekleri için - Önce önbellekten, sonra ağdan
-    if (request.method === 'GET') {
-        event.respondWith(
-            caches.match(request).then((response) => {
-                if (response) {
-                    return response;
-                }
-
-                return fetch(request)
-                    .then((response) => {
-                        // Sadece başarılı yanıtları önbelleğe al
-                        if (!response || response.status !== 200 || response.type === 'error') {
-                            return response;
-                        }
-
-                        // Yanıtın kopyasını önbelleğe al
-                        const responseToCache = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => {
-                            cache.put(request, responseToCache);
-                        });
-
-                        return response;
-                    })
-                    .catch(() => {
-                        // Ağ başarısız - önceki sürümü sunma
-                        return caches.match(request).then((response) => {
-                            if (response) {
-                                return response;
-                            }
-
-                            // Çevrimdışı sayfası
-                            if (request.destination === 'document') {
-                                return caches.match('/');
-                            }
-
-                            return new Response(
-                                'Çevrimdışı moddasınız. Lütfen internet bağlantısını kontrol edin.',
-                                {
-                                    status: 503,
-                                    statusText: 'Hizmet Kullanılamaz',
-                                    headers: new Headers({
-                                        'Content-Type': 'text/plain; charset=utf-8'
-                                    })
-                                }
-                            );
-                        });
+    event.respondWith(
+        fetch(request)
+            .then((response) => {
+                // Başarılı ağ yanıtını önbelleğe kaydet (çevrimdışı yedek olarak)
+                if (response && response.status === 200) {
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(request, responseToCache);
                     });
+                }
+                return response;
             })
-        );
-    }
+            .catch(() => {
+                // Ağ başarısız — önbellekten sun
+                return caches.match(request).then((cached) => {
+                    if (cached) return cached;
+
+                    if (request.destination === 'document') {
+                        return caches.match('/');
+                    }
+
+                    return new Response('Çevrimdışı moddasınız.', {
+                        status: 503,
+                        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                    });
+                });
+            })
+    );
 });
 
-// Arka planda senkronizasyon (gelecekteki genişleme için)
-self.addEventListener('sync', (event) => {
-    if (event.tag === 'veri-senkronizasyonu') {
-        event.waitUntil(
-            fetch('/api/senkronize')
-                .then((response) => response.json())
-                .catch(() => {
-                    console.log('Senkronizasyon başarısız - daha sonra denenir');
-                })
-        );
-    }
-});
-
-// Bildirim işleme
-self.addEventListener('push', (event) => {
-    const data = event.data ? event.data.json() : {};
-    const options = {
-        body: data.body || 'DDoS Tespiti Uygulaması',
-        icon: '/icon-192.png',
-        badge: '/icon-96.png',
-        tag: 'ddos-notification'
-    };
-
-    event.waitUntil(self.registration.showNotification(data.title || 'Bildirim', options));
-});
-
-console.log('Service Worker yüklendi - Versiyon:', CACHE_NAME);
+console.log('Service Worker yüklendi (network-first) — Versiyon:', CACHE_NAME);
