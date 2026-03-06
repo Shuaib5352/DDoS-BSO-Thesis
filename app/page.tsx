@@ -11,7 +11,7 @@ import {
   BookOpen, ChevronRight, ArrowRight, GraduationCap,
   Activity, Layers, Brain, Award, Clock, Calendar,
   Sparkles, BarChart2, Network, MessageCircleQuestion, Library, ScanSearch, Workflow, Sigma,
-  PieChart, List, Github,
+  PieChart, List, Github, GitCompare, Shuffle,
 } from "lucide-react"
 import BSOVisualization from "@/components/bso-visualization"
 import MLClassificationPanel from "@/components/ml-classification-panel"
@@ -48,6 +48,8 @@ import ThesisChapterOrganizer from "@/components/thesis-chapter-organizer"
 import ConclusionRecommendations from "@/components/conclusion-recommendations"
 import AcademicParagraphs from "@/components/academic-paragraphs"
 import ThesisAbstract from "@/components/thesis-abstract"
+import OptimizerConvergenceComparison from "@/components/optimizer-convergence-comparison"
+import ConceptDriftSimulation from "@/components/concept-drift-simulation"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -106,6 +108,7 @@ const TAB_CATEGORIES = [
       { value: "features", label: "Öznitelik Önemi", icon: Target },
       { value: "ml", label: "ML Sınıflandırma", icon: Cpu },
       { value: "algorithms", label: "Algoritmalar", icon: BarChart3 },
+      { value: "convergence", label: "Yakınsama Karşılaştırma", icon: GitCompare },
       { value: "ranking", label: "Model Sıralaması", icon: Trophy },
     ],
   },
@@ -118,6 +121,7 @@ const TAB_CATEGORIES = [
       { value: "errors", label: "Hata Analizi", icon: AlertTriangle },
       { value: "learning", label: "Öğrenme Eğrileri", icon: Gauge },
       { value: "ablation", label: "Ablasyon Çalışması", icon: FlaskConical },
+      { value: "concept-drift", label: "Kavram Kayması", icon: Shuffle },
       { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
     ],
   },
@@ -180,6 +184,8 @@ const TAB_COLORS: Record<string, string> = {
   "chapter-org": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   paragraphs: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   abstract: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  convergence: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "concept-drift": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -876,6 +882,8 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="chapter-org" className="space-y-6 animate-fade-in"><ThesisChapterOrganizer /></TabsContent>
           <TabsContent value="paragraphs" className="space-y-6 animate-fade-in"><AcademicParagraphs /></TabsContent>
           <TabsContent value="abstract" className="space-y-6 animate-fade-in"><ThesisAbstract /></TabsContent>
+          <TabsContent value="convergence" className="space-y-6 animate-fade-in"><OptimizerConvergenceComparison /></TabsContent>
+          <TabsContent value="concept-drift" className="space-y-6 animate-fade-in"><ConceptDriftSimulation /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}

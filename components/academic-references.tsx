@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { BookOpen, Search, ExternalLink, Filter, Copy, CheckCircle2, FileText, GraduationCap } from "lucide-react"
+import { BookOpen, Search, ExternalLink, Filter, Copy, CheckCircle2, FileText, GraduationCap, Download, Code2 } from "lucide-react"
 
 /* ═══════════════════════════════════════════════════════════════
    Akademik Kaynakça — 60+ Gerçek Referans
@@ -129,10 +129,71 @@ const PDF_URLS: Record<number, string> = {
 const scholarUrl = (title: string) =>
     `https://scholar.google.com/scholar?q=${encodeURIComponent(title)}`
 
+/* ═══════════════════════════════════════════════════════════════
+   BibTeX Generation
+   ═══════════════════════════════════════════════════════════════ */
+function generateCitationKey(ref: Reference): string {
+    const firstAuthor = ref.authors.split(",")[0].split(" ").pop()?.toLowerCase() || "unknown"
+    return `${firstAuthor}${ref.year}`
+}
+
+function getBibType(ref: Reference): string {
+    const j = ref.journal.toLowerCase()
+    if (j.includes("proceedings") || j.includes("conference") || j.includes("workshop") || j.includes("symposium")) return "inproceedings"
+    if (j.includes("press") || j.includes("springer") || j.includes("edition") || j.includes("associates")) return "book"
+    if (j.includes("white paper") || j.includes("report")) return "techreport"
+    return "article"
+}
+
+function generateBibTeX(ref: Reference): string {
+    const key = generateCitationKey(ref)
+    const type = getBibType(ref)
+    const lines = [`@${type}{${key},`]
+    lines.push(`  author    = {${ref.authors}},`)
+    lines.push(`  title     = {${ref.title}},`)
+    lines.push(`  year      = {${ref.year}},`)
+    if (type === "article") {
+        const parts = ref.journal.split(",")
+        lines.push(`  journal   = {${parts[0].trim()}},`)
+        if (parts.length > 1) lines.push(`  volume    = {${parts.slice(1).join(",").trim()}},`)
+    } else if (type === "inproceedings") {
+        lines.push(`  booktitle = {${ref.journal}},`)
+    } else if (type === "book") {
+        lines.push(`  publisher = {${ref.journal}},`)
+    } else {
+        lines.push(`  institution = {${ref.journal}},`)
+    }
+    if (ref.doi) lines.push(`  doi       = {${ref.doi}},`)
+    lines.push("}")
+    return lines.join("\n")
+}
+
+function generateAllBibTeX(refs: Reference[]): string {
+    const header = `% ═══════════════════════════════════════════════════════════════
+% BibTeX — DDoS Tespiti BSO-Hybrid RF Tezi
+% Otomatik oluşturuldu: ${new Date().toLocaleDateString("tr-TR")}
+% Toplam: ${refs.length} kaynak
+% ═══════════════════════════════════════════════════════════════\n\n`
+    return header + refs.map(generateBibTeX).join("\n\n")
+}
+
+function downloadBibFile(refs: Reference[]) {
+    const content = generateAllBibTeX(refs)
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "ddos-bso-thesis-references.bib"
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
 export default function AcademicReferences() {
     const [search, setSearch] = useState("")
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
     const [copiedId, setCopiedId] = useState<number | null>(null)
+    const [copiedBibId, setCopiedBibId] = useState<number | null>(null)
+    const [bulkCopied, setBulkCopied] = useState(false)
 
     const filtered = REFERENCES.filter((ref) => {
         const matchesSearch =
@@ -151,6 +212,18 @@ export default function AcademicReferences() {
         navigator.clipboard.writeText(apa)
         setCopiedId(ref.id)
         setTimeout(() => setCopiedId(null), 2000)
+    }
+
+    const copyBibTeX = (ref: Reference) => {
+        navigator.clipboard.writeText(generateBibTeX(ref))
+        setCopiedBibId(ref.id)
+        setTimeout(() => setCopiedBibId(null), 2000)
+    }
+
+    const copyAllBibTeX = () => {
+        navigator.clipboard.writeText(generateAllBibTeX(REFERENCES))
+        setBulkCopied(true)
+        setTimeout(() => setBulkCopied(false), 3000)
     }
 
     return (
@@ -192,6 +265,37 @@ export default function AcademicReferences() {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* ════════════════════ TOPLU DIŞA AKTARMA ════════════════════ */}
+            <Card className="border-purple-200 dark:border-purple-800/40 bg-gradient-to-r from-purple-50/50 to-indigo-50/50 dark:from-purple-950/20 dark:to-indigo-950/20">
+                <CardContent className="pt-4 pb-4">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-bold text-purple-900 dark:text-purple-100 flex items-center gap-2">
+                                <Code2 className="w-4 h-4" />
+                                BibTeX Toplu Dışa Aktarma
+                            </h3>
+                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-0.5">
+                                Tüm {REFERENCES.length} kaynağı BibTeX formatında kopyalayın veya .bib dosyası olarak indirin
+                            </p>
+                        </div>
+                        <button
+                            onClick={copyAllBibTeX}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition-colors"
+                        >
+                            {bulkCopied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                            {bulkCopied ? "Kopyalandı!" : "Tümünü Kopyala"}
+                        </button>
+                        <button
+                            onClick={() => downloadBibFile(REFERENCES)}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition-colors"
+                        >
+                            <Download className="w-4 h-4" />
+                            .bib İndir
+                        </button>
+                    </div>
+                </CardContent>
+            </Card>
 
             {/* ════════════════════ ARAMA VE FİLTRE ════════════════════ */}
             <Card>
@@ -307,6 +411,17 @@ export default function AcademicReferences() {
                                                 <Copy className="w-3.5 h-3.5" />
                                             )}
                                         </button>
+                                        <button
+                                            onClick={() => copyBibTeX(ref)}
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/30 text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 text-xs font-medium transition-colors"
+                                            title="BibTeX Formatında Kopyala"
+                                        >
+                                            {copiedBibId === ref.id ? (
+                                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                                            ) : (
+                                                <Code2 className="w-3.5 h-3.5" />
+                                            )}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -326,6 +441,7 @@ export default function AcademicReferences() {
                         <li><span className="font-semibold text-emerald-700 dark:text-emerald-400">PDF</span> — Açık erişim makalelere doğrudan PDF bağlantısı ({Object.keys(PDF_URLS).length} kaynak)</li>
                         <li><span className="font-semibold text-blue-700 dark:text-blue-400">Scholar</span> — Google Scholar'da otomatik arama (tüm kaynaklar)</li>
                         <li><span className="font-semibold text-purple-700 dark:text-purple-400">DOI</span> — Digital Object Identifier ile yayıncı sayfasına erişim</li>
+                        <li><span className="font-semibold text-indigo-700 dark:text-indigo-400">BibTeX</span> — Her referans için BibTeX kopyalama veya toplu .bib dosyası indirme</li>
                     </ul>
                 </CardContent>
             </Card>
