@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -263,26 +263,41 @@ const accentMap: Record<string, { border: string; bg: string; iconBg: string }> 
 
 export default function DDoSDetectionDashboard() {
   const [activeTab, setActiveTab] = useState("home")
+  const exportBusyRef = useRef(false)
   useForceTurkish()
 
   // ── Handle cross-tab PNG export requests from export panel ──
   useEffect(() => {
     const handler = async (e: Event) => {
       const detail = (e as CustomEvent).detail as { type: "figures" | "tables" }
-      if (!detail?.type) return
-      const prevTab = activeTab
+      if (!detail?.type || exportBusyRef.current) return
+      exportBusyRef.current = true
+
+      const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
       try {
         const { toPng } = await import("html-to-image")
 
         if (detail.type === "figures") {
+          // 1. Switch to figures tab
           setActiveTab("figures")
-          await new Promise(r => setTimeout(r, 2500))
+          await wait(1500)
 
-          const nodes = document.querySelectorAll("[id^='svg-'], [id^='figure-'], [id^='fig-'], .recharts-wrapper")
+          // 2. Click "Tümünü Aç" (Expand All) button to open all figures
+          const expandBtn = Array.from(document.querySelectorAll("button")).find(
+            btn => btn.textContent?.includes("Tümünü Aç") || btn.textContent?.includes("Expand")
+          )
+          if (expandBtn) {
+            expandBtn.click()
+            await wait(2000) // wait for all figures to render
+          }
+
+          // 3. Capture all svg- elements
+          const nodes = document.querySelectorAll("[id^='svg-']")
           if (nodes.length === 0) {
             alert("Şekil bulunamadı. Lütfen 'Tez Şekilleri' sekmesinde şekilleri açın ve tekrar deneyin.")
-            setActiveTab(prevTab)
+            setActiveTab("export")
+            exportBusyRef.current = false
             return
           }
 
@@ -296,19 +311,22 @@ export default function DDoSDetectionDashboard() {
               link.href = dataUrl
               link.click()
               count++
-              await new Promise(r => setTimeout(r, 400))
+              await wait(500)
             } catch { /* skip */ }
           }
           alert(`✅ ${count} şekil yüksek çözünürlüklü PNG olarak indirildi`)
 
         } else if (detail.type === "tables") {
+          // 1. Switch to tables tab
           setActiveTab("tables")
-          await new Promise(r => setTimeout(r, 2500))
+          await wait(2000)
 
-          const nodes = document.querySelectorAll(".academic-table, [id^='table-'], [id^='result-']")
+          // 2. Capture all .academic-table elements
+          const nodes = document.querySelectorAll(".academic-table")
           if (nodes.length === 0) {
             alert("Tablo bulunamadı. Lütfen tekrar deneyin.")
-            setActiveTab(prevTab)
+            setActiveTab("export")
+            exportBusyRef.current = false
             return
           }
 
@@ -323,7 +341,7 @@ export default function DDoSDetectionDashboard() {
               link.href = dataUrl
               link.click()
               count++
-              await new Promise(r => setTimeout(r, 400))
+              await wait(500)
             } catch { /* skip */ }
           }
           alert(`✅ ${count} tablo yüksek çözünürlüklü PNG olarak indirildi`)
@@ -334,11 +352,12 @@ export default function DDoSDetectionDashboard() {
 
       // Switch back to export tab
       setActiveTab("export")
+      exportBusyRef.current = false
     }
 
     window.addEventListener("export-png-request", handler)
     return () => window.removeEventListener("export-png-request", handler)
-  }, [activeTab])
+  }, []) // empty deps — handler uses setActiveTab (stable) and refs
 
   return (
     <div className="min-h-screen mesh-bg bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
