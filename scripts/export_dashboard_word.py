@@ -145,25 +145,33 @@ BSO_RF_PER_CLASS = [
 
 CROSS_VALIDATION = {
     "folds": [
-        {"fold":1,"accuracy":90.89,"precision":90.92,"recall":90.97,"f1Score":90.88},
-        {"fold":2,"accuracy":91.04,"precision":91.07,"recall":91.12,"f1Score":91.02},
-        {"fold":3,"accuracy":90.84,"precision":90.85,"recall":90.93,"f1Score":90.82},
-        {"fold":4,"accuracy":90.87,"precision":90.93,"recall":90.93,"f1Score":90.86},
-        {"fold":5,"accuracy":91.37,"precision":91.46,"recall":91.44,"f1Score":91.38},
-        {"fold":6,"accuracy":90.66,"precision":90.66,"recall":90.72,"f1Score":90.61},
-        {"fold":7,"accuracy":91.16,"precision":91.17,"recall":91.22,"f1Score":91.13},
-        {"fold":8,"accuracy":90.99,"precision":91.11,"recall":91.05,"f1Score":91.00},
-        {"fold":9,"accuracy":91.12,"precision":91.22,"recall":91.16,"f1Score":91.13},
-        {"fold":10,"accuracy":90.82,"precision":90.85,"recall":90.87,"f1Score":90.80},
+        {"fold":1,"accuracy":89.43,"precision":82.91,"recall":85.40,"f1Score":83.89},
+        {"fold":2,"accuracy":89.44,"precision":82.54,"recall":85.14,"f1Score":83.52},
+        {"fold":3,"accuracy":89.13,"precision":82.62,"recall":85.21,"f1Score":83.62},
+        {"fold":4,"accuracy":89.42,"precision":83.01,"recall":85.18,"f1Score":83.86},
+        {"fold":5,"accuracy":89.71,"precision":83.73,"recall":85.80,"f1Score":84.57},
+        {"fold":6,"accuracy":89.33,"precision":81.89,"recall":85.02,"f1Score":82.98},
+        {"fold":7,"accuracy":89.46,"precision":82.65,"recall":85.40,"f1Score":83.66},
+        {"fold":8,"accuracy":89.43,"precision":82.91,"recall":84.96,"f1Score":83.71},
+        {"fold":9,"accuracy":90.00,"precision":83.98,"recall":85.84,"f1Score":84.74},
+        {"fold":10,"accuracy":89.42,"precision":82.57,"recall":85.63,"f1Score":83.71},
     ],
-    "mean":{"accuracy":90.98,"precision":91.02,"recall":91.04,"f1Score":90.96},
-    "std":{"accuracy":0.204,"precision":0.229,"recall":0.204,"f1Score":0.217},
+    "mean":{"accuracy":89.47,"precision":82.88,"recall":85.36,"f1Score":83.83},
+    "std":{"accuracy":0.219,"precision":0.571,"recall":0.297,"f1Score":0.479},
 }
 
 STATISTICAL_TESTS = [
-    {"comparison":"BSO-Hybrid vs Random Forest","improvement":"-0.45%","tStatistic":-9.7019,"pValue":0.000005,"significant":True,"cohenD":-3.234,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs Decision Tree","improvement":"+3.62%","tStatistic":33.1978,"pValue":0.0,"significant":True,"cohenD":11.0659,"effectSize":"large","wilcoxonP":0.001953},
-    {"comparison":"BSO-Hybrid vs Logistic Regression","improvement":"+10.51%","tStatistic":86.4492,"pValue":0.0,"significant":True,"cohenD":28.8164,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs BSO-SVM","improvement":"+9.99%","tStatistic":124.3393,"pValue":0.0,"significant":True,"cohenD":41.4464,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs PSO-RF","improvement":"+2.13%","tStatistic":21.8446,"pValue":0.0,"significant":True,"cohenD":7.2815,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs GA-RF","improvement":"+0.30%","tStatistic":3.1155,"pValue":0.012409,"significant":True,"cohenD":1.0385,"effectSize":"large","wilcoxonP":0.013672},
+    {"comparison":"BSO-Hybrid vs GWO-RF","improvement":"+0.01%","tStatistic":0.0648,"pValue":0.949721,"significant":False,"cohenD":0.0216,"effectSize":"small","wilcoxonP":1.0},
+    {"comparison":"BSO-Hybrid vs Random Forest","improvement":"-0.12%","tStatistic":-0.9293,"pValue":0.376997,"significant":False,"cohenD":-0.3098,"effectSize":"small","wilcoxonP":0.322266},
+    {"comparison":"BSO-Hybrid vs SVM (Linear)","improvement":"+8.97%","tStatistic":83.2104,"pValue":0.0,"significant":True,"cohenD":27.7368,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs Decision Tree","improvement":"+5.28%","tStatistic":24.1431,"pValue":0.0,"significant":True,"cohenD":8.0477,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs KNN","improvement":"+6.73%","tStatistic":37.7211,"pValue":0.0,"significant":True,"cohenD":12.5737,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs Naive Bayes","improvement":"+26.63%","tStatistic":137.8028,"pValue":0.0,"significant":True,"cohenD":45.9343,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs Logistic Regression","improvement":"+9.08%","tStatistic":76.7155,"pValue":0.0,"significant":True,"cohenD":25.5718,"effectSize":"large","wilcoxonP":0.001953},
+    {"comparison":"BSO-Hybrid vs XGBoost","improvement":"-0.92%","tStatistic":-5.6323,"pValue":0.000321,"significant":True,"cohenD":-1.8774,"effectSize":"large","wilcoxonP":0.001953},
 ]
 
 BSO_CONVERGENCE = [

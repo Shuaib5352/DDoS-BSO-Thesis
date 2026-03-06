@@ -58,7 +58,7 @@ const KEY_FINDINGS = [
     {
         id: "B4",
         title: "İstatistiksel Olarak Anlamlı Sonuçlar",
-        detail: `10-katlı çapraz doğrulama (ort. %${CROSS_VALIDATION.mean.accuracy} ± ${CROSS_VALIDATION.std.accuracy}), Wilcoxon testi (${STATISTICAL_TESTS.filter(t => t.significant).length}/${STATISTICAL_TESTS.length} anlamlı), Cohen's d=${STATISTICAL_TESTS[0].cohenD.toFixed(2)} (büyük etki). Sonuçlar güvenilir ve tekrarlanabilirdir.`,
+        detail: `10-katlı çapraz doğrulama (ort. %${CROSS_VALIDATION.mean.accuracy} ± ${CROSS_VALIDATION.std.accuracy}), Wilcoxon testi (${STATISTICAL_TESTS.filter(t => t.significant).length}/${STATISTICAL_TESTS.length} anlamlı), Cohen's d=${STATISTICAL_TESTS[6].cohenD.toFixed(2)} (büyük etki). Sonuçlar güvenilir ve tekrarlanabilirdir.`,
         icon: GitGraph,
         color: "blue",
     },

@@ -2,9 +2,9 @@
   "experimentInfo": {
     "title": "Improved Detection of DDoS Attacks Using a Hybrid Machine Learning Framework Optimized with Bat Swarm Optimization (BSO) in Dynamic Network Environments",
     "author": "SHUAIB AYAD JASIM",
-    "date": "2026-02-23 06:11:50",
+    "date": "2026-03-06 09:38:01",
     "randomSeed": 42,
-    "totalExperimentTime": 1332.6
+    "totalExperimentTime": 2540.8
   },
   "datasetStatistics": {
     "name": "CICIoT2023 - Real Network Traffic",
@@ -179,7 +179,7 @@
         "min_samples_split": 7,
         "max_features": 0.469
       },
-      "elapsedTime": 840.43,
+      "elapsedTime": 877.79,
       "selectedFeatureNames": [
         "Header_Length",
         "Time_To_Live",
@@ -246,7 +246,7 @@
       "nSelected": 18,
       "reductionPct": 53.8,
       "bestFitness": 0.1938945296099064,
-      "elapsedTime": 68.91,
+      "elapsedTime": 73.91,
       "nEvaluations": 820
     },
     "GA": {
@@ -299,7 +299,7 @@
       "nSelected": 21,
       "reductionPct": 46.2,
       "bestFitness": 0.1889823960584604,
-      "elapsedTime": 60.47,
+      "elapsedTime": 64.36,
       "nEvaluations": 722
     },
     "GWO": {
@@ -356,7 +356,7 @@
       "nSelected": 23,
       "reductionPct": 41.0,
       "bestFitness": 0.19218099243509207,
-      "elapsedTime": 70.23,
+      "elapsedTime": 76.15,
       "nEvaluations": 820
     }
   },
@@ -1281,8 +1281,8 @@
       "recallMacro": 85.56,
       "aucRoc": 98.38,
       "mcc": 0.8676,
-      "trainingTime": 3.742,
-      "predictionTimeMs": 0.0043,
+      "trainingTime": 4.237,
+      "predictionTimeMs": 0.0044,
       "confusionMatrix": [
         [
           421,
@@ -1833,8 +1833,8 @@
       "recallMacro": 78.64,
       "aucRoc": 97.0,
       "mcc": 0.7808,
-      "trainingTime": 5.485,
-      "predictionTimeMs": 0.0009,
+      "trainingTime": 5.967,
+      "predictionTimeMs": 0.0011,
       "confusionMatrix": [
         [
           398,
@@ -2377,8 +2377,8 @@
       "recallMacro": 82.39,
       "aucRoc": 97.87,
       "mcc": 0.848,
-      "trainingTime": 2.601,
-      "predictionTimeMs": 0.0071,
+      "trainingTime": 2.927,
+      "predictionTimeMs": 0.006,
       "confusionMatrix": [
         [
           349,
@@ -2897,8 +2897,8 @@
       "recallMacro": 84.24,
       "aucRoc": 98.24,
       "mcc": 0.8614,
-      "trainingTime": 2.816,
-      "predictionTimeMs": 0.006,
+      "trainingTime": 3.229,
+      "predictionTimeMs": 0.0066,
       "confusionMatrix": [
         [
           386,
@@ -3329,7 +3329,7 @@
             0.0067757606750191764,
             0.009971874200971618,
             0.015213500383533623,
-            0.015533111736128867,
+            0.015597034006647916,
             0.01598056762976221,
             0.03279212477627205,
             0.033303502940424445,
@@ -3505,8 +3505,8 @@
       "recallMacro": 85.38,
       "aucRoc": 98.37,
       "mcc": 0.8672,
-      "trainingTime": 3.508,
-      "predictionTimeMs": 0.006,
+      "trainingTime": 4.012,
+      "predictionTimeMs": 0.0086,
       "confusionMatrix": [
         [
           415,
@@ -4153,7 +4153,7 @@
       "recallMacro": 84.76,
       "aucRoc": 98.36,
       "mcc": 0.8662,
-      "trainingTime": 4.52,
+      "trainingTime": 5.314,
       "predictionTimeMs": 0.0068,
       "confusionMatrix": [
         [
@@ -4685,7 +4685,7 @@
       "recallMacro": 80.15,
       "aucRoc": 97.25,
       "mcc": 0.791,
-      "trainingTime": 68.244,
+      "trainingTime": 76.475,
       "predictionTimeMs": 0.0011,
       "confusionMatrix": [
         [
@@ -5241,8 +5241,8 @@
       "recallMacro": 79.5,
       "aucRoc": 91.2,
       "mcc": 0.819,
-      "trainingTime": 1.007,
-      "predictionTimeMs": 0.0003,
+      "trainingTime": 1.024,
+      "predictionTimeMs": 0.0002,
       "confusionMatrix": [
         [
           310,
@@ -5408,7 +5408,7 @@
       "aucRoc": 95.61,
       "mcc": 0.8114,
       "trainingTime": 0.006,
-      "predictionTimeMs": 0.0514,
+      "predictionTimeMs": 0.061,
       "confusionMatrix": [
         [
           396,
@@ -5601,8 +5601,8 @@
       "recallMacro": 68.87,
       "aucRoc": 96.09,
       "mcc": 0.6315,
-      "trainingTime": 0.048,
-      "predictionTimeMs": 0.0007,
+      "trainingTime": 0.049,
+      "predictionTimeMs": 0.0008,
       "confusionMatrix": [
         [
           624,
@@ -6059,8 +6059,8 @@
       "recallMacro": 80.06,
       "aucRoc": 97.3,
       "mcc": 0.7873,
-      "trainingTime": 3.742,
-      "predictionTimeMs": 0.0001,
+      "trainingTime": 3.75,
+      "predictionTimeMs": 0.0002,
       "confusionMatrix": [
         [
           434,
@@ -6613,8 +6613,8 @@
       "recallMacro": 84.79,
       "aucRoc": 98.51,
       "mcc": 0.8743,
-      "trainingTime": 4.688,
-      "predictionTimeMs": 0.002,
+      "trainingTime": 3.219,
+      "predictionTimeMs": 0.0019,
       "confusionMatrix": [
         [
           376,
@@ -7155,278 +7155,814 @@
       "folds": 10,
       "accuracy": {
         "scores": [
-          90.89,
-          91.04,
-          90.84,
-          90.87,
-          91.37,
-          90.66,
-          91.16,
-          90.99,
-          91.12,
-          90.82
+          89.43,
+          89.44,
+          89.13,
+          89.42,
+          89.71,
+          89.33,
+          89.46,
+          89.43,
+          90.0,
+          89.42
         ],
-        "mean": 90.98,
-        "std": 0.194
+        "mean": 89.47,
+        "std": 0.219
       },
       "f1Macro": {
         "scores": [
-          90.88,
-          91.02,
-          90.82,
-          90.86,
-          91.38,
-          90.61,
-          91.13,
-          91.0,
-          91.13,
-          90.8
+          83.89,
+          83.52,
+          83.62,
+          83.86,
+          84.57,
+          82.98,
+          83.66,
+          83.71,
+          84.74,
+          83.71
         ],
-        "mean": 90.96,
-        "std": 0.206
+        "mean": 83.83,
+        "std": 0.479
       },
       "precision": {
         "scores": [
-          90.92,
-          91.07,
-          90.85,
-          90.93,
-          91.46,
-          90.66,
-          91.17,
-          91.11,
-          91.22,
-          90.85
+          82.91,
+          82.54,
+          82.62,
+          83.01,
+          83.73,
+          81.89,
+          82.65,
+          82.91,
+          83.98,
+          82.57
         ],
-        "mean": 91.02,
-        "std": 0.218
+        "mean": 82.88,
+        "std": 0.571
       },
       "recall": {
         "scores": [
-          90.97,
-          91.12,
-          90.93,
-          90.93,
-          91.44,
-          90.72,
-          91.22,
-          91.05,
-          91.16,
-          90.87
+          85.4,
+          85.14,
+          85.21,
+          85.18,
+          85.8,
+          85.02,
+          85.4,
+          84.96,
+          85.84,
+          85.63
         ],
-        "mean": 91.04,
-        "std": 0.193
+        "mean": 85.36,
+        "std": 0.297
+      }
+    },
+    "BSO-SVM": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          81.81,
+          81.85,
+          81.55,
+          81.9,
+          82.56,
+          81.81,
+          81.68,
+          81.75,
+          82.96,
+          81.93
+        ],
+        "mean": 81.98,
+        "std": 0.414
+      },
+      "f1Macro": {
+        "scores": [
+          73.98,
+          73.87,
+          73.56,
+          73.75,
+          74.24,
+          73.49,
+          73.43,
+          73.63,
+          74.66,
+          73.74
+        ],
+        "mean": 73.84,
+        "std": 0.359
+      },
+      "precision": {
+        "scores": [
+          76.08,
+          76.1,
+          75.75,
+          75.77,
+          76.04,
+          75.76,
+          75.49,
+          75.65,
+          76.3,
+          75.7
+        ],
+        "mean": 75.86,
+        "std": 0.239
+      },
+      "recall": {
+        "scores": [
+          79.31,
+          78.87,
+          78.48,
+          78.3,
+          78.55,
+          77.59,
+          77.75,
+          78.28,
+          79.08,
+          78.23
+        ],
+        "mean": 78.44,
+        "std": 0.515
+      }
+    },
+    "PSO-RF": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          88.5,
+          87.98,
+          87.98,
+          87.96,
+          88.58,
+          88.09,
+          88.12,
+          88.0,
+          88.54,
+          88.3
+        ],
+        "mean": 88.2,
+        "std": 0.24
+      },
+      "f1Macro": {
+        "scores": [
+          82.37,
+          81.38,
+          81.33,
+          81.44,
+          82.51,
+          81.15,
+          81.39,
+          81.31,
+          82.25,
+          81.82
+        ],
+        "mean": 81.7,
+        "std": 0.476
+      },
+      "precision": {
+        "scores": [
+          81.8,
+          80.8,
+          80.92,
+          80.91,
+          82.05,
+          80.42,
+          80.87,
+          80.79,
+          81.85,
+          81.15
+        ],
+        "mean": 81.15,
+        "std": 0.519
+      },
+      "recall": {
+        "scores": [
+          83.14,
+          82.17,
+          81.9,
+          82.16,
+          83.11,
+          82.23,
+          82.12,
+          82.02,
+          82.74,
+          82.74
+        ],
+        "mean": 82.43,
+        "std": 0.434
+      }
+    },
+    "GA-RF": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          89.39,
+          89.13,
+          88.94,
+          88.94,
+          89.55,
+          88.95,
+          88.93,
+          89.09,
+          89.72,
+          89.49
+        ],
+        "mean": 89.21,
+        "std": 0.281
+      },
+      "f1Macro": {
+        "scores": [
+          84.08,
+          83.24,
+          83.27,
+          83.4,
+          84.18,
+          82.56,
+          82.99,
+          83.33,
+          84.2,
+          84.0
+        ],
+        "mean": 83.52,
+        "std": 0.533
+      },
+      "precision": {
+        "scores": [
+          83.6,
+          82.68,
+          82.96,
+          82.87,
+          83.77,
+          81.74,
+          82.35,
+          82.85,
+          83.67,
+          83.34
+        ],
+        "mean": 82.98,
+        "std": 0.606
+      },
+      "recall": {
+        "scores": [
+          84.69,
+          84.0,
+          83.71,
+          84.12,
+          84.72,
+          83.76,
+          83.87,
+          84.0,
+          84.86,
+          84.88
+        ],
+        "mean": 84.26,
+        "std": 0.447
+      }
+    },
+    "GWO-RF": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          89.27,
+          89.45,
+          88.63,
+          89.25,
+          89.55,
+          89.12,
+          89.66,
+          89.49,
+          89.69,
+          89.38
+        ],
+        "mean": 89.35,
+        "std": 0.295
+      },
+      "f1Macro": {
+        "scores": [
+          84.04,
+          83.82,
+          82.77,
+          83.84,
+          84.22,
+          82.86,
+          84.3,
+          84.18,
+          84.38,
+          83.76
+        ],
+        "mean": 83.82,
+        "std": 0.54
+      },
+      "precision": {
+        "scores": [
+          83.06,
+          83.0,
+          82.03,
+          82.94,
+          83.47,
+          81.79,
+          83.33,
+          83.3,
+          83.54,
+          82.65
+        ],
+        "mean": 82.91,
+        "std": 0.563
+      },
+      "recall": {
+        "scores": [
+          85.47,
+          85.08,
+          83.86,
+          85.18,
+          85.27,
+          84.71,
+          85.83,
+          85.49,
+          85.59,
+          85.53
+        ],
+        "mean": 85.2,
+        "std": 0.536
       }
     },
     "Random Forest": {
       "folds": 10,
       "accuracy": {
         "scores": [
-          91.49,
-          91.27,
-          91.1,
-          91.22,
-          91.66,
-          91.34,
-          91.69,
-          91.46,
-          91.59,
-          91.28
+          89.5,
+          89.4,
+          88.85,
+          89.15,
+          89.79,
+          89.43,
+          89.72,
+          89.54,
+          89.73,
+          89.37
         ],
-        "mean": 91.41,
-        "std": 0.189
+        "mean": 89.45,
+        "std": 0.272
       },
       "f1Macro": {
         "scores": [
-          91.49,
-          91.27,
-          91.1,
-          91.24,
-          91.69,
-          91.31,
-          91.69,
-          91.48,
-          91.61,
-          91.28
+          84.15,
+          83.33,
+          83.03,
+          83.82,
+          84.82,
+          83.07,
+          84.39,
+          84.43,
+          84.51,
+          83.92
         ],
-        "mean": 91.42,
-        "std": 0.194
+        "mean": 83.95,
+        "std": 0.597
       },
       "precision": {
         "scores": [
-          91.48,
-          91.29,
-          91.1,
-          91.24,
-          91.69,
-          91.28,
-          91.69,
-          91.54,
-          91.62,
-          91.27
+          83.55,
+          82.68,
+          82.36,
+          83.2,
+          84.14,
+          82.11,
+          83.56,
+          83.76,
+          83.76,
+          83.0
         ],
-        "mean": 91.42,
-        "std": 0.198
+        "mean": 83.21,
+        "std": 0.629
       },
       "recall": {
         "scores": [
-          91.59,
-          91.37,
-          91.2,
-          91.32,
-          91.76,
-          91.43,
-          91.79,
-          91.54,
-          91.68,
-          91.37
+          84.92,
+          84.3,
+          83.97,
+          84.63,
+          85.74,
+          84.56,
+          85.61,
+          85.39,
+          85.55,
+          85.25
         ],
-        "mean": 91.51,
-        "std": 0.187
+        "mean": 84.99,
+        "std": 0.578
+      }
+    },
+    "SVM (Linear)": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          82.76,
+          82.84,
+          82.68,
+          82.61,
+          83.25,
+          82.75,
+          82.67,
+          82.73,
+          83.4,
+          82.78
+        ],
+        "mean": 82.85,
+        "std": 0.248
+      },
+      "f1Macro": {
+        "scores": [
+          75.14,
+          74.79,
+          74.75,
+          74.6,
+          75.23,
+          74.63,
+          74.46,
+          74.87,
+          75.27,
+          74.81
+        ],
+        "mean": 74.85,
+        "std": 0.261
+      },
+      "precision": {
+        "scores": [
+          76.69,
+          76.35,
+          76.25,
+          76.02,
+          76.49,
+          76.48,
+          76.09,
+          76.28,
+          76.67,
+          76.31
+        ],
+        "mean": 76.36,
+        "std": 0.212
+      },
+      "recall": {
+        "scores": [
+          81.1,
+          79.75,
+          79.96,
+          79.56,
+          80.27,
+          79.38,
+          79.04,
+          80.25,
+          80.12,
+          79.95
+        ],
+        "mean": 79.94,
+        "std": 0.536
       }
     },
     "Decision Tree": {
       "folds": 10,
       "accuracy": {
         "scores": [
-          87.71,
-          87.59,
-          86.8,
-          86.96,
-          87.4,
-          87.05,
-          87.52,
-          86.89,
-          87.69,
-          87.66
+          85.89,
+          85.43,
+          84.92,
+          85.97,
+          85.9,
+          86.35,
+          85.78,
+          85.7,
+          85.68,
+          85.58
         ],
-        "mean": 87.33,
-        "std": 0.344
+        "mean": 85.72,
+        "std": 0.356
       },
       "f1Macro": {
         "scores": [
-          87.72,
-          87.61,
-          86.82,
-          87.0,
-          87.42,
-          87.05,
-          87.53,
-          86.92,
-          87.71,
-          87.67
+          79.15,
+          78.39,
+          77.77,
+          78.5,
+          78.9,
+          78.99,
+          78.28,
+          78.77,
+          78.16,
+          78.58
         ],
-        "mean": 87.35,
-        "std": 0.34
+        "mean": 78.55,
+        "std": 0.398
       },
       "precision": {
         "scores": [
-          87.67,
-          87.58,
-          86.82,
-          86.99,
-          87.43,
-          87.02,
-          87.5,
-          86.9,
-          87.69,
-          87.65
+          78.37,
+          77.65,
+          76.92,
+          77.85,
+          78.23,
+          78.25,
+          77.55,
+          77.99,
+          77.48,
+          77.79
         ],
-        "mean": 87.33,
-        "std": 0.332
+        "mean": 77.81,
+        "std": 0.414
       },
       "recall": {
         "scores": [
-          87.79,
-          87.64,
-          86.83,
-          87.01,
-          87.42,
-          87.09,
-          87.56,
-          86.95,
-          87.73,
-          87.71
+          80.25,
+          79.46,
+          79.18,
+          79.43,
+          79.81,
+          80.12,
+          79.38,
+          79.92,
+          79.16,
+          79.75
         ],
-        "mean": 87.37,
-        "std": 0.348
+        "mean": 79.64,
+        "std": 0.361
+      }
+    },
+    "KNN": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          84.81,
+          84.77,
+          84.63,
+          84.95,
+          85.24,
+          85.52,
+          85.08,
+          84.97,
+          85.19,
+          85.22
+        ],
+        "mean": 85.04,
+        "std": 0.25
+      },
+      "f1Macro": {
+        "scores": [
+          77.15,
+          76.68,
+          76.61,
+          76.75,
+          77.6,
+          77.65,
+          76.98,
+          77.09,
+          77.27,
+          77.2
+        ],
+        "mean": 77.1,
+        "std": 0.338
+      },
+      "precision": {
+        "scores": [
+          76.84,
+          76.44,
+          76.39,
+          76.54,
+          77.19,
+          77.34,
+          76.91,
+          76.75,
+          77.03,
+          77.08
+        ],
+        "mean": 76.85,
+        "std": 0.306
+      },
+      "recall": {
+        "scores": [
+          81.59,
+          80.4,
+          80.56,
+          80.41,
+          82.05,
+          81.87,
+          80.97,
+          81.15,
+          81.33,
+          81.36
+        ],
+        "mean": 81.17,
+        "std": 0.554
+      }
+    },
+    "Naive Bayes": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          63.44,
+          62.76,
+          62.61,
+          62.88,
+          63.11,
+          63.24,
+          63.22,
+          62.32,
+          63.0,
+          63.04
+        ],
+        "mean": 62.96,
+        "std": 0.314
+      },
+      "f1Macro": {
+        "scores": [
+          57.65,
+          57.1,
+          56.91,
+          57.12,
+          57.26,
+          57.53,
+          57.47,
+          56.45,
+          57.28,
+          57.19
+        ],
+        "mean": 57.19,
+        "std": 0.323
+      },
+      "precision": {
+        "scores": [
+          74.76,
+          74.96,
+          75.13,
+          74.65,
+          75.38,
+          75.48,
+          74.4,
+          74.43,
+          76.39,
+          74.56
+        ],
+        "mean": 75.01,
+        "std": 0.581
+      },
+      "recall": {
+        "scores": [
+          68.93,
+          68.3,
+          68.78,
+          68.54,
+          69.2,
+          69.31,
+          69.02,
+          68.55,
+          68.98,
+          69.01
+        ],
+        "mean": 68.86,
+        "std": 0.299
       }
     },
     "Logistic Regression": {
       "folds": 10,
       "accuracy": {
         "scores": [
-          80.04,
-          80.7,
-          80.34,
-          80.4,
-          81.16,
-          80.85,
-          80.65,
-          80.6,
-          81.5,
-          80.87
+          82.21,
+          82.56,
+          82.47,
+          82.26,
+          83.09,
+          82.61,
+          82.55,
+          82.77,
+          83.35,
+          82.62
         ],
-        "mean": 80.71,
-        "std": 0.396
+        "mean": 82.65,
+        "std": 0.331
       },
       "f1Macro": {
         "scores": [
-          79.77,
-          80.44,
-          80.05,
-          80.14,
-          80.89,
-          80.61,
-          80.39,
-          80.32,
-          81.25,
-          80.63
+          74.57,
+          74.65,
+          74.68,
+          74.29,
+          75.11,
+          74.54,
+          74.46,
+          75.05,
+          75.3,
+          74.79
         ],
-        "mean": 80.45,
-        "std": 0.403
+        "mean": 74.74,
+        "std": 0.303
       },
       "precision": {
         "scores": [
-          80.22,
-          80.96,
-          80.5,
-          80.67,
-          81.33,
-          81.21,
-          80.83,
-          80.77,
-          81.82,
-          81.19
+          76.43,
+          76.43,
+          76.34,
+          75.93,
+          76.5,
+          76.51,
+          76.18,
+          76.48,
+          76.95,
+          76.48
         ],
-        "mean": 80.95,
-        "std": 0.434
+        "mean": 76.42,
+        "std": 0.246
       },
       "recall": {
         "scores": [
-          79.78,
-          80.47,
-          80.08,
-          80.16,
-          80.92,
-          80.64,
-          80.39,
-          80.36,
-          81.26,
-          80.65
+          80.45,
+          79.93,
+          80.25,
+          79.34,
+          80.28,
+          79.4,
+          79.28,
+          80.82,
+          80.35,
+          80.29
         ],
-        "mean": 80.47,
-        "std": 0.405
+        "mean": 80.04,
+        "std": 0.502
+      }
+    },
+    "XGBoost": {
+      "folds": 10,
+      "accuracy": {
+        "scores": [
+          90.02,
+          89.71,
+          89.84,
+          89.8,
+          90.51,
+          90.31,
+          90.19,
+          89.88,
+          90.6,
+          90.02
+        ],
+        "mean": 90.09,
+        "std": 0.29
+      },
+      "f1Macro": {
+        "scores": [
+          84.9,
+          83.57,
+          84.66,
+          84.09,
+          85.7,
+          84.91,
+          84.76,
+          84.7,
+          85.53,
+          84.59
+        ],
+        "mean": 84.74,
+        "std": 0.586
+      },
+      "precision": {
+        "scores": [
+          84.73,
+          83.56,
+          84.28,
+          83.96,
+          85.54,
+          84.38,
+          84.4,
+          84.82,
+          85.37,
+          84.3
+        ],
+        "mean": 84.53,
+        "std": 0.573
+      },
+      "recall": {
+        "scores": [
+          85.14,
+          83.67,
+          85.2,
+          84.36,
+          85.99,
+          85.62,
+          85.32,
+          84.65,
+          85.8,
+          84.98
+        ],
+        "mean": 85.07,
+        "std": 0.665
       }
     }
   },
   "statisticalTests": [
     {
-      "comparison": "BSO-Hybrid vs Random Forest",
-      "improvement": -0.45,
+      "comparison": "BSO-Hybrid vs BSO-SVM",
+      "improvement": 9.99,
       "tTest": {
-        "tStatistic": -9.7019,
-        "pValue": 5e-06,
+        "tStatistic": 124.3393,
+        "pValue": 0.0,
         "significant": true
       },
       "wilcoxon": {
@@ -7434,14 +7970,94 @@
         "pValue": 0.001953,
         "significant": true
       },
-      "cohenD": -3.234,
+      "cohenD": 41.4464,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs PSO-RF",
+      "improvement": 2.13,
+      "tTest": {
+        "tStatistic": 21.8446,
+        "pValue": 0.0,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 0.0,
+        "pValue": 0.001953,
+        "significant": true
+      },
+      "cohenD": 7.2815,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs GA-RF",
+      "improvement": 0.3,
+      "tTest": {
+        "tStatistic": 3.1155,
+        "pValue": 0.012409,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 4.0,
+        "pValue": 0.013672,
+        "significant": true
+      },
+      "cohenD": 1.0385,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs GWO-RF",
+      "improvement": 0.01,
+      "tTest": {
+        "tStatistic": 0.0648,
+        "pValue": 0.949721,
+        "significant": false
+      },
+      "wilcoxon": {
+        "wStatistic": 27.0,
+        "pValue": 1.0,
+        "significant": false
+      },
+      "cohenD": 0.0216,
+      "effectSize": "small"
+    },
+    {
+      "comparison": "BSO-Hybrid vs Random Forest",
+      "improvement": -0.12,
+      "tTest": {
+        "tStatistic": -0.9293,
+        "pValue": 0.376997,
+        "significant": false
+      },
+      "wilcoxon": {
+        "wStatistic": 17.0,
+        "pValue": 0.322266,
+        "significant": false
+      },
+      "cohenD": -0.3098,
+      "effectSize": "small"
+    },
+    {
+      "comparison": "BSO-Hybrid vs SVM (Linear)",
+      "improvement": 8.97,
+      "tTest": {
+        "tStatistic": 83.2104,
+        "pValue": 0.0,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 0.0,
+        "pValue": 0.001953,
+        "significant": true
+      },
+      "cohenD": 27.7368,
       "effectSize": "large"
     },
     {
       "comparison": "BSO-Hybrid vs Decision Tree",
-      "improvement": 3.62,
+      "improvement": 5.28,
       "tTest": {
-        "tStatistic": 33.1978,
+        "tStatistic": 24.1431,
         "pValue": 0.0,
         "significant": true
       },
@@ -7450,14 +8066,46 @@
         "pValue": 0.001953,
         "significant": true
       },
-      "cohenD": 11.0659,
+      "cohenD": 8.0477,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs KNN",
+      "improvement": 6.73,
+      "tTest": {
+        "tStatistic": 37.7211,
+        "pValue": 0.0,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 0.0,
+        "pValue": 0.001953,
+        "significant": true
+      },
+      "cohenD": 12.5737,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs Naive Bayes",
+      "improvement": 26.63,
+      "tTest": {
+        "tStatistic": 137.8028,
+        "pValue": 0.0,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 0.0,
+        "pValue": 0.001953,
+        "significant": true
+      },
+      "cohenD": 45.9343,
       "effectSize": "large"
     },
     {
       "comparison": "BSO-Hybrid vs Logistic Regression",
-      "improvement": 10.51,
+      "improvement": 9.08,
       "tTest": {
-        "tStatistic": 86.4492,
+        "tStatistic": 76.7155,
         "pValue": 0.0,
         "significant": true
       },
@@ -7466,7 +8114,23 @@
         "pValue": 0.001953,
         "significant": true
       },
-      "cohenD": 28.8164,
+      "cohenD": 25.5718,
+      "effectSize": "large"
+    },
+    {
+      "comparison": "BSO-Hybrid vs XGBoost",
+      "improvement": -0.92,
+      "tTest": {
+        "tStatistic": -5.6323,
+        "pValue": 0.000321,
+        "significant": true
+      },
+      "wilcoxon": {
+        "wStatistic": 0.0,
+        "pValue": 0.001953,
+        "significant": true
+      },
+      "cohenD": -1.8774,
       "effectSize": "large"
     }
   ],
@@ -7540,33 +8204,33 @@
     "throughput": [
       {
         "batchSize": 100,
-        "avgTimeMs": 38.25,
-        "samplesPerSecond": 2615,
-        "msPerSample": 0.3825
+        "avgTimeMs": 42.6,
+        "samplesPerSecond": 2347,
+        "msPerSample": 0.426
       },
       {
         "batchSize": 500,
-        "avgTimeMs": 48.08,
-        "samplesPerSecond": 10400,
-        "msPerSample": 0.0962
+        "avgTimeMs": 53.19,
+        "samplesPerSecond": 9400,
+        "msPerSample": 0.1064
       },
       {
         "batchSize": 1000,
-        "avgTimeMs": 48.43,
-        "samplesPerSecond": 20647,
-        "msPerSample": 0.0484
+        "avgTimeMs": 50.48,
+        "samplesPerSecond": 19811,
+        "msPerSample": 0.0505
       },
       {
         "batchSize": 5000,
-        "avgTimeMs": 59.09,
-        "samplesPerSecond": 84621,
+        "avgTimeMs": 58.93,
+        "samplesPerSecond": 84841,
         "msPerSample": 0.0118
       },
       {
         "batchSize": 20644,
-        "avgTimeMs": 89.05,
-        "samplesPerSecond": 231833,
-        "msPerSample": 0.0043
+        "avgTimeMs": 93.54,
+        "samplesPerSecond": 220707,
+        "msPerSample": 0.0045
       }
     ],
     "learningCurve": [
@@ -7575,42 +8239,42 @@
         "nSamples": 8750,
         "accuracy": 88.13,
         "f1Macro": 81.8,
-        "trainingTime": 0.513
+        "trainingTime": 0.545
       },
       {
         "fraction": 0.2,
         "nSamples": 17500,
         "accuracy": 88.76,
         "f1Macro": 82.7,
-        "trainingTime": 0.759
+        "trainingTime": 0.806
       },
       {
         "fraction": 0.3,
         "nSamples": 26250,
         "accuracy": 89.01,
         "f1Macro": 83.16,
-        "trainingTime": 1.078
+        "trainingTime": 1.129
       },
       {
         "fraction": 0.5,
         "nSamples": 43750,
         "accuracy": 89.41,
         "f1Macro": 83.71,
-        "trainingTime": 1.834
+        "trainingTime": 1.892
       },
       {
         "fraction": 0.7,
         "nSamples": 61249,
         "accuracy": 89.61,
         "f1Macro": 84.0,
-        "trainingTime": 2.663
+        "trainingTime": 2.804
       },
       {
         "fraction": 1.0,
         "nSamples": 87500,
         "accuracy": 89.85,
         "f1Macro": 84.34,
-        "trainingTime": 4.207
+        "trainingTime": 4.491
       }
     ]
   },
@@ -7933,85 +8597,85 @@
     "models": [
       {
         "model": "BSO-Hybrid RF (Proposed)",
-        "trainingTime": 3.742,
-        "predictionTimeMs": 0.0043,
+        "trainingTime": 4.237,
+        "predictionTimeMs": 0.0044,
         "featuresUsed": 19,
         "featureSet": "BSO"
       },
       {
         "model": "BSO-SVM",
-        "trainingTime": 5.485,
-        "predictionTimeMs": 0.0009,
+        "trainingTime": 5.967,
+        "predictionTimeMs": 0.0011,
         "featuresUsed": 19,
         "featureSet": "BSO"
       },
       {
         "model": "PSO-RF",
-        "trainingTime": 2.601,
-        "predictionTimeMs": 0.0071,
+        "trainingTime": 2.927,
+        "predictionTimeMs": 0.006,
         "featuresUsed": 18,
         "featureSet": "PSO"
       },
       {
         "model": "GA-RF",
-        "trainingTime": 2.816,
-        "predictionTimeMs": 0.006,
+        "trainingTime": 3.229,
+        "predictionTimeMs": 0.0066,
         "featuresUsed": 21,
         "featureSet": "GA"
       },
       {
         "model": "GWO-RF",
-        "trainingTime": 3.508,
-        "predictionTimeMs": 0.006,
+        "trainingTime": 4.012,
+        "predictionTimeMs": 0.0086,
         "featuresUsed": 23,
         "featureSet": "GWO"
       },
       {
         "model": "Random Forest",
-        "trainingTime": 4.52,
+        "trainingTime": 5.314,
         "predictionTimeMs": 0.0068,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "SVM (Linear)",
-        "trainingTime": 68.244,
+        "trainingTime": 76.475,
         "predictionTimeMs": 0.0011,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "Decision Tree",
-        "trainingTime": 1.007,
-        "predictionTimeMs": 0.0003,
+        "trainingTime": 1.024,
+        "predictionTimeMs": 0.0002,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "KNN",
         "trainingTime": 0.006,
-        "predictionTimeMs": 0.0514,
+        "predictionTimeMs": 0.061,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "Naive Bayes",
-        "trainingTime": 0.048,
-        "predictionTimeMs": 0.0007,
+        "trainingTime": 0.049,
+        "predictionTimeMs": 0.0008,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "Logistic Regression",
-        "trainingTime": 3.742,
-        "predictionTimeMs": 0.0001,
+        "trainingTime": 3.75,
+        "predictionTimeMs": 0.0002,
         "featuresUsed": 39,
         "featureSet": "All"
       },
       {
         "model": "XGBoost",
-        "trainingTime": 4.688,
-        "predictionTimeMs": 0.002,
+        "trainingTime": 3.219,
+        "predictionTimeMs": 0.0019,
         "featuresUsed": 39,
         "featureSet": "All"
       }
