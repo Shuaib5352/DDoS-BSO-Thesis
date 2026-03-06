@@ -221,23 +221,47 @@ export default function PrintExportPanel() {
         setExporting("figures-png")
         try {
             const { toPng } = await import("html-to-image")
-            const nodes = document.querySelectorAll("[id^='svg-']")
+
+            // Switch to figures tab if elements not found
+            let nodes = document.querySelectorAll("[id^='svg-']")
             if (nodes.length === 0) {
-                showResult("error", "Şekil bulunamadı. Lütfen önce 'Şekiller' sekmesine gidin ve şekilleri açın.")
+                // Programmatically click the figures tab
+                const figTab = document.querySelector("[role='tab'][value='figures']") as HTMLElement
+                    || document.querySelector("[data-value='figures']") as HTMLElement
+                    || Array.from(document.querySelectorAll("[role='tab']")).find(el => el.textContent?.includes("Şekil")) as HTMLElement
+                if (figTab) {
+                    figTab.click()
+                    await new Promise(r => setTimeout(r, 2000)) // wait for render
+                    nodes = document.querySelectorAll("[id^='svg-']")
+                }
+            }
+
+            if (nodes.length === 0) {
+                // Try broader selectors
+                nodes = document.querySelectorAll("[id^='figure-'], [id^='fig-'], .recharts-wrapper, [id^='chart-']")
+            }
+
+            if (nodes.length === 0) {
+                showResult("error", "Şekil bulunamadı. Lütfen önce 'Tez Şekilleri' sekmesine tıklayın, tüm şekilleri açın ve tekrar deneyin.")
                 setExporting(null)
                 return
             }
+
+            let downloaded = 0
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i] as HTMLElement
-                const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
-                const link = document.createElement("a")
-                link.download = `${node.id}.png`
-                link.href = dataUrl
-                link.click()
-                await new Promise((r) => setTimeout(r, 300))
+                try {
+                    const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+                    const link = document.createElement("a")
+                    link.download = `${node.id || `figure_${String(i + 1).padStart(2, "0")}`}.png`
+                    link.href = dataUrl
+                    link.click()
+                    downloaded++
+                    await new Promise((r) => setTimeout(r, 400))
+                } catch { /* skip failed nodes */ }
             }
             setExporting(null)
-            showResult("success", `${nodes.length} şekil yüksek çözünürlüklü PNG olarak indirildi`)
+            showResult("success", `${downloaded} şekil yüksek çözünürlüklü PNG olarak indirildi`)
         } catch (err) {
             setExporting(null)
             showResult("error", `PNG dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
@@ -248,24 +272,47 @@ export default function PrintExportPanel() {
         setExporting("tables-png")
         try {
             const { toPng } = await import("html-to-image")
-            const nodes = document.querySelectorAll(".academic-table")
+
+            // Switch to tables tab if elements not found
+            let nodes = document.querySelectorAll(".academic-table")
             if (nodes.length === 0) {
-                showResult("error", "Tablo bulunamadı. Lütfen önce 'Tablolar' sekmesine gidin.")
+                const tabBtn = document.querySelector("[role='tab'][value='tables']") as HTMLElement
+                    || document.querySelector("[data-value='tables']") as HTMLElement
+                    || Array.from(document.querySelectorAll("[role='tab']")).find(el => el.textContent?.includes("Tablo")) as HTMLElement
+                if (tabBtn) {
+                    tabBtn.click()
+                    await new Promise(r => setTimeout(r, 2000)) // wait for render
+                    nodes = document.querySelectorAll(".academic-table")
+                }
+            }
+
+            if (nodes.length === 0) {
+                // Try broader selectors
+                nodes = document.querySelectorAll("[id^='table-'], [id^='result-'], table")
+            }
+
+            if (nodes.length === 0) {
+                showResult("error", "Tablo bulunamadı. Lütfen önce 'Tez Tabloları' sekmesine tıklayın ve tekrar deneyin.")
                 setExporting(null)
                 return
             }
+
+            let downloaded = 0
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i] as HTMLElement
-                const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
-                const link = document.createElement("a")
-                const id = node.id || `table_${String(i + 1).padStart(2, "0")}`
-                link.download = `${id}.png`
-                link.href = dataUrl
-                link.click()
-                await new Promise((r) => setTimeout(r, 300))
+                try {
+                    const dataUrl = await toPng(node, { pixelRatio: 3, backgroundColor: "#ffffff", cacheBust: true })
+                    const link = document.createElement("a")
+                    const id = node.id || `table_${String(i + 1).padStart(2, "0")}`
+                    link.download = `${id}.png`
+                    link.href = dataUrl
+                    link.click()
+                    downloaded++
+                    await new Promise((r) => setTimeout(r, 400))
+                } catch { /* skip failed nodes */ }
             }
             setExporting(null)
-            showResult("success", `${nodes.length} tablo yüksek çözünürlüklü PNG olarak indirildi`)
+            showResult("success", `${downloaded} tablo yüksek çözünürlüklü PNG olarak indirildi`)
         } catch (err) {
             setExporting(null)
             showResult("error", `PNG dışa aktarma başarısız: ${err instanceof Error ? err.message : "Bilinmeyen hata"}`)
