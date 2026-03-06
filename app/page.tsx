@@ -51,6 +51,9 @@ import ThesisAbstract from "@/components/thesis-abstract"
 import OptimizerConvergenceComparison from "@/components/optimizer-convergence-comparison"
 import ConceptDriftSimulation from "@/components/concept-drift-simulation"
 import JournalPublicationCharts from "@/components/journal-publication-charts"
+import PerClassRocCurves from "@/components/per-class-roc-curves"
+import PrecisionRecallCurves from "@/components/precision-recall-curves"
+import TsneVisualization from "@/components/tsne-visualization"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -125,6 +128,9 @@ const TAB_CATEGORIES = [
       { value: "concept-drift", label: "Dinamik Ortam", icon: Shuffle },
       { value: "statistics", label: "İstatistiksel Testler", icon: BarChart2 },
       { value: "journal-charts", label: "Yayın Şekilleri", icon: BarChart3 },
+      { value: "roc-curves", label: "ROC Eğrileri", icon: TrendingUp },
+      { value: "pr-curves", label: "PR Eğrileri", icon: Activity },
+      { value: "tsne", label: "t-SNE Görselleştirme", icon: Layers },
     ],
   },
   {
@@ -189,6 +195,9 @@ const TAB_COLORS: Record<string, string> = {
   convergence: "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "concept-drift": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "journal-charts": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-fuchsia-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "roc-curves": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "pr-curves": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-green-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "tsne": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -888,6 +897,9 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="convergence" className="space-y-6 animate-fade-in"><OptimizerConvergenceComparison /></TabsContent>
           <TabsContent value="concept-drift" className="space-y-6 animate-fade-in"><ConceptDriftSimulation /></TabsContent>
           <TabsContent value="journal-charts" className="space-y-6 animate-fade-in"><JournalPublicationCharts /></TabsContent>
+          <TabsContent value="roc-curves" className="space-y-6 animate-fade-in"><PerClassRocCurves /></TabsContent>
+          <TabsContent value="pr-curves" className="space-y-6 animate-fade-in"><PrecisionRecallCurves /></TabsContent>
+          <TabsContent value="tsne" className="space-y-6 animate-fade-in"><TsneVisualization /></TabsContent>
         </Tabs>
 
         {/* ════════════════════ FOOTER ════════════════════ */}
