@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import {
     DATASET_STATISTICS, CICIOT2023_ATTACK_TYPES, BSO_SELECTED_FEATURES, BSO_PARAMETERS,
-    MODEL_RESULTS, CROSS_VALIDATION, CICIOT2023_FEATURES, STATISTICAL_TESTS
+    MODEL_RESULTS, CROSS_VALIDATION, CICIOT2023_FEATURES, STATISTICAL_TESTS, FEATURE_SELECTION_COMPARISON
 } from "@/lib/ciciot2023-dataset"
 
 /* ═══════════════════════════════════════════════════════════════
@@ -211,7 +211,7 @@ export default function Chapter3Consolidated() {
                                 { label: "Veri Seti", value: "103.218 örnek", color: "bg-blue-50 border-blue-200 text-blue-700" },
                                 { label: "BSO Seçim", value: "19/39 özellik", color: "bg-purple-50 border-purple-200 text-purple-700" },
                                 { label: "Doğruluk", value: `%${bso.accuracy}`, color: "bg-emerald-50 border-emerald-200 text-emerald-700" },
-                                { label: "Fitness", value: `${BSO_PARAMETERS.bestFitness}`, color: "bg-amber-50 border-amber-200 text-amber-700" },
+                                { label: "Fitness", value: `${FEATURE_SELECTION_COMPARISON.BSO.bestFitness}`, color: "bg-amber-50 border-amber-200 text-amber-700" },
                             ].map(s => (
                                 <div key={s.label} className={`${s.color} border rounded-xl p-3 text-center`}>
                                     <p className="text-xs font-medium opacity-70">{s.label}</p>
@@ -378,7 +378,7 @@ export default function Chapter3Consolidated() {
                                 <DataRow label="Boyut Sayısı" value="39 (ikili — özellik seçimi)" />
                                 <DataRow label="Toplam Değerlendirme" value={BSO_PARAMETERS.totalEvaluations.toLocaleString("tr-TR")} />
                                 <DataRow label="Optimizasyon Süresi" value={`${BSO_PARAMETERS.optimizationTime.toFixed(2)} saniye`} />
-                                <DataRow label="En İyi Fitness Değeri" value={BSO_PARAMETERS.bestFitness.toString()} />
+                                <DataRow label="En İyi Fitness Değeri" value={FEATURE_SELECTION_COMPARISON.BSO.bestFitness.toString()} />
                                 <DataRow label="Seçilen Özellik Sayısı" value={`${BSO_SELECTED_FEATURES.length} / ${DATASET_STATISTICS.totalFeatures}`} />
                             </div>
                         </CollapsibleSection>
@@ -462,12 +462,12 @@ export default function Chapter3Consolidated() {
 
                         <CollapsibleSection title="Tablo 3.5 — Optimize Edilen RF Hiperparametreleri" badge="BSO sonucu">
                             <div className="divide-y">
-                                <DataRow label="n_estimators (ağaç sayısı)" value={BSO_PARAMETERS.optimizedHP.nEstimators.toString()} />
-                                <DataRow label="max_depth (maks. derinlik)" value={BSO_PARAMETERS.optimizedHP.maxDepth.toString()} />
-                                <DataRow label="min_samples_split (min. bölme)" value={BSO_PARAMETERS.optimizedHP.minSamplesSplit.toString()} />
-                                <DataRow label="max_features (maks. özellik oranı)" value={BSO_PARAMETERS.optimizedHP.maxFeatures.toString()} />
+                                <DataRow label="n_estimators (ağaç sayısı)" value={BSO_PARAMETERS.optimizedHyperparameters.n_estimators.toString()} />
+                                <DataRow label="max_depth (maks. derinlik)" value={BSO_PARAMETERS.optimizedHyperparameters.max_depth.toString()} />
+                                <DataRow label="min_samples_split (min. bölme)" value={BSO_PARAMETERS.optimizedHyperparameters.min_samples_split.toString()} />
+                                <DataRow label="max_features (maks. özellik oranı)" value={BSO_PARAMETERS.optimizedHyperparameters.max_features.toString()} />
                                 <DataRow label="Kullanılan Özellik Sayısı" value="19 / 39 (%51.3 azaltma)" />
-                                <DataRow label="En İyi Fitness" value={BSO_PARAMETERS.bestFitness.toString()} />
+                                <DataRow label="En İyi Fitness" value={FEATURE_SELECTION_COMPARISON.BSO.bestFitness.toString()} />
                             </div>
                         </CollapsibleSection>
                     </div>
@@ -526,13 +526,13 @@ export default function Chapter3Consolidated() {
                                 <DataRow label="Ortalama Doğruluk" value={`%${CROSS_VALIDATION.mean.accuracy.toFixed(2)} ± ${CROSS_VALIDATION.std.accuracy}`} />
                                 <DataRow label="Ortalama F1-Macro" value={`%${CROSS_VALIDATION.mean.f1Score.toFixed(2)} ± ${CROSS_VALIDATION.std.f1Score}`} />
                             </div>
-                            {CROSS_VALIDATION.foldResults && (
+                            {CROSS_VALIDATION.results && (
                                 <table className="w-full text-xs">
                                     <thead className="bg-gray-50">
                                         <tr><th className="px-2 py-1">Kat</th><th className="px-2 py-1 text-right">Doğ.</th><th className="px-2 py-1 text-right">Kesin.</th><th className="px-2 py-1 text-right">Duyar.</th><th className="px-2 py-1 text-right">F1</th></tr>
                                     </thead>
                                     <tbody className="divide-y">
-                                        {CROSS_VALIDATION.foldResults.map((f: { fold: number; accuracy: number; precision: number; recall: number; f1Score: number }, i: number) => (
+                                        {CROSS_VALIDATION.results.map((f, i) => (
                                             <tr key={i} className={i % 2 === 0 ? "" : "bg-gray-50/50"}>
                                                 <td className="px-2 py-1 font-mono text-gray-400">{f.fold}</td>
                                                 <td className="px-2 py-1 text-right font-mono">{f.accuracy}</td>
