@@ -56,6 +56,7 @@ import PrecisionRecallCurves from "@/components/precision-recall-curves"
 import TsneVisualization from "@/components/tsne-visualization"
 import FigureTableIndex from "@/components/figure-table-index"
 import EquationsChapterGuide from "@/components/equations-chapter-guide"
+import Chapter3Consolidated from "@/components/chapter3-consolidated"
 
 /* ═══════════════════════════════════════════════════════════════
    Force Turkish language on mount
@@ -96,6 +97,7 @@ const TAB_CATEGORIES = [
     id: "ch3-method",
     label: "Bölüm 3 · Yöntem",
     tabs: [
+      { value: "bolum3", label: "★ Bölüm 3 Konsolide", icon: Layers },
       { value: "methodology", label: "Metodoloji Çerçevesi", icon: FileText },
       { value: "dataset-eda", label: "Veri Keşfi", icon: PieChart },
       { value: "bso", label: "BSO Optimizasyonu", icon: GitGraph },
@@ -204,6 +206,7 @@ const TAB_COLORS: Record<string, string> = {
   "tsne": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "fig-index": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-700 data-[state=active]:to-slate-800 data-[state=active]:text-white data-[state=active]:shadow-lg",
   "equations": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+  "bolum3": "data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-700 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-lg",
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -889,6 +892,7 @@ export default function DDoSDetectionDashboard() {
           <TabsContent value="pipeline" className="space-y-6 animate-fade-in"><PipelineDemo /></TabsContent>
           <TabsContent value="equations" className="space-y-6 animate-fade-in"><MathEquations /></TabsContent>
           <TabsContent value="literature" className="space-y-6 animate-fade-in"><LiteratureComparison /></TabsContent>
+          <TabsContent value="bolum3" className="space-y-6 animate-fade-in"><Chapter3Consolidated /></TabsContent>
           <TabsContent value="methodology" className="space-y-6 animate-fade-in"><MethodologyFramework /></TabsContent>
           <TabsContent value="dataset-eda" className="space-y-6 animate-fade-in"><DatasetEDA /></TabsContent>
           <TabsContent value="statistics" className="space-y-6 animate-fade-in"><StatisticalSignificance /></TabsContent>
