@@ -4,12 +4,16 @@
  * yalnızca çevrimdışıyken önbellekten yanıt verir.
  */
 
-const CACHE_NAME = 'ddos-bso-v3.0.0';
+const CACHE_NAME = 'ddos-bso-v4.0.0';
 
-// Kurulum — eski SW'yi hemen devre dışı bırak
+// Kurulum — eski SW'yi hemen devre dışı bırak, eski cacheler silinsin
 self.addEventListener('install', (event) => {
-    console.log('Service Worker kuruluyor (network-first)...');
-    self.skipWaiting();
+    console.log('Service Worker v4 kuruluyor — eski cache temizleniyor...');
+    event.waitUntil(
+        caches.keys().then((names) =>
+            Promise.all(names.map((n) => caches.delete(n)))
+        ).then(() => self.skipWaiting())
+    );
 });
 
 // Etkinleştirme — tüm eski önbellekleri temizle

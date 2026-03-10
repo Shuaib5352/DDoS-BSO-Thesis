@@ -134,7 +134,7 @@ function TableCard({ num, title, titleEN, desc }: {
 const bso = MODEL_RESULTS[0]
 const xgb = MODEL_RESULTS.find(m => m.name === "XGBoost")!
 const dt = MODEL_RESULTS.find(m => m.name === "Decision Tree")!
-const rf = MODEL_RESULTS.find(m => m.name === "Random Forest (Default)")!
+const rf = MODEL_RESULTS.find(m => m.name === "Random Forest")!
 
 export default function Chapter3Consolidated() {
     const [activeSection, setActiveSection] = useState("overview")
