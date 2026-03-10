@@ -92,7 +92,7 @@ ATTACK_TYPES = [
 
 DS = dict(
     totalFeatures=39, selectedFeatures=19, featureReductionPct=51.3,
-    totalSamples=118466, classes=5,
+    totalSamples=103218, classes=5,
     training=87500, validation=10322, testing=20644,
     smoteSyntheticSamples=15248, originalMinorityCount=2252, balancedClassCount=17500,
 )
@@ -746,7 +746,7 @@ def fig_system_architecture():
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.set_xlim(0, 10); ax.set_ylim(0, 5); ax.axis("off")
     boxes = [
-        (0.2, 3.5, "CICIoT2023\nVeri Seti\n118.466 örnek", "#dbeafe"),
+        (0.2, 3.5, "CICIoT2023\nVeri Seti\n103.218 örnek", "#dbeafe"),
         (2.2, 3.5, "Ön İşleme\nStandardScaler\nTrain/Val/Test", "#e0e7ff"),
         (4.2, 3.5, "SMOTE\nDengeleme\n72K → 87.5K", "#fce7f3"),
         (6.2, 3.5, "BSO Optimizasyonu\n50 iterasyon\n25 yarasa", "#dcfce7"),
@@ -1513,7 +1513,7 @@ def build_document():
         "Deney Tarihi: 2026-02-23\n"
         "Toplam Çalışma Süresi: 1332.6 saniye\n"
         "Veri Seti: CICIoT2023 (Neto et al., 2023)\n"
-        "Toplam Örnek: 118.466\n"
+        "Toplam Örnek: 103.218\n"
         f"Toplam Şekil: {fig_counter[0]}\n"
         f"Toplam Tablo: {tbl_counter[0]}+\n\n"
         "Hiçbir veri üretilmemiş veya uydurulmamıştır. Tüm rakamlar, "

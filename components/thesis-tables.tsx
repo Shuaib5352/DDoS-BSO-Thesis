@@ -420,7 +420,7 @@ export default function ThesisTables() {
                                     { name: "CIC-DDoS2019", year: "2019", samples: "50.063.112", features: 87, classes: 13, iot: false, currency: "Orta" },
                                     { name: "TON_IoT", year: "2020", samples: "461.043", features: 44, classes: 10, iot: true, currency: "Yüksek" },
                                     { name: "Edge-IIoTset", year: "2022", samples: "10.686.199", features: 61, classes: 14, iot: true, currency: "Yüksek" },
-                                    { name: "CICIoT2023", year: "2023", samples: "118.466*", features: 39, classes: 5, iot: true, currency: "En güncel", selected: true },
+                                    { name: "CICIoT2023", year: "2023", samples: "103.218*", features: 39, classes: 5, iot: true, currency: "En güncel", selected: true },
                                 ].map((ds, i) => (
                                     <TableRow key={ds.name} className={ds.selected ? highlight : i % 2 === 0 ? "bg-white dark:bg-slate-900" : "bg-slate-50/50 dark:bg-slate-800/30"}>
                                         <TableCell className={`${td} ${bold} ${ds.selected ? bestCell : ""}`}>{ds.name}</TableCell>
@@ -806,7 +806,7 @@ export default function ThesisTables() {
                                     ["Veri İşleme", "pandas 2.1.4, NumPy 1.26.2"],
                                     ["Dengeleme Kütüphanesi", "imbalanced-learn 0.11.0 (SMOTE)"],
                                     ["XGBoost Sürümü", "xgboost 2.0.2"],
-                                    ["Veri Seti", "CICIoT2023 — 118.466 örnek, 39 öznitelik, 5 sınıf"],
+                                    ["Veri Seti", "CICIoT2023 — 103.218 örnek, 39 öznitelik, 5 sınıf"],
                                     ["Toplam Çalışma Süresi", "1.332,6 saniye (≈22,2 dakika)"],
                                     ["Deney Tarihi", "23 Şubat 2026"],
                                     ["Çapraz Doğrulama", "10-katlı tabakalı çapraz doğrulama (Stratified K-Fold)"],

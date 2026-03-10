@@ -88,7 +88,7 @@ ATTACK_TYPES = [
 
 DATASET_STATS = dict(
     totalFeatures=39, selectedFeatures=19, featureReductionPct=51.3,
-    totalSamples=118466, classes=5,
+    totalSamples=103218, classes=5,
     training=87500, validation=10322, testing=20644,
     smoteSyntheticSamples=15248, originalMinorityCount=2252, balancedClassCount=17500,
 )
@@ -870,7 +870,7 @@ def fig_system_architecture():
     ax.set_title("Sistem Mimarisi — BSO-Hybrid RF DDoS Tespit Sistemi", fontweight="bold", fontsize=13, y=0.95)
     # Sub-labels
     sublabels = [
-        "19 CSV dosyası\n118,466 akış", "StandardScaler\nSMOTE dengeleme",
+        "19 CSV dosyası\n103,218 akış", "StandardScaler\nSMOTE dengeleme",
         "Yarasa Sürüsü\n19/39 özellik", "n_estimators=266\nmax_depth=20",
         "5 sınıf\n%89.82 doğruluk"
     ]
@@ -1061,7 +1061,7 @@ def generate_document():
     add_heading_styled(doc, "2.1 Sistem Boru Hattı", 2)
     headers = ["Aşama", "Açıklama", "Detay"]
     rows = [
-        ["1. Veri Toplama", "CICIoT2023 veri seti", "19 CSV, 118,466 akış, 39 özellik"],
+        ["1. Veri Toplama", "CICIoT2023 veri seti", "19 CSV, 103,218 akış, 39 özellik"],
         ["2. Ön İşleme", "Temizleme ve dengeleme", "StandardScaler + SMOTE"],
         ["3. BSO Optimizasyon", "Özellik seçimi + hiperparametre", "50 iterasyon, 25 popülasyon"],
         ["4. RF Sınıflandırma", "Random Forest eğitimi", "266 ağaç, max_depth=20"],

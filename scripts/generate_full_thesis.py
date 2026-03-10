@@ -151,7 +151,7 @@ P(doc,
 
 P(doc,
     "Deneyler, Canadian Institute for Cybersecurity tarafından yayınlanan CICIoT2023 "
-    "veri seti üzerinde gerçekleştirilmiştir (Neto vd., 2023). 118.466 akış kaydı ve "
+    "veri seti üzerinde gerçekleştirilmiştir (Neto vd., 2023). 103.218 akış kaydı ve "
     "39 ağ trafik özelliğinden oluşan veri seti, 5 sınıflı çok sınıflandırma problemi "
     "olarak yapılandırılmıştır. BSO, 25 yarasa × 50 iterasyon = 1.177 uygunluk "
     "değerlendirmesi sonucunda 39 özellikten 19'unu seçerek %51,3 boyut azaltma "
@@ -188,7 +188,7 @@ P(doc,
 
 P(doc,
     "Experiments were conducted on the CICIoT2023 dataset published by the Canadian "
-    "Institute for Cybersecurity (Neto et al., 2023), comprising 118,466 flow records "
+    "Institute for Cybersecurity (Neto et al., 2023), comprising 103,218 flow records "
     "and 39 network traffic features across 5 classes. BSO selected 19 out of 39 features "
     "(51.3% reduction) while optimizing RF hyperparameters (n_estimators=266, max_depth=20, "
     "min_samples_split=7, max_features=0.469) through 1,177 fitness evaluations."
@@ -905,7 +905,7 @@ P(doc,
 )
 
 steps = [
-    ("Aşama 1 — Veri Toplama:", " CICIoT2023 veri setinden 19 CSV dosyası yüklenerek 118.466 akış kaydı ve 39 özellik oluşturulmuştur (Neto vd., 2023)."),
+    ("Aşama 1 — Veri Toplama:", " CICIoT2023 veri setinden 19 CSV dosyası yüklenerek 103.218 akış kaydı ve 39 özellik oluşturulmuştur (Neto vd., 2023)."),
     ("Aşama 2 — Ön İşleme:", " Eksik değer kontrolü, tekrarlanan kayıt temizliği ve StandardScaler normalizasyonu uygulanmıştır."),
     ("Aşama 3 — Veri Bölme:", " Tabakalı bölme ile %70 eğitim (72.252), %10 doğrulama (10.322) ve %20 test (20.644)."),
     ("Aşama 4 — SMOTE:", " Yalnızca eğitim setine uygulanmış; 72.252 → 87.500 dengeli örnek (Chawla vd., 2002)."),
@@ -926,13 +926,13 @@ P(doc,
     "Bu çalışmada kullanılan CICIoT2023 veri seti, Canadian Institute for "
     "Cybersecurity tarafından 2023 yılında yayınlanmıştır (Neto vd., 2023). "
     "Gerçek IoT cihazlarından (105 cihaz, 19 saldırı senaryosu) toplanan "
-    "veri seti, 118.466 akış kaydı ve 39 ağ trafik özelliğinden oluşmaktadır."
+    "veri seti, 103.218 akış kaydı ve 39 ağ trafik özelliğinden oluşmaktadır."
 )
 
 make_table(doc,
     ["Özellik", "Değer"],
     [
-        ["Toplam Örnek", "118.466"],
+        ["Toplam Örnek", "103.218"],
         ["Özellik Sayısı", "39"],
         ["Sınıf Sayısı", "5"],
         ["Eğitim Seti (%70)", "87.500 (SMOTE sonrası)"],

@@ -450,7 +450,7 @@ doc.add_paragraph(
 doc.add_paragraph("Çalışmanın kapsamı aşağıdaki unsurları içermektedir:")
 
 scope_items = [
-    "CICIoT2023 veri seti üzerinde kapsamlı keşifsel veri analizi (EDA) — 118.466 akış kaydı, 39 özellik, 5 sınıf",
+    "CICIoT2023 veri seti üzerinde kapsamlı keşifsel veri analizi (EDA) — 103.218 akış kaydı, 39 özellik, 5 sınıf",
     "BSO ile eşzamanlı özellik seçimi ve RF hiper-parametre optimizasyonu — 25 yarasa × 50 iterasyon = 1.177 değerlendirme",
     "SMOTE ile sınıf dengesizliği ele alınması — eğitim seti 72.252'den 87.500'e yükseltilmiştir",
     "12 farklı makine öğrenmesi modeli ile karşılaştırmalı performans değerlendirmesi",
@@ -995,7 +995,7 @@ doc.add_paragraph(
 )
 
 pipeline_steps = [
-    ("Aşama 1 — Veri Toplama: ", "CICIoT2023 veri setinden 19 CSV dosyası yüklenerek 118.466 akış kaydı ve 39 özellik elde edilmiştir."),
+    ("Aşama 1 — Veri Toplama: ", "CICIoT2023 veri setinden 19 CSV dosyası yüklenerek 103.218 akış kaydı ve 39 özellik elde edilmiştir."),
     ("Aşama 2 — Ön İşleme: ", "Eksik değer kontrolü, tekrarlanan veri temizliği ve StandardScaler normalizasyonu (z-score: μ=0, σ=1) uygulanmıştır."),
     ("Aşama 3 — Veri Bölme: ", "Tabakalı (stratified) bölme ile %70 eğitim (72.252), %10 doğrulama (10.322) ve %20 test (20.644) olarak ayrılmıştır."),
     ("Aşama 4 — SMOTE: ", "Yalnızca eğitim setine SMOTE uygulanarak 72.252'den 87.500 dengeli örneğe yükseltilmiştir. Backdoor_Malware: 2.252 → 17.500 (×7,8)."),
@@ -1017,7 +1017,7 @@ doc.add_paragraph(
     "Bu çalışmada, Canadian Institute for Cybersecurity tarafından 2023 "
     "yılında yayınlanan CICIoT2023 veri seti kullanılmıştır (Neto vd., 2023). "
     "Veri seti, gerçek IoT cihazlarından (105 cihaz) toplanan ağ trafiğini "
-    "içermekte olup toplam 118.466 örnek ve 39 ağ trafik özelliğinden "
+    "içermekte olup toplam 103.218 örnek ve 39 ağ trafik özelliğinden "
     "oluşmaktadır."
 )
 
@@ -1026,7 +1026,7 @@ add_formatted_table(
     doc,
     headers=["Özellik", "Değer"],
     rows=[
-        ["Toplam Örnek Sayısı", "118.466"],
+        ["Toplam Örnek Sayısı", "103.218"],
         ["Özellik Sayısı", "39"],
         ["Sınıf Sayısı", "5"],
         ["Eğitim Seti (%70)", "87.500 (SMOTE sonrası)"],

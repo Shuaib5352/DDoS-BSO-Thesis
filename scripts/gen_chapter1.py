@@ -413,7 +413,7 @@ P(doc,
 scopes = [
     ("(a) Veri Seti ve Keşifsel Analiz: ", "Canadian Institute for "
      "Cybersecurity tarafından yayınlanan CICIoT2023 veri seti "
-     "(Neto vd., 2023) üzerinde 118.466 akış kaydı ve 39 özelliğin "
+     "(Neto vd., 2023) üzerinde 103.218 akış kaydı ve 39 özelliğin "
      "5 sınıflı çok sınıflandırma problemi olarak yapılandırılması."),
     ("(b) BSO Optimizasyonu: ", "25 yarasa × 50 iterasyon = 1.177 "
      "uygunluk değerlendirmesi ile eşzamanlı özellik seçimi (39→19, "

@@ -717,7 +717,7 @@ const QA_DATA: QAItem[] = [
         answer: [
             "Bu çok sık sorulan ve önemli bir sorudur:",
             "1) Tezin Odağı: Bu tez, meta-sezgisel optimizasyon ile öznitelik mühendisliği üzerine odaklanmaktadır. Derin öğrenme farklı bir araştırma yönelimidir.",
-            "2) Veri Boyutu: CICIoT2023'teki 118.466 örnek, derin öğrenme için nispeten küçüktür. Derin modeller genellikle milyonlarca örnekle en iyi performansı gösterir.",
+            "2) Veri Boyutu: CICIoT2023'teki 103.218 örnek, derin öğrenme için nispeten küçüktür. Derin modeller genellikle milyonlarca örnekle en iyi performansı gösterir.",
             "3) Öznitelik Türü: Tablo (tabular) verilerinde, RF ve XGBoost gibi ağaç tabanlı modeller genellikle derin öğrenmeden daha iyi veya eşdeğer performans gösterir (Kaggle yarışmaları ve literatür bunu destekler).",
             "4) Yorumlanabilirlik: RF öznitelik önem sıralaması sunar. Derin öğrenme modelleri 'kara kutu' niteliğindedir ve güvenlik uygulamalarında bu bir dezavantajdır.",
             "5) BSO Uyumluluğu: BSO'nun öznitelik seçimi mekanizması, açık öznitelik tanımları olan modellerde en etkilidir. DL'de öznitelik seçimi otomatik (gizli katmanlar) yapılır.",
@@ -950,8 +950,8 @@ export default function ThesisDefenseQA() {
                             <button
                                 onClick={() => setSelectedCategory("all")}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${selectedCategory === "all"
-                                        ? "bg-indigo-600 text-white shadow-md"
-                                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                                    ? "bg-indigo-600 text-white shadow-md"
+                                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                                     }`}
                             >
                                 Tümü ({QA_DATA.length})
@@ -961,8 +961,8 @@ export default function ThesisDefenseQA() {
                                     key={cat.id}
                                     onClick={() => setSelectedCategory(cat.id)}
                                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${selectedCategory === cat.id
-                                            ? "bg-indigo-600 text-white shadow-md"
-                                            : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                                        ? "bg-indigo-600 text-white shadow-md"
+                                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                                         }`}
                                 >
                                     {cat.label} ({cat.count})
@@ -979,8 +979,8 @@ export default function ThesisDefenseQA() {
                                         key={d}
                                         onClick={() => setDifficultyFilter(d)}
                                         className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${difficultyFilter === d
-                                                ? d === "all" ? "bg-slate-700 text-white" : difficultyColor(d)
-                                                : "bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
+                                            ? d === "all" ? "bg-slate-700 text-white" : difficultyColor(d)
+                                            : "bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
                                             }`}
                                     >
                                         {d === "all" ? "Tümü" : difficultyLabel(d)}
@@ -1009,8 +1009,8 @@ export default function ThesisDefenseQA() {
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id === selectedCategory ? "all" : cat.id)}
                             className={`p-4 rounded-xl border transition-all text-left card-hover-lift ${selectedCategory === cat.id
-                                    ? "border-indigo-400 dark:border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/30 ring-2 ring-indigo-500/20"
-                                    : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900/50"
+                                ? "border-indigo-400 dark:border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/30 ring-2 ring-indigo-500/20"
+                                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900/50"
                                 }`}
                         >
                             <div className={`inline-flex p-2 rounded-lg bg-gradient-to-br ${cat.gradient} mb-2`}>
@@ -1042,8 +1042,8 @@ export default function ThesisDefenseQA() {
                         <Card
                             key={qa.id}
                             className={`overflow-hidden transition-all duration-300 ${isExpanded
-                                    ? "ring-2 ring-indigo-500/30 border-indigo-300 dark:border-indigo-700 shadow-lg"
-                                    : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md"
+                                ? "ring-2 ring-indigo-500/30 border-indigo-300 dark:border-indigo-700 shadow-lg"
+                                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md"
                                 }`}
                         >
                             {/* Question Header */}
@@ -1069,8 +1069,8 @@ export default function ThesisDefenseQA() {
                                     </h3>
                                 </div>
                                 <div className={`flex-shrink-0 p-1.5 rounded-full transition-all duration-300 ${isExpanded
-                                        ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rotate-180"
-                                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                                    ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rotate-180"
+                                    : "bg-slate-100 dark:bg-slate-800 text-slate-400"
                                     }`}>
                                     <ChevronDown className="w-4 h-4" />
                                 </div>

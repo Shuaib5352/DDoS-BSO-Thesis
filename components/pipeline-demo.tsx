@@ -129,10 +129,10 @@ export default function PipelineDemo() {
                                     <button
                                         onClick={() => goToStep(i)}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-xs font-medium ${isActive
-                                                ? `bg-gradient-to-r ${s.gradient} text-white shadow-lg scale-105`
-                                                : isDone
-                                                    ? "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                                                    : "text-slate-400 dark:text-slate-500 hover:text-slate-600"
+                                            ? `bg-gradient-to-r ${s.gradient} text-white shadow-lg scale-105`
+                                            : isDone
+                                                ? "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                                                : "text-slate-400 dark:text-slate-500 hover:text-slate-600"
                                             }`}
                                     >
                                         {isDone ? (
@@ -164,8 +164,8 @@ export default function PipelineDemo() {
                         <button
                             onClick={handlePlay}
                             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isPlaying
-                                    ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200"
-                                    : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200"
+                                ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200"
+                                : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200"
                                 }`}
                         >
                             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -220,7 +220,7 @@ function StepRawData() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-3">
-                        <StatBox label="Toplam Örnek" value="118.466" color="blue" />
+                        <StatBox label="Toplam Örnek" value="103.218" color="blue" />
                         <StatBox label="Toplam Öznitelik" value="39" color="indigo" />
                         <StatBox label="Sınıf Sayısı" value="5" color="purple" />
                         <StatBox label="CSV Dosyası" value="19 adet" color="violet" />
@@ -279,7 +279,7 @@ function StepRawData() {
    ═══════════════════════════════════════════════════════════════ */
 function StepPreprocessing() {
     const steps = [
-        { step: "1. Veri Yükleme", detail: "19 CSV dosyasından verilerin okunması", before: "Ham CSV", after: "DataFrame (118.466 × 39)", icon: FileSpreadsheet, color: "bg-blue-500" },
+        { step: "1. Veri Yükleme", detail: "19 CSV dosyasından verilerin okunması", before: "Ham CSV", after: "DataFrame (103.218 × 39)", icon: FileSpreadsheet, color: "bg-blue-500" },
         { step: "2. Alt Örnekleme", detail: "Çoğunluk sınıflarının 25.000 örneğe indirilmesi", before: "Dengesiz dağılım", after: "25.000/sınıf (maks)", icon: Filter, color: "bg-purple-500" },
         { step: "3. Eğitim/Test Bölme", detail: "Tabakalı (stratified) bölme: %70 / %10 / %20", before: "Tek veri seti", after: "87.500 / 10.322 / 20.644", icon: Layers, color: "bg-indigo-500" },
         { step: "4. StandardScaler", detail: "Her özniteliğin ortalaması=0, std=1 yapılır", before: "Farklı ölçekler", after: "Normalleştirilmiş [0,1]", icon: BarChart3, color: "bg-teal-500" },
@@ -518,8 +518,8 @@ function StepFeatureSelection() {
                                 <Badge
                                     key={i}
                                     className={`text-[10px] px-2 py-0.5 font-mono transition-all ${isSelected
-                                            ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700"
-                                            : "bg-red-50 dark:bg-red-950/20 text-red-400 dark:text-red-500 border-red-200 dark:border-red-800 line-through opacity-60"
+                                        ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700"
+                                        : "bg-red-50 dark:bg-red-950/20 text-red-400 dark:text-red-500 border-red-200 dark:border-red-800 line-through opacity-60"
                                         }`}
                                     variant="outline"
                                 >

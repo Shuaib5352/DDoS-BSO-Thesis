@@ -2,11 +2,11 @@
 // CICIoT2023 DATASET — REAL EXPERIMENT RESULTS (BSO-Hybrid v4)
 // =============================================================================
 // Generated from: scripts/real_experiment.py
-// Dataset: CICIoT2023 — Real Network Traffic
+// Dataset: CICIoT2023 — Real Network Traffic (103,218 samples after undersampling)
 // Author: SHUAIB AYAD JASIM
 // Experiment Date: 2026-02-23
 // Total Runtime: 1332.6 s (22.2 min)
-// SMOTE: Applied (72,252 → 87,500 training samples)
+// SMOTE: Applied on training set only (72,252 → 87,500 training samples)
 // BSO-Hybrid: Joint feature selection + RF hyperparameter optimization
 // =============================================================================
 
@@ -67,14 +67,19 @@ export const CICIOT2023_ATTACK_TYPES = [
 ]
 
 // ---------------------------------------------------------------------------
-// 3. DATASET STATISTICS (after SMOTE balancing)
+// 3. DATASET STATISTICS
+// ---------------------------------------------------------------------------
+// Original CICIoT2023: 25,000×4 majority + 3,218 Backdoor = 103,218 samples
+// After SMOTE (training only): 87,500 + 10,322 + 20,644 = 118,466 grand total
 // ---------------------------------------------------------------------------
 export const DATASET_STATISTICS = {
   totalFeatures: 39,
   selectedFeatures: 19,
   featureReductionPct: 51.3,
-  totalSamples: 118466,
+  totalSamples: 103218,
+  grandTotalAfterSmote: 118466,
   totalFlows: { training: 87500, validation: 10322, testing: 20644 },
+  preSMOTETraining: 72252,
   splitRatio: "70/10/20 (stratified)",
   smoteApplied: true,
   smoteSyntheticSamples: 15248,
@@ -83,7 +88,7 @@ export const DATASET_STATISTICS = {
   classes: 5,
   preprocessingSteps: [
     "Loaded 19 CSV files from CICIoT2023",
-    "Random undersampling to 25,000 per majority class",
+    "Random undersampling to 25,000 per majority class (103,218 total)",
     "Stratified train/val/test split (70/10/20)",
     "SMOTE oversampling on training set (72,252 → 87,500)",
     "StandardScaler normalization",

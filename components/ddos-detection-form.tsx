@@ -355,8 +355,8 @@ export default function DDoSDetectionForm() {
                                     <div
                                         key={at.name}
                                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all ${at.name === result.label
-                                                ? "bg-white dark:bg-slate-800 shadow-md font-bold border border-slate-200 dark:border-slate-600 scale-105"
-                                                : "text-slate-500 dark:text-slate-400"
+                                            ? "bg-white dark:bg-slate-800 shadow-md font-bold border border-slate-200 dark:border-slate-600 scale-105"
+                                            : "text-slate-500 dark:text-slate-400"
                                             }`}
                                     >
                                         <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: at.color }} />
@@ -377,7 +377,7 @@ export default function DDoSDetectionForm() {
                     <div className="space-y-1">
                         <p><strong>Bu bir simülasyondur.</strong> Sınıflandırma sonuçları, BSO-Hibrit RF modelinin gerçek deney sonuçlarına dayalı karar sınırlarını taklit eder.</p>
                         <p className="text-xs text-blue-700 dark:text-blue-300">
-                            Gerçek model: CICIoT2023 veri seti | 118.466 örnek | 5 sınıf | %89.82 Doğruluk | %84.24 F1-Makro | %98.38 AUC-ROC
+                            Gerçek model: CICIoT2023 veri seti | 103.218 örnek | 5 sınıf | %89.82 Doğruluk | %84.24 F1-Makro | %98.38 AUC-ROC
                         </p>
                     </div>
                 </CardContent>

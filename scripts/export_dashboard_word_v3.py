@@ -96,7 +96,7 @@ ATTACK_TYPES = [
 
 DS = dict(
     totalFeatures=39, selectedFeatures=19, featureReductionPct=51.3,
-    totalSamples=118466, classes=5,
+    totalSamples=103218, classes=5,
     training=87500, validation=10322, testing=20644,
     smoteSyntheticSamples=15248, originalMinorityCount=2252, balancedClassCount=17500,
 )
@@ -547,7 +547,7 @@ REF_DATASETS = [
     ("CIC-DDoS2019",2019,"50.063.112",87,13,"Hayır","DDoS odaklı"),
     ("TON_IoT",2020,"461.043",44,10,"Evet","IoT odaklı"),
     ("Edge-IIoTset",2022,"10.686.199",61,14,"Evet","IIoT odaklı"),
-    ("CICIoT2023",2023,"118.466*",39,5,"Evet","Bu çalışma"),
+    ("CICIoT2023",2023,"103.218*",39,5,"Evet","Bu çalışma"),
 ]
 
 # =============================================================================
@@ -896,7 +896,7 @@ def fig_system_arch():
     fig, ax = plt.subplots(figsize=(12, 5))
     ax.set_xlim(0, 12); ax.set_ylim(0, 5); ax.axis("off")
     boxes = [
-        (0.3,3.2,"CICIoT2023\n118.466 örnek\n39 öznitelik","#dbeafe"),
+        (0.3,3.2,"CICIoT2023\n103.218 örnek\n39 öznitelik","#dbeafe"),
         (2.3,3.2,"Ön İşleme\nBölme (70/10/20)\nStandardScaler","#e0e7ff"),
         (4.3,3.2,"SMOTE\n72.252 → 87.500\n5 × 17.500","#fce7f3"),
         (6.3,3.2,"BSO Optimizasyonu\n25 yarasa × 50 iter\nFitness: 0.1778","#dcfce7"),
@@ -1431,7 +1431,7 @@ def build_document():
         ["İşletim Sistemi","Ubuntu 22.04 LTS / Windows 11"],["Programlama Dili","Python 3.10"],
         ["ML Kütüphanesi","scikit-learn 1.3.2"],["Optimizasyon","Özel BSO (Python/NumPy)"],
         ["Veri İşleme","pandas 2.1.4, NumPy 1.26.2"],["Dengeleme","imbalanced-learn 0.11.0 (SMOTE)"],
-        ["XGBoost","xgboost 2.0.2"],["Veri Seti","CICIoT2023 — 118.466 örnek"],
+        ["XGBoost","xgboost 2.0.2"],["Veri Seti","CICIoT2023 — 103.218 örnek"],
         ["Toplam Süre","1.332,6 saniye (≈22,2 dk)"],["Tarih","23 Şubat 2026"],
         ["Çapraz Doğrulama","10-katlı tabakalı"],["Tekrarlanabilirlik","random_state=42"],
     ]

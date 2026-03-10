@@ -204,7 +204,7 @@ export default function ThesisResultsChapter() {
                                 </Badge>
                                 <Badge variant="outline" className="px-3 py-1 text-xs">
                                     <Database className="w-3 h-3 mr-1" />
-                                    CICIoT2023 — 118,466 {t("samples", "عينة", "örnek")}
+                                    CICIoT2023 — 103,218 {t("samples", "عينة", "örnek")}
                                 </Badge>
                                 <Badge variant="outline" className="px-3 py-1 text-xs">
                                     <Clock className="w-3 h-3 mr-1" />
