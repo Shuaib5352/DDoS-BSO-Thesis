@@ -2,6 +2,7 @@
 """
 Extract cross-validation fold scores for statistical analysis
 Generates CSV files suitable for Paired t-test, Wilcoxon, and Cohen's d calculations
+Reference model: BSO-Hybrid RF (Proposed)
 """
 
 import json
@@ -71,6 +72,12 @@ def export_folds_to_csv(fold_data: Dict[str, Dict[str, List[float]]],
         print(f"✗ No data found for metric: {metric}")
         return
     
+    # Sort with reference model first
+    reference_model = "BSO-Hybrid RF (Proposed)"
+    if reference_model in models:
+        models.remove(reference_model)
+        models = [reference_model] + sorted(models)
+    
     # Write CSV
     with open(output_file, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
@@ -122,6 +129,12 @@ def export_summary_statistics(fold_data: Dict[str, Dict[str, List[float]]],
             }
             rows.append(row)
     
+    # Sort with reference model first
+    reference_model = "BSO-Hybrid RF (Proposed)"
+    reference_rows = [r for r in rows if r['Model'] == reference_model]
+    other_rows = sorted([r for r in rows if r['Model'] != reference_model], key=lambda x: x['Model'])
+    rows = reference_rows + other_rows
+    
     # Write CSV
     fieldnames = ['Model', 'Metric', 'Folds', 'Mean', 'Std', 'Min', 'Max', 'Median', 'Q1', 'Q3']
     with open(output_file, 'w', newline='', encoding='utf-8') as f:
@@ -136,73 +149,89 @@ def calculate_statistical_tests(fold_data: Dict[str, Dict[str, List[float]]],
                                 output_file: str, metric: str = 'accuracy') -> None:
     """
     Calculate paired t-tests, Wilcoxon tests, and Cohen's d
+    Reference model: BSO-Hybrid RF (Proposed)
     
     Args:
         fold_data: Dictionary with model fold scores
         output_file: Path to output CSV file
         metric: Metric to analyze
     """
-    models = list(fold_data.keys())
-    rows = []
-    
     # Get scores for the metric
     scores_dict = {}
-    for model in models:
-        if metric in fold_data[model]:
-            scores_dict[model] = np.array(fold_data[model][metric])
+    for model_name, model_metrics in fold_data.items():
+        if metric in model_metrics:
+            scores_dict[model_name] = np.array(model_metrics[metric])
     
     if len(scores_dict) < 2:
         print(f"✗ Need at least 2 models with '{metric}' data for statistical tests")
         return
     
-    # Pairwise comparisons
-    models_with_data = list(scores_dict.keys())
-    for i in range(len(models_with_data)):
-        for j in range(i + 1, len(models_with_data)):
-            model1 = models_with_data[i]
-            model2 = models_with_data[j]
-            
-            scores1 = scores_dict[model1]
-            scores2 = scores_dict[model2]
-            
-            # Paired t-test
-            t_stat, t_pvalue = stats.ttest_rel(scores1, scores2)
-            
-            # Wilcoxon signed-rank test
-            w_stat, w_pvalue = stats.wilcoxon(scores1, scores2)
-            
-            # Cohen's d
-            diff = scores1 - scores2
-            cohens_d = np.mean(diff) / np.std(diff, ddof=1)
-            
-            # Effect size interpretation
-            if abs(cohens_d) < 0.2:
-                effect = "negligible"
-            elif abs(cohens_d) < 0.5:
-                effect = "small"
-            elif abs(cohens_d) < 0.8:
-                effect = "medium"
-            else:
-                effect = "large"
-            
-            row = {
-                'Comparison': f"{model1} vs {model2}",
-                'Model_1': model1,
-                'Model_2': model2,
-                'Mean_Diff': np.mean(diff),
-                'T_Statistic': t_stat,
-                'T_p_value': t_pvalue,
-                'T_Significant': 'Yes' if t_pvalue < 0.05 else 'No',
-                'Wilcoxon_Statistic': w_stat,
-                'Wilcoxon_p_value': w_pvalue,
-                'Wilcoxon_Significant': 'Yes' if w_pvalue < 0.05 else 'No',
-                'Cohens_d': cohens_d,
-                'Effect_Size': effect
-            }
-            rows.append(row)
+    # Reference model
+    reference_model = "BSO-Hybrid RF (Proposed)"
+    if reference_model not in scores_dict:
+        print(f"✗ Reference model '{reference_model}' not found!")
+        print(f"  Available models: {list(scores_dict.keys())}")
+        return
+    
+    rows = []
+    scores1 = scores_dict[reference_model]
+    
+    # Compare reference with all other models
+    for model2 in sorted(scores_dict.keys()):
+        if model2 == reference_model:
+            continue
+        
+        scores2 = scores_dict[model2]
+        
+        # Ensure same length
+        if len(scores1) != len(scores2):
+            print(f"⚠ Warning: {reference_model} has {len(scores1)} folds, {model2} has {len(scores2)} folds")
+            min_len = min(len(scores1), len(scores2))
+            s1 = scores1[:min_len]
+            s2 = scores2[:min_len]
+        else:
+            s1 = scores1
+            s2 = scores2
+        
+        # Paired t-test
+        t_stat, t_pvalue = stats.ttest_rel(s1, s2)
+        
+        # Wilcoxon signed-rank test
+        w_stat, w_pvalue = stats.wilcoxon(s1, s2)
+        
+        # Cohen's d
+        diff = s1 - s2
+        mean_diff = np.mean(diff)
+        cohens_d = mean_diff / np.std(diff, ddof=1)
+        
+        # Effect size interpretation
+        if abs(cohens_d) < 0.2:
+            effect = "negligible"
+        elif abs(cohens_d) < 0.5:
+            effect = "small"
+        elif abs(cohens_d) < 0.8:
+            effect = "medium"
+        else:
+            effect = "large"
+        
+        row = {
+            'Comparison': f"{reference_model} vs {model2}",
+            'Baseline_Model': reference_model,
+            'Comparison_Model': model2,
+            'Mean_Diff': mean_diff,
+            'T_Statistic': t_stat,
+            'T_p_value': t_pvalue,
+            'T_Significant': 'Yes' if t_pvalue < 0.05 else 'No',
+            'Wilcoxon_Statistic': w_stat,
+            'Wilcoxon_p_value': w_pvalue,
+            'Wilcoxon_Significant': 'Yes' if w_pvalue < 0.05 else 'No',
+            'Cohens_d': cohens_d,
+            'Effect_Size': effect
+        }
+        rows.append(row)
     
     # Write CSV
-    fieldnames = ['Comparison', 'Model_1', 'Model_2', 'Mean_Diff', 'T_Statistic', 
+    fieldnames = ['Comparison', 'Baseline_Model', 'Comparison_Model', 'Mean_Diff', 'T_Statistic', 
                   'T_p_value', 'T_Significant', 'Wilcoxon_Statistic', 'Wilcoxon_p_value',
                   'Wilcoxon_Significant', 'Cohens_d', 'Effect_Size']
     
@@ -212,6 +241,7 @@ def calculate_statistical_tests(fold_data: Dict[str, Dict[str, List[float]]],
         writer.writerows(rows)
     
     print(f"✓ Statistical tests for '{metric}' exported to: {output_file}")
+    print(f"  Reference Model: {reference_model}")
     print(f"  Comparisons: {len(rows)}")
 
 
@@ -222,9 +252,10 @@ def main():
     json_file = repo_root / 'public' / 'experiment_results.json'
     output_dir = repo_root / 'public'
     
-    print("=" * 70)
+    print("=" * 80)
     print("Cross-Validation Fold Scores Extraction & Statistical Analysis")
-    print("=" * 70)
+    print("Reference Model: BSO-Hybrid RF (Proposed)")
+    print("=" * 80)
     
     # Check if JSON file exists
     if not json_file.exists():
@@ -243,38 +274,50 @@ def main():
     print(f"✓ Found {len(fold_data)} models")
     print(f"✓ Available metrics: {', '.join(metrics)}\n")
     
+    # List all models
+    print("Models found:")
+    for i, model in enumerate(sorted(fold_data.keys()), 1):
+        prefix = "🔴 " if model == "BSO-Hybrid RF (Proposed)" else "   "
+        print(f"{prefix}{i}. {model}")
+    print()
+    
     # Export fold scores for each metric
-    print("1. Exporting fold scores by metric:")
-    print("-" * 70)
+    print("\n1. Exporting fold scores by metric:")
+    print("-" * 80)
     for metric in metrics:
         csv_file = output_dir / f'cross_validation_folds_{metric}.csv'
         export_folds_to_csv(fold_data, str(csv_file), metric)
     
     # Export summary statistics
     print("\n2. Exporting summary statistics:")
-    print("-" * 70)
+    print("-" * 80)
     summary_file = output_dir / 'cross_validation_summary.csv'
     export_summary_statistics(fold_data, str(summary_file))
     
     # Calculate statistical tests for each metric
-    print("\n3. Calculating statistical tests:")
-    print("-" * 70)
+    print("\n3. Calculating statistical tests (BSO-Hybrid RF as reference):")
+    print("-" * 80)
     for metric in metrics:
         test_file = output_dir / f'statistical_tests_{metric}.csv'
         calculate_statistical_tests(fold_data, str(test_file), metric)
     
     # Print detailed summary
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 80)
     print("DETAILED SUMMARY")
-    print("=" * 70)
-    for model_name, metrics_dict in fold_data.items():
-        print(f"\n{model_name}:")
-        for metric_name, scores in metrics_dict.items():
+    print("=" * 80)
+    for model_name, metrics_dict in sorted(fold_data.items()):
+        ref_mark = " 🔴 [REFERENCE]" if model_name == "BSO-Hybrid RF (Proposed)" else ""
+        print(f"\n{model_name}{ref_mark}:")
+        for metric_name, scores in sorted(metrics_dict.items()):
             scores_arr = np.array(scores)
             print(f"  {metric_name}:")
-            print(f"    Scores: {scores}")
+            print(f"    Scores: {[f'{s:.2f}' for s in scores]}")
             print(f"    Mean ± Std: {np.mean(scores_arr):.2f} ± {np.std(scores_arr, ddof=1):.4f}")
             print(f"    Range: [{np.min(scores_arr):.2f}, {np.max(scores_arr):.2f}]")
+    
+    print("\n" + "=" * 80)
+    print("✓ All exports completed!")
+    print("=" * 80)
 
 
 if __name__ == '__main__':
