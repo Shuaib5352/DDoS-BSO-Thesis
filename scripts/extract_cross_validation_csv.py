@@ -1,124 +1,280 @@
 #!/usr/bin/env python3
 """
-Extract cross-validation results from experiment_results.json and export to CSV
+Extract cross-validation fold scores for statistical analysis
+Generates CSV files suitable for Paired t-test, Wilcoxon, and Cohen's d calculations
 """
 
 import json
 import csv
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
+import numpy as np
+from scipy import stats
 
-def extract_cross_validation_data(json_file: str) -> List[Dict[str, Any]]:
+def extract_fold_scores(json_file: str) -> Tuple[Dict[str, Dict[str, List[float]]], List[str]]:
     """
-    Extract cross-validation results from JSON file.
+    Extract fold scores from experiment_results.json
     
     Args:
         json_file: Path to experiment_results.json
         
     Returns:
-        List of dictionaries containing cross-validation data
+        Tuple of (fold_data dict, metrics list)
     """
     with open(json_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    cv_results = []
+    fold_data = {}
+    metrics = set()
     
-    # Extract cross-validation data
     if 'crossValidation' in data:
         cv_data = data['crossValidation']
         
-        for model_name, metrics in cv_data.items():
-            row = {'Model': model_name}
+        for model_name, model_metrics in cv_data.items():
+            fold_data[model_name] = {}
             
-            # Add all metrics from the CV data
-            for metric_name, metric_values in metrics.items():
-                if isinstance(metric_values, dict):
-                    # Handle metrics with mean and std (e.g., accuracy, f1Macro)
-                    if 'mean' in metric_values:
-                        row[f'{metric_name}_Mean'] = metric_values['mean']
-                    if 'std' in metric_values:
-                        row[f'{metric_name}_Std'] = metric_values['std']
-                else:
-                    row[metric_name] = metric_values
-            
-            cv_results.append(row)
+            # Extract scores for each metric
+            for metric_name, metric_data in model_metrics.items():
+                if metric_name == 'folds':
+                    continue
+                    
+                if isinstance(metric_data, dict) and 'scores' in metric_data:
+                    fold_data[model_name][metric_name] = metric_data['scores']
+                    metrics.add(metric_name)
     
-    return cv_results
+    return fold_data, sorted(list(metrics))
 
 
-def export_to_csv(data: List[Dict[str, Any]], output_file: str) -> None:
+def export_folds_to_csv(fold_data: Dict[str, Dict[str, List[float]]], 
+                        output_file: str, metric: str = 'accuracy') -> None:
     """
-    Export cross-validation data to CSV file.
+    Export fold scores to CSV for statistical analysis
     
     Args:
-        data: List of dictionaries with cross-validation results
+        fold_data: Dictionary with model fold scores
         output_file: Path to output CSV file
+        metric: Metric to export (accuracy, f1Macro, precision, recall)
     """
-    if not data:
-        print("No cross-validation data found!")
+    # Extract fold scores for the specified metric
+    models = []
+    fold_scores = {}
+    max_folds = 0
+    
+    for model_name, metrics in fold_data.items():
+        if metric in metrics:
+            scores = metrics[metric]
+            fold_scores[model_name] = scores
+            models.append(model_name)
+            max_folds = max(max_folds, len(scores))
+    
+    if not models:
+        print(f"✗ No data found for metric: {metric}")
         return
     
-    # Get all unique fieldnames
-    fieldnames = set()
-    for row in data:
-        fieldnames.update(row.keys())
+    # Write CSV
+    with open(output_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        
+        # Header
+        header = ['Fold'] + models
+        writer.writerow(header)
+        
+        # Data rows
+        for fold_idx in range(max_folds):
+            row = [f'Fold_{fold_idx + 1}']
+            for model in models:
+                if fold_idx < len(fold_scores[model]):
+                    row.append(fold_scores[model][fold_idx])
+                else:
+                    row.append('')
+            writer.writerow(row)
     
-    # Sort fieldnames with 'Model' first
-    fieldnames = sorted(list(fieldnames))
-    if 'Model' in fieldnames:
-        fieldnames.remove('Model')
-        fieldnames = ['Model'] + fieldnames
+    print(f"✓ Fold scores for '{metric}' exported to: {output_file}")
+    print(f"  Models: {len(models)}")
+    print(f"  Folds: {max_folds}")
+
+
+def export_summary_statistics(fold_data: Dict[str, Dict[str, List[float]]], 
+                              output_file: str) -> None:
+    """
+    Export summary statistics for all metrics
+    
+    Args:
+        fold_data: Dictionary with model fold scores
+        output_file: Path to output CSV file
+    """
+    rows = []
+    
+    for model_name, metrics in fold_data.items():
+        for metric_name, scores in metrics.items():
+            scores_arr = np.array(scores)
+            row = {
+                'Model': model_name,
+                'Metric': metric_name,
+                'Folds': len(scores),
+                'Mean': np.mean(scores_arr),
+                'Std': np.std(scores_arr, ddof=1),
+                'Min': np.min(scores_arr),
+                'Max': np.max(scores_arr),
+                'Median': np.median(scores_arr),
+                'Q1': np.percentile(scores_arr, 25),
+                'Q3': np.percentile(scores_arr, 75)
+            }
+            rows.append(row)
+    
+    # Write CSV
+    fieldnames = ['Model', 'Metric', 'Folds', 'Mean', 'Std', 'Min', 'Max', 'Median', 'Q1', 'Q3']
+    with open(output_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    
+    print(f"✓ Summary statistics exported to: {output_file}")
+
+
+def calculate_statistical_tests(fold_data: Dict[str, Dict[str, List[float]]], 
+                                output_file: str, metric: str = 'accuracy') -> None:
+    """
+    Calculate paired t-tests, Wilcoxon tests, and Cohen's d
+    
+    Args:
+        fold_data: Dictionary with model fold scores
+        output_file: Path to output CSV file
+        metric: Metric to analyze
+    """
+    models = list(fold_data.keys())
+    rows = []
+    
+    # Get scores for the metric
+    scores_dict = {}
+    for model in models:
+        if metric in fold_data[model]:
+            scores_dict[model] = np.array(fold_data[model][metric])
+    
+    if len(scores_dict) < 2:
+        print(f"✗ Need at least 2 models with '{metric}' data for statistical tests")
+        return
+    
+    # Pairwise comparisons
+    models_with_data = list(scores_dict.keys())
+    for i in range(len(models_with_data)):
+        for j in range(i + 1, len(models_with_data)):
+            model1 = models_with_data[i]
+            model2 = models_with_data[j]
+            
+            scores1 = scores_dict[model1]
+            scores2 = scores_dict[model2]
+            
+            # Paired t-test
+            t_stat, t_pvalue = stats.ttest_rel(scores1, scores2)
+            
+            # Wilcoxon signed-rank test
+            w_stat, w_pvalue = stats.wilcoxon(scores1, scores2)
+            
+            # Cohen's d
+            diff = scores1 - scores2
+            cohens_d = np.mean(diff) / np.std(diff, ddof=1)
+            
+            # Effect size interpretation
+            if abs(cohens_d) < 0.2:
+                effect = "negligible"
+            elif abs(cohens_d) < 0.5:
+                effect = "small"
+            elif abs(cohens_d) < 0.8:
+                effect = "medium"
+            else:
+                effect = "large"
+            
+            row = {
+                'Comparison': f"{model1} vs {model2}",
+                'Model_1': model1,
+                'Model_2': model2,
+                'Mean_Diff': np.mean(diff),
+                'T_Statistic': t_stat,
+                'T_p_value': t_pvalue,
+                'T_Significant': 'Yes' if t_pvalue < 0.05 else 'No',
+                'Wilcoxon_Statistic': w_stat,
+                'Wilcoxon_p_value': w_pvalue,
+                'Wilcoxon_Significant': 'Yes' if w_pvalue < 0.05 else 'No',
+                'Cohens_d': cohens_d,
+                'Effect_Size': effect
+            }
+            rows.append(row)
+    
+    # Write CSV
+    fieldnames = ['Comparison', 'Model_1', 'Model_2', 'Mean_Diff', 'T_Statistic', 
+                  'T_p_value', 'T_Significant', 'Wilcoxon_Statistic', 'Wilcoxon_p_value',
+                  'Wilcoxon_Significant', 'Cohens_d', 'Effect_Size']
     
     with open(output_file, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(data)
+        writer.writerows(rows)
     
-    print(f"✓ Cross-validation results exported to: {output_file}")
-    print(f"✓ Total models: {len(data)}")
-    print(f"✓ Total metrics: {len(fieldnames) - 1}")
+    print(f"✓ Statistical tests for '{metric}' exported to: {output_file}")
+    print(f"  Comparisons: {len(rows)}")
 
 
 def main():
     """Main execution function"""
-    # Define paths
     script_dir = Path(__file__).parent
     repo_root = script_dir.parent
     json_file = repo_root / 'public' / 'experiment_results.json'
-    csv_file = repo_root / 'public' / 'cross_validation_results.csv'
+    output_dir = repo_root / 'public'
     
-    print("=" * 60)
-    print("Cross-Validation Results Extraction Tool")
-    print("=" * 60)
+    print("=" * 70)
+    print("Cross-Validation Fold Scores Extraction & Statistical Analysis")
+    print("=" * 70)
     
     # Check if JSON file exists
     if not json_file.exists():
         print(f"✗ Error: {json_file} not found!")
         return
     
-    print(f"📄 Reading from: {json_file}")
+    print(f"📄 Reading from: {json_file}\n")
     
-    # Extract data
-    cv_data = extract_cross_validation_data(str(json_file))
+    # Extract fold data
+    fold_data, metrics = extract_fold_scores(str(json_file))
     
-    if cv_data:
-        # Export to CSV
-        export_to_csv(cv_data, str(csv_file))
-        
-        # Print summary
-        print("\n" + "=" * 60)
-        print("Summary:")
-        print("=" * 60)
-        for idx, row in enumerate(cv_data, 1):
-            print(f"\n{idx}. {row.get('Model', 'Unknown')}:")
-            for key, value in sorted(row.items()):
-                if key != 'Model':
-                    if isinstance(value, float):
-                        print(f"   {key}: {value:.4f}")
-                    else:
-                        print(f"   {key}: {value}")
-    else:
+    if not fold_data:
         print("✗ No cross-validation data found!")
+        return
+    
+    print(f"✓ Found {len(fold_data)} models")
+    print(f"✓ Available metrics: {', '.join(metrics)}\n")
+    
+    # Export fold scores for each metric
+    print("1. Exporting fold scores by metric:")
+    print("-" * 70)
+    for metric in metrics:
+        csv_file = output_dir / f'cross_validation_folds_{metric}.csv'
+        export_folds_to_csv(fold_data, str(csv_file), metric)
+    
+    # Export summary statistics
+    print("\n2. Exporting summary statistics:")
+    print("-" * 70)
+    summary_file = output_dir / 'cross_validation_summary.csv'
+    export_summary_statistics(fold_data, str(summary_file))
+    
+    # Calculate statistical tests for each metric
+    print("\n3. Calculating statistical tests:")
+    print("-" * 70)
+    for metric in metrics:
+        test_file = output_dir / f'statistical_tests_{metric}.csv'
+        calculate_statistical_tests(fold_data, str(test_file), metric)
+    
+    # Print detailed summary
+    print("\n" + "=" * 70)
+    print("DETAILED SUMMARY")
+    print("=" * 70)
+    for model_name, metrics_dict in fold_data.items():
+        print(f"\n{model_name}:")
+        for metric_name, scores in metrics_dict.items():
+            scores_arr = np.array(scores)
+            print(f"  {metric_name}:")
+            print(f"    Scores: {scores}")
+            print(f"    Mean ± Std: {np.mean(scores_arr):.2f} ± {np.std(scores_arr, ddof=1):.4f}")
+            print(f"    Range: [{np.min(scores_arr):.2f}, {np.max(scores_arr):.2f}]")
 
 
 if __name__ == '__main__':
