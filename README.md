@@ -1,152 +1,29 @@
-# BSO-Hybrid DDoS Tespiti — Yüksek Lisans Tez Paneli
+# CICIoT2023 üzerinde BSO-RF ile DDoS tespiti
 
-> **Dinamik Ağ Ortamlarında Yarasa Sürüsü Optimizasyonu (BSO) ile Optimize Edilmiş Hibrit Makine Öğrenmesi Çerçevesi Kullanılarak DDoS Saldırılarının Geliştirilmiş Tespiti**
+**SHUAIB AYAD JASIM JASIM** · Yüksek lisans tezi araştırma deposu
 
-| | |
-|---|---|
-| **Yazar** | SHUAIB AYAD JASIM |
-| **Danışman** | Dr. Öğr. Üyesi Saim ERVURAL |
-| **Program** | Bilgisayar Mühendisliği — Yüksek Lisans (M.Sc.) |
-| **Üniversite** | KTO Karatay Üniversitesi, Konya |
-| **Tarih** | 2026 |
-| **Canlı Demo** | [bso-thesis.vercel.app](https://bso-thesis.vercel.app) |
+CICIoT2023 örneklemindeki beş trafik sınıfı, Yarasa Sürüsü Optimizasyonu (BSO) ile öznitelik seçimi ve hiperparametre araması yapılan bir Random Forest ile sınıflandırılır.
 
----
+| Model | Öznitelik | Doğruluk | Makro-F1 | Ağırlıklı F1 | MCC | Ağırlıklı OvR ROC-AUC |
+|---|---:|---:|---:|---:|---:|---:|
+| BSO-RF | 23 | 87.51% | 82.49% | 87.59% | 0.8382 | 97.70% |
+| Tuned RF-All39 | 39 | 87.37% | 81.97% | 87.46% | 0.8363 | 97.67% |
 
-## Proje Hakkında
+RF-All39 uses the BSO-selected RF hyperparameters with all 39 inputs. BSO-RF reduces inputs by 41.03%. The point estimates describe a compactness–performance trade-off on the frozen test partition.
 
-Bu proje, CICIoT2023 veri seti üzerinde **BSO (Bat Swarm Optimization)** ile eşzamanlı özellik seçimi ve hiperparametre optimizasyonu yapan hibrit bir DDoS tespit sistemi sunar. Sonuçlar **30 sekmeli interaktif web paneli** ile görselleştirilmektedir.
+## Değerlendirme protokolü
 
-### Temel Katkılar
+1. SHA-256 özetleriyle 103.218 ham satır, tam öznitelik eşleşmesine göre gruplandı.
+2. Tohum 42 ile grup duyarlı bölümleme yapıldı. Eğitim 72.252, doğrulama 10.322 ve test 20.644 satır içerir. Bölümler arasında tam satır örtüşmesi sıfırdır.
+3. Medyan atama, sabit öznitelik taraması ve ölçekleme eğitim üzerinde uyarlandı. SMOTE yalnızca eğitimde uygulandı.
+4. BSO eğitim ve doğrulama ile 23 öznitelik ve RF ayarlarını seçti. Dondurulan model, saklı test bölümünde değerlendirildi.
 
-- **Eşzamanlı optimizasyon**: Özellik seçimi + Random Forest HP ayarlama (tek BSO ile)
-- **%51.3 boyut azaltma**: 39 → 19 özellik, performans kaybı olmadan
-- **5 sınıflı tespit**: DDoS-ACK_Frag, DDoS-SYN_Flood, BenignTraffic, PortScan, Backdoor_Malware
-- **12 model karşılaştırma**: BSO-RF, XGBoost, RF, SVM, DT, KNN, LR, PSO-RF, GA-RF, GWO-RF, vb.
+RF: 237 ağaç, maksimum derinlik 28, min_samples_split 8 ve max_features 0.50812. Bulgular veri kümesi içindeki tam satır gruplu değerlendirmeyle sınırlıdır.
 
----
+## Çalıştırma ve kanıt dosyaları
 
-## Anahtar Sonuçlar
+`npm ci` ve `npm run dev` ile güncel sonuç panosunu açın. Pano, [kaydedilmiş sonuçlardan](reproducibility/) beslenir.
 
-| Metrik | BSO-Hybrid RF | XGBoost | Standart RF | PSO-RF | GA-RF | GWO-RF |
-|--------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Doğruluk** | **89.82%** | 90.37% | 89.74% | 87.40% | 87.01% | 87.73% |
-| **F1-Macro** | **84.24%** | 84.74% | 83.06% | 81.82% | 81.25% | 81.15% |
-| **AUC-ROC** | **98.38%** | 98.81% | 98.36% | 97.82% | 97.60% | 97.40% |
-| **Özellik** | **19/39** | 39/39 | 39/39 | 21/39 | 18/39 | 20/39 |
+[Deney kodu](reproducibility/scripts/run_sealed.py), [ayrım denetimi](reproducibility/group_split.json), [sınıf metrikleri](reproducibility/per_class_metrics.csv), [kaynak profili](reproducibility/resource_comparison.csv) ve [ortam kaydı](reproducibility/environment.json) depoda yer alır. Eğitimi bağımsız olarak tekrarlamak için orijinal `sampled_numeric_data.npz` gerekir. Arşiv sonuçlarını korumak için çalıştırma çıktısını ayrı bir çalışma kopyasında üretin.
 
-**İstatistiksel Anlamlılık (Wilcoxon):** BSO-RF vs PSO-RF p=0.002 | vs GA-RF p=0.001 | vs GWO-RF p=0.005
-
----
-
-## Panel Sekmeleri (30 Adet)
-
-| # | Sekme | Açıklama |
-|---|---|---|
-| 1 | Ana Sayfa | Genel bakış, zaman çizelgesi, istatistikler |
-| 2 | Tez (Bölüm 4) | Sonuçlar bölümü — tablolar ve yorumlar |
-| 3 | Sistem Mimarisi | Uçtan uca BSO-Hybrid RF diyagramı |
-| 4 | BSO Görselleştirme | Yakınsama, parametre analizi, sürü animasyonu |
-| 5 | Özellik Analizi | 19 seçili özelliğin önem sıralaması |
-| 6 | Ablasyon (S1-S4) | 4 senaryo karşılaştırması |
-| 7 | ML Sınıflandırma | 12 modelin detaylı sonuçları |
-| 8 | Algoritma Karşılaştırma | BSO vs PSO vs GA vs GWO |
-| 9 | Model Sıralama | Çok ölçütlü sıralama tablosu |
-| 10 | Performans Değerlendirme | 7 metrik detaylı analiz |
-| 11 | Karışıklık Matrisi | 5×5 ısı haritası |
-| 12 | Hata Analizi | Yanlış sınıflandırma dağılımı |
-| 13 | Öğrenme Eğrileri | Eğitim/test verimlilik analizi |
-| 14 | Savunma S&C | Tez savunması soru-cevap |
-| 15 | Tablolar | Tüm tez tabloları — kopyalanabilir |
-| 16 | Özellik Seçimi | BSO/PSO/GA/GWO FS karşılaştırması |
-| 17 | Kaynakça | IEEE/APA formatında referanslar |
-| 18 | DDoS Tespit Formu | Canlı trafik sınıflandırma demo |
-| 19 | Pipeline Demo | Veri akışı görselleştirmesi |
-| 20 | Matematik | Tez denklemleri (KaTeX) |
-| 21 | Literatür | İlgili çalışmalar karşılaştırması |
-| 22 | Metodoloji | Bölüm 3 — yöntem çerçevesi |
-| 23 | Veri Seti EDA | CICIoT2023 keşifsel analiz |
-| 24 | İstatistik | Wilcoxon, Friedman testleri |
-| 25 | Yazım Rehberi | Akademik yazım önerileri |
-| 26 | Terimler Sözlüğü | Teknik terimler ve notasyonlar |
-| 27 | Dışa Aktarma | Yazdırma ve PDF export |
-| 28 | Sonuç (Bölüm 5) | Sonuç ve öneriler — kopyalanabilir |
-| 29 | Şekiller (18 SVG) | Tüm tez şekilleri — indirilebilir |
-| 30 | Bölüm Düzenleyici | Tez metin bölümleri — kopyalanabilir |
-
----
-
-## Teknoloji
-
-| Katman | Araç |
-|---|---|
-| Framework | Next.js 16, React 19, TypeScript 5 |
-| UI | shadcn/ui, Tailwind CSS 4, Recharts |
-| İkonlar | Lucide React |
-| Dağıtım | Vercel (otomatik CI/CD) |
-| Python Deneyleri | scikit-learn, XGBoost, SMOTE |
-
----
-
-## Kurulum ve Çalıştırma
-
-```bash
-# Bağımlılıkları yükle
-npm install
-
-# Geliştirme sunucusu
-npm run dev
-
-# Üretim derlemesi
-npm run build
-```
-
-**Canlı:** [https://bso-thesis.vercel.app](https://bso-thesis.vercel.app)
-
----
-
-## Proje Yapısı
-
-```
-├── app/                    # Next.js sayfa ve layout
-│   ├── page.tsx            # Ana sayfa (30 sekme)
-│   └── layout.tsx          # Root layout + metadata
-├── components/             # React bileşenleri (~30 panel)
-│   ├── thesis-figures.tsx  # 18 SVG akademik şekil
-│   ├── thesis-chapter-organizer.tsx
-│   ├── conclusion-recommendations.tsx
-│   ├── ablation-study.tsx
-│   └── ...
-├── lib/                    # Veri ve yardımcı fonksiyonlar
-│   └── ciciot2023-dataset.ts  # Tüm deneysel veriler
-├── scripts/                # Python deney betikleri
-│   ├── bso_ddos_experiment.py
-│   └── run_experiments.py
-├── docs/                   # Türkçe tez dokümantasyonu
-├── public/                 # Statik dosyalar (ikon, manifest)
-└── styles/                 # CSS dosyaları
-```
-
----
-
-## BSO Parametreleri
-
-| Parametre | Değer |
-|---|---|
-| Popülasyon | 25 yarasa |
-| Maks. İterasyon | 50 |
-| Frekans [f_min, f_max] | [0, 2] |
-| Başlangıç Gürültü (A₀) | 0.9 |
-| Başlangıç Darbe Oranı (r₀) | 0.5 |
-| α (loudness decay) | 0.97 |
-| γ (pulse rate increase) | 0.1 |
-| Toplam Değerlendirme | 1.177 |
-| Optimizasyon Süresi | 840.43 sn |
-
----
-
-## Lisans
-
-Bu proje KTO Karatay Üniversitesi Yüksek Lisans Tezi kapsamında geliştirilmiştir.
-
-**© 2026 Shuaib Ayad Jasim — Tüm hakları saklıdır.**
+`docs/`, `scripts/` ve önceki pano bileşenleri tarihsel prototip kaynaklarıdır. Tez için güncel veri kaynağı `reproducibility/` dizinidir.

@@ -1,0 +1,127 @@
+{
+  "comparison": [
+    {
+      "model": "BSO-RF",
+      "features": "23",
+      "reduction": "0.41025641025641024",
+      "accuracy": "0.8751211005619066",
+      "macro_f1": "0.824862384066925",
+      "weighted_f1": "0.8758720431513265",
+      "balanced_accuracy": "0.84412099378882",
+      "mcc": "0.8381922457224962",
+      "weighted_ovr_roc_auc": "0.9769874871762215"
+    },
+    {
+      "model": "Tuned RF-All39",
+      "features": "39",
+      "reduction": "0.0",
+      "accuracy": "0.8736678938190273",
+      "macro_f1": "0.8196516174304517",
+      "weighted_f1": "0.8745710183206571",
+      "balanced_accuracy": "0.8380509316770187",
+      "mcc": "0.8363272395681722",
+      "weighted_ovr_roc_auc": "0.9767097935547846"
+    }
+  ],
+  "classes": [
+    {
+      "class": "Backdoor_Malware",
+      "precision": "0.5011160714285714",
+      "recall": "0.6972049689440993",
+      "f1": "0.5831168831168831",
+      "support": "644"
+    },
+    {
+      "class": "BenignTraffic",
+      "precision": "0.7520585544373285",
+      "recall": "0.822",
+      "f1": "0.7854753941710464",
+      "support": "5000"
+    },
+    {
+      "class": "DDoS-ACK_Fragmentation",
+      "precision": "0.9993998799759952",
+      "recall": "0.9992",
+      "f1": "0.9992999299929993",
+      "support": "5000"
+    },
+    {
+      "class": "DDoS-SYN_Flood",
+      "precision": "0.9995999199839968",
+      "recall": "0.9994",
+      "f1": "0.9994999499949995",
+      "support": "5000"
+    },
+    {
+      "class": "Recon-PortScan",
+      "precision": "0.8200700116686115",
+      "recall": "0.7028",
+      "f1": "0.7569197630586968",
+      "support": "5000"
+    }
+  ],
+  "split": {
+    "method": "StratifiedGroupKFold(10, shuffle=True, random_state=42); deterministic 2-fold test/1-fold validation selection by class-count target error",
+    "test_folds": [
+      0,
+      1
+    ],
+    "validation_fold": 2,
+    "train_rows": 72252,
+    "validation_rows": 10322,
+    "test_rows": 20644,
+    "overlaps": {
+      "exact_row_overlap_train_val": 0,
+      "exact_row_overlap_train_test": 0,
+      "exact_row_overlap_val_test": 0
+    },
+    "class_counts": {
+      "train": [
+        2252,
+        17500,
+        17500,
+        17500,
+        17500
+      ],
+      "validation": [
+        322,
+        2500,
+        2500,
+        2500,
+        2500
+      ],
+      "test": [
+        644,
+        5000,
+        5000,
+        5000,
+        5000
+      ]
+    }
+  },
+  "features": [
+    "Header_Length",
+    "Protocol Type",
+    "Time_To_Live",
+    "Rate",
+    "fin_flag_number",
+    "syn_flag_number",
+    "rst_flag_number",
+    "psh_flag_number",
+    "syn_count",
+    "rst_count",
+    "HTTP",
+    "HTTPS",
+    "DNS",
+    "SSH",
+    "DHCP",
+    "ICMP",
+    "LLC",
+    "Tot sum",
+    "Min",
+    "Max",
+    "AVG",
+    "Std",
+    "Number"
+  ]
+}

@@ -1,3 +1,5 @@
+> **Arşiv / Archive.** Bu belge önceki prototipe aittir. Güncel tez sonuçları için [README](README.md) ve reproducibility dizinini kullanın.
+
 # Cross-Validation Section Analysis
 
 ## ✅ النماذج المتوفرة في experiment_results.json:

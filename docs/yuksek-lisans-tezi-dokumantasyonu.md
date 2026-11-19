@@ -1,3 +1,5 @@
+> **Arşiv / Archive.** Bu belge önceki prototipe aittir. Güncel tez sonuçları için [README](../README.md) ve reproducibility dizinini kullanın.
+
 # Yüksek Lisans Tezi Dokümantasyonu
 
 ## BSO-Hybrid ile DDoS Saldırı Tespiti
