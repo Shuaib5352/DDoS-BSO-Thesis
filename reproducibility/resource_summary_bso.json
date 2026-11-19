@@ -1,0 +1,10 @@
+{
+  "model": "bso",
+  "serialized_model_mb": 37.893304,
+  "rss_before_load_mb": 94.048256,
+  "rss_after_load_mb": 363.70432,
+  "rss_increment_mb": 269.656064,
+  "peak_working_set_mb": 533.921792,
+  "measurement": "software host profile; full saved preprocessing plus predict_proba; five warmups and 100 repeated calls per batch size",
+  "physical_energy_measured": false
+}
