@@ -1,0 +1,208 @@
+[
+  {
+    "id": "ch1-intro",
+    "label": "Bölüm 1 · Giriş",
+    "tabs": [
+      {
+        "id": "home",
+        "label": "Ana Sayfa"
+      },
+      {
+        "id": "architecture",
+        "label": "Sistem Mimarisi"
+      }
+    ]
+  },
+  {
+    "id": "ch2-literature",
+    "label": "Bölüm 2 · Literatür",
+    "tabs": [
+      {
+        "id": "literature",
+        "label": "İlgili Çalışmalar"
+      },
+      {
+        "id": "references",
+        "label": "Kaynakça"
+      }
+    ]
+  },
+  {
+    "id": "ch3-method",
+    "label": "Bölüm 3 · Yöntem",
+    "tabs": [
+      {
+        "id": "bolum3",
+        "label": "★ Bölüm 3 Konsolide"
+      },
+      {
+        "id": "methodology",
+        "label": "Metodoloji Çerçevesi"
+      },
+      {
+        "id": "dataset-eda",
+        "label": "Veri Keşfi"
+      },
+      {
+        "id": "bso",
+        "label": "BSO Optimizasyonu"
+      },
+      {
+        "id": "feature-selection",
+        "label": "Öznitelik Seçimi"
+      },
+      {
+        "id": "equations",
+        "label": "Formüller"
+      },
+      {
+        "id": "pipeline",
+        "label": "Veri Süreci"
+      },
+      {
+        "id": "detection",
+        "label": "DDoS Tespit"
+      }
+    ]
+  },
+  {
+    "id": "ch4-results",
+    "label": "Bölüm 4 · Bulgular",
+    "tabs": [
+      {
+        "id": "thesis",
+        "label": "Tez Sonuçları"
+      },
+      {
+        "id": "tables",
+        "label": "Tez Tabloları"
+      },
+      {
+        "id": "features",
+        "label": "Öznitelik Önemi"
+      },
+      {
+        "id": "ml",
+        "label": "ML Sınıflandırma"
+      },
+      {
+        "id": "algorithms",
+        "label": "Algoritmalar"
+      },
+      {
+        "id": "convergence",
+        "label": "Yakınsama Karşılaştırma"
+      },
+      {
+        "id": "ranking",
+        "label": "Model Sıralaması"
+      }
+    ]
+  },
+  {
+    "id": "ch4-eval",
+    "label": "Bölüm 4 · Değerlendirme",
+    "tabs": [
+      {
+        "id": "performance",
+        "label": "Performans"
+      },
+      {
+        "id": "heatmap",
+        "label": "Karışıklık Matrisi"
+      },
+      {
+        "id": "errors",
+        "label": "Hata Analizi"
+      },
+      {
+        "id": "learning",
+        "label": "Öğrenme Eğrileri"
+      },
+      {
+        "id": "ablation",
+        "label": "Ablasyon Çalışması"
+      },
+      {
+        "id": "concept-drift",
+        "label": "Dinamik Ortam"
+      },
+      {
+        "id": "statistics",
+        "label": "İstatistiksel Testler"
+      },
+      {
+        "id": "journal-charts",
+        "label": "Yayın Şekilleri"
+      },
+      {
+        "id": "roc-curves",
+        "label": "ROC Eğrileri"
+      },
+      {
+        "id": "pr-curves",
+        "label": "PR Eğrileri"
+      },
+      {
+        "id": "tsne",
+        "label": "t-SNE Görselleştirme"
+      }
+    ]
+  },
+  {
+    "id": "ch5-conclusion",
+    "label": "Bölüm 5 · Sonuç",
+    "tabs": [
+      {
+        "id": "conclusion",
+        "label": "Sonuç ve Öneriler"
+      }
+    ]
+  },
+  {
+    "id": "tools",
+    "label": "Araçlar",
+    "tabs": [
+      {
+        "id": "abstract",
+        "label": "Tez Özeti"
+      },
+      {
+        "id": "fig-index",
+        "label": "Şekil/Tablo Dizini"
+      },
+      {
+        "id": "eq-guide",
+        "label": "Denklem Dizini"
+      },
+      {
+        "id": "figures",
+        "label": "Tez Şekilleri"
+      },
+      {
+        "id": "chapter-org",
+        "label": "Bölüm Düzenleyici"
+      },
+      {
+        "id": "defense",
+        "label": "Savunma S&C"
+      },
+      {
+        "id": "paragraphs",
+        "label": "Akademik Metin"
+      },
+      {
+        "id": "writing-guide",
+        "label": "Yazım Rehberi"
+      },
+      {
+        "id": "glossary",
+        "label": "Semboller"
+      },
+      {
+        "id": "export",
+        "label": "Dışa Aktar"
+      }
+    ]
+  }
+]
