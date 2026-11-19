@@ -2,7 +2,7 @@
   "name": "ddos-bso-thesis",
   "version": "1.0.0",
   "description": "DDoS Saldırısı Tespiti - BSO-Hibrit Framework - Tez Projesi",
-  "author": "غسق محمد - Thesis Author",
+  "author": "SHUAIB AYAD JASIM JASIM",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",

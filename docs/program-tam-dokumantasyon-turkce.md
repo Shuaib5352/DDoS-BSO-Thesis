@@ -1,3 +1,5 @@
+> **Arşiv / Archive.** Bu belge önceki prototipe aittir. Güncel tez sonuçları için [README](../README.md) ve reproducibility dizinini kullanın.
+
 # BSO-Hybrid ile DDoS Saldırı Tespit Sistemi — Program Dokümantasyonu
 
 **Geliştiren: SHUAIB AYAD JASIM**
