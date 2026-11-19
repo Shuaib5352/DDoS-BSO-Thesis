@@ -1,0 +1,10 @@
+{
+  "model": "all39",
+  "serialized_model_mb": 36.19435,
+  "rss_before_load_mb": 94.318592,
+  "rss_after_load_mb": 351.547392,
+  "rss_increment_mb": 257.2288,
+  "peak_working_set_mb": 511.594496,
+  "measurement": "software host profile; full saved preprocessing plus predict_proba; five warmups and 100 repeated calls per batch size",
+  "physical_energy_measured": false
+}

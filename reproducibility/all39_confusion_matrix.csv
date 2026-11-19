@@ -1,0 +1,6 @@
+,Backdoor_Malware,BenignTraffic,DDoS-ACK_Fragmentation,DDoS-SYN_Flood,Recon-PortScan
+Backdoor_Malware,431,126,0,0,87
+BenignTraffic,217,4104,0,0,679
+DDoS-ACK_Fragmentation,0,0,4996,2,2
+DDoS-SYN_Flood,0,0,2,4998,0
+Recon-PortScan,249,1244,0,0,3507

@@ -13,7 +13,20 @@ RF-All39, BSO ile seçilen RF hiperparametrelerini 39 girdinin tümüyle kullan�
 
 ## Deney akışı
 
-![Dört aşamalı deney akışı: ham CICIoT2023 verisi, SHA-256 ile grup duyarlı bölme, yalnızca eğitimde SMOTE ve eğitim ile doğrulamada BSO-RF, dondurulmuş test değerlendirmesi.](docs/thesis-figures/experimental-workflow.gif)
+![Altı aşamalı BSO-RF deney protokolü. Ham veri, grup duyarlı bölümleme, eğitimde ön işleme ve SMOTE, BSO araması, modelin dondurulması ve saklı test değerlendirmesi.](docs/thesis-figures/experimental-workflow.gif)
+
+### Eğitimden değerlendirmeye
+
+| Aşama | Veri ve işlem | Kod veya kayıt |
+|---|---|---|
+| Ham örneklem | CICIoT2023, 103.218 satır, 39 akış özniteliği | [Öznitelik şeması](reproducibility/schema.json) |
+| Bölümleme | SHA-256 ile özdeş satırları aynı grupta tutma. Eğitim 72.252, doğrulama 10.322, test 20.644. Bölümler arası tam satır örtüşmesi sıfır | [Bölümleme denetimi](reproducibility/group_split.json) |
+| Ön işleme | Medyan atama, sabit sütun taraması ve ölçekleme eğitim verisine uydurulur. SMOTE yalnızca eğitimde uygulanır | [Deney kodu](reproducibility/scripts/run_sealed.py) |
+| Model seçimi | 25 aday ve 50 iterasyon. Eğitim ve doğrulama verisiyle öznitelik maskesi ve RF ayarları seçilir | [BSO araması](reproducibility/scripts/corrected_optimizer.py) · [Arama çıktısı](reproducibility/optimizer_result.json) |
+| Dondurma | 23 öznitelik, 237 ağaç, azami derinlik 28, minimum bölme 8, max_features 0.50812 | [Model kaydı](reproducibility/model_metadata.json) |
+| Değerlendirme | BSO-RF ve aynı ayarları kullanan RF-All39, aynı saklı test bölümünde karşılaştırılır | [Metrikler](reproducibility/predictive_comparison.csv) · [Karışıklık matrisi](reproducibility/confusion_matrix.csv) |
+
+Çevrimiçi çıkarımda akış öznitelikleri, saklanan ön işlemeden ve 23 öznitelikli seçimden geçerek dondurulmuş RF modeline girer. BSO araması çevrimdışı model seçiminin parçasıdır. [Sistem mimarisi](docs/thesis-figures/sekil-12.png)
 
 ## Tezin bilimsel içeriği
 
@@ -1534,10 +1547,17 @@ Kaynak: Bu tez kapsamında 28 Eylül 2026 tarihinde yeniden yürütülen doğrul
 
 </details>
 
-## Çalıştırma ve kanıt dosyaları
+## Güncel kaynak kodu ve deney kanıtları
 
-`npm ci` ve `npm run dev` ile güncel sonuç panosunu açın. Pano, [kaydedilmiş sonuçlardan](reproducibility/) beslenir.
+| Kaynak | İçerik |
+|---|---|
+| [Deney kodu](reproducibility/scripts/run_sealed.py) | Bölümleme, eğitimde ön işleme, SMOTE, BSO-RF ve RF-All39 |
+| [BSO uygulaması](reproducibility/scripts/corrected_optimizer.py) | Öznitelik maskesi ve RF hiperparametrelerinin ortak araması |
+| [Çıkarım profili kodu](reproducibility/scripts/profile_sealed.py) | Saklanan modeller için boyut, bellek ve gecikme ölçümü |
+| [Kaydedilmiş sonuçlar](reproducibility/) | Sınıf metrikleri, ablasyon, güven aralıkları, model kaydı ve kaynak profili |
+| [Ek analizler](reproducibility/additional-analysis/) | Eşleştirilmiş bootstrap, kalibrasyon ve doğrulama kümesindeki TreeSHAP özeti |
+| [Ortam kaydı](reproducibility/environment.json) · [SHA-256 listesi](reproducibility/SHA256SUMS.txt) | Deney ortamı ve bu depoda dağıtılan kanıt dosyalarının bütünlük özetleri |
 
-[Deney kodu](reproducibility/scripts/run_sealed.py), [ayrım denetimi](reproducibility/group_split.json), [sınıf metrikleri](reproducibility/per_class_metrics.csv), [kaynak profili](reproducibility/resource_comparison.csv) ve [ortam kaydı](reproducibility/environment.json) depoda yer alır. Eğitimi bağımsız olarak tekrarlamak için orijinal `sampled_numeric_data.npz` gerekir. Arşiv sonuçlarını korumak için çalıştırma çıktısını ayrı bir çalışma kopyasında üretin.
+Web panosu kaydedilmiş kanıtları okur. Yerel görüntüleme için `npm ci` ve `npm run dev` kullanılabilir.
 
-`docs/`, `scripts/` ve önceki pano bileşenleri tarihsel prototip kaynaklarıdır. Tez için güncel veri kaynağı `reproducibility/` dizinidir.
+Deneyi yeniden üretmek için kaynak paketteki orijinal `sampled_numeric_data.npz`, kaydedilmiş şema ve deney ortamı gerekir. Profil kodu ayrıca saklanmış model dosyalarını ve test girdilerini kullanır. Ham örneklem ve eğitilmiş model dosyaları bu depoda yayımlanmaz. Yeni çıktılar ayrı bir çalışma kopyasında üretilmelidir.
