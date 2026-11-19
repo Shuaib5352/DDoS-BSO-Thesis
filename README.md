@@ -28,14 +28,14 @@ RF-All39, BSO ile seçilen RF hiperparametrelerini 39 girdinin tümüyle kullan�
 
 Çevrimiçi çıkarımda akış öznitelikleri, saklanan ön işlemeden ve 23 öznitelikli seçimden geçerek dondurulmuş RF modeline girer. BSO araması çevrimdışı model seçiminin parçasıdır. [Sistem mimarisi](docs/thesis-figures/sekil-12.png)
 
-<details>
-<summary><strong>Çevrimiçi çıkarım ve dondurulmuş test karşılaştırması</strong></summary>
+### Çevrimiçi çıkarım
 
 ![Çevrimiçi çıkarım: ağ akışı öznitelikleri, saklanan ön işleme, 23 öznitelik, dondurulmuş RF ve beş sınıflı tahmin.](docs/thesis-figures/online-inference.gif)
 
+### Dondurulmuş test karşılaştırması
+
 ![Dondurulmuş test: BSO-RF ve RF-All39 doğruluk, Makro-F1 ve ağırlıklı OvR ROC-AUC karşılaştırması. Sayısal değerler yukarıdaki tabloda yer alır.](docs/thesis-figures/frozen-test-comparison.gif)
 
-</details>
 
 ## Tezin bilimsel içeriği
 
@@ -1570,3 +1570,7 @@ Kaynak: Bu tez kapsamında 28 Eylül 2026 tarihinde yeniden yürütülen doğrul
 Web panosu kaydedilmiş kanıtları okur. Yerel görüntüleme için `npm ci` ve `npm run dev` kullanılabilir.
 
 Deneyi yeniden üretmek için kaynak paketteki orijinal `sampled_numeric_data.npz`, kaydedilmiş şema ve deney ortamı gerekir. Profil kodu ayrıca saklanmış model dosyalarını ve test girdilerini kullanır. Ham örneklem ve eğitilmiş model dosyaları bu depoda yayımlanmaz. Yeni çıktılar ayrı bir çalışma kopyasında üretilmelidir.
+
+---
+
+**© جميع الحقوق محفوظة لدى شعيب — SHUAIB AYAD JASIM JASIM.**
