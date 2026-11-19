@@ -11,6 +11,10 @@ CICIoT2023 örneklemindeki beş trafik sınıfı, Yarasa Sürüsü Optimizasyonu
 
 RF-All39, BSO ile seçilen RF hiperparametrelerini 39 girdinin tümüyle kullanır. BSO-RF, girdi sayısını %41,03 azaltır. Karşılaştırma, iki modelin aynı dondurulmuş test bölümündeki çalışma noktalarını gösterir.
 
+## Deney akışı
+
+![Dört aşamalı deney akışı: ham CICIoT2023 verisi, SHA-256 ile grup duyarlı bölme, yalnızca eğitimde SMOTE ve eğitim ile doğrulamada BSO-RF, dondurulmuş test değerlendirmesi.](docs/thesis-figures/experimental-workflow.gif)
+
 ## Tezin bilimsel içeriği
 
 Bölümler, doğrulanmış tez sürümündeki sırayı izler. Aşağıdaki başlıklara tıklayarak metni, tabloları ve şekilleri doğrudan GitHub sayfasında açabilirsiniz.
